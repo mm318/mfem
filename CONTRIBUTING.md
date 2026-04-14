@@ -5,9 +5,8 @@
 <p align="center">
 <a href="https://github.com/mfem/mfem/blob/master/LICENSE"><img alt="License" src="https://img.shields.io/badge/License-BSD-brightgreen.svg"></a>
 <a href="https://github.com/mfem/mfem/actions?query=workflow%3Arepo-check+branch%3Amaster"><img alt="Repo check" src="https://github.com/mfem/mfem/actions/workflows/repo-check.yml/badge.svg?branch=master"></a>
-<a href="https://github.com/mfem/mfem/actions?query=workflow%3Abuild-analysis+branch%3Amaster"><img alt="Build Analysis" src="https://github.com/mfem/mfem/actions/workflows/mfem-analysis.yml/badge.svg?branch=master"></a>
-<a href="https://github.com/mfem/mfem/actions?query=workflow%3Abuilds-and-tests+branch%3Amaster"><img alt="Builds and Tests" src="https://github.com/mfem/mfem/actions/workflows/builds-and-tests.yml/badge.svg?branch=master"></a>
-<a href="https://ci.appveyor.com/project/mfem/mfem"><img alt="Build Status" src="https://ci.appveyor.com/api/projects/status/19non9sqm6msi2wy?svg=true"></a>
+<a href="https://github.com/mfem/mfem/actions/workflows/test.yml"><img alt="Build" src="https://github.com/mfem/mfem/actions/workflows/test.yml/badge.svg?branch=master"></a>
+<a href="https://github.com/mfem/mfem/actions/workflows/codeql-analysis.yml"><img alt="CodeQL" src="https://github.com/mfem/mfem/actions/workflows/codeql-analysis.yml/badge.svg?branch=master"></a>
 <a href="https://docs.mfem.org/html/index.html"><img alt="Doxygen" src="https://img.shields.io/badge/code-documented-brightgreen.svg"></a>
 </p>
 
@@ -284,8 +283,6 @@ Before you can start, you need a GitHub account, here are a few suggestions:
   repository.
 - The website and corresponding documentation are in the
   [web](https://github.com/mfem/web) repository.
-- The [PyMFEM](https://github.com/mfem/PyMFEM) repository contains a Python
-  wrapper for MFEM.
 - The [data](https://github.com/mfem/data) repository contains additional
   (large) datafiles for MFEM.
 
@@ -536,7 +533,6 @@ Before a PR can be merged, it should satisfy the following:
     - [ ] Did the requirements or the installation process change? *(rare)*
 - [ ] Update continuous integration server configurations if necessary (e.g. with new version requirements for each of MFEM's dependencies)
     - [ ] `.github`
-    - [ ] `.appveyor.yml`
 - [ ] Update `.gitignore`:
     - [ ] Check if `make distclean; git status` shows any files that were generated from the source by the project (not an IDE) but we don't want to track in the repository.
     - [ ] Add new patterns (just for the new files above) and re-run the above test.
@@ -658,7 +654,6 @@ MFEM uses a `master`/`next`-branch workflow as described below:
 - [ ] Check that version requirements for each of MFEM's dependencies are documented in `INSTALL` and up-to-date
 - [ ] Check that continuous integration server configurations reflect the dependency version requirements of the new release
     - [ ] `.github`
-    - [ ] `.appveyor.yml`
 - [ ] Update the `CHANGELOG` to organize all release contributions
 - [ ] Review the whole source code once over
 - [ ] Ask MFEM-based applications to test the pre-release branch
@@ -739,14 +734,6 @@ constraint on jobs. Two virtual machines are configured - Mac (OS X) and Linux.
 - Tests on the `next` branch are currently scheduled to run each night.
 
 
-### Windows smoke test
-We use Appveyor to test building with the MS Visual C++ compiler in a Windows
-environment, as well as to test the CMake build. See the `.appveyor` file and the
-build logs at
-[https://ci.appveyor.com/project/mfem/mfem](https://ci.appveyor.com/project/mfem/mfem).
-
-CMake is used to generate the MSVC Project files and drive the build.  A release
-and debug build is performed with a simple run of `ex1` to verify the executable.
 
 
 ### Tests at LLNL

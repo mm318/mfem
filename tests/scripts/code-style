@@ -24,7 +24,7 @@ case $1 in
    This script checks if the code in mfem_dir conforms to the MFEM C++ style
    (currently based on astyle-3.1). Note that the comparison is done with
    "git diff", so all differences between mfem_dir and the repository will be
-   reported. The local changes can be erased (lost!) with "git checkout .".
+   reported.
 
    In addition to C++ styling, the script also verifies that std::cout and
    std::cerr are not used in the library (use mfem::out and mfem::err instead).
@@ -52,17 +52,46 @@ shift
 
 # Verify C++ code styling in MFEM
 cd $mfem_dir
-# make distclean
-if [ -t 1 ]; then
-   make style
-else
-   make_style_out="$(make style 2>&1)"
-   if [ "$?" -eq 0 ]; then
-     printf "%s\n" "$make_style_out"
+
+ASTYLE_OPTS="--options=$mfem_dir/config/mfem.astylerc"
+ASTYLE_VER="Artistic Style Version 3.1"
+astyle_version="$(astyle --version 2>/dev/null)"
+if [ "$astyle_version" != "$ASTYLE_VER" ]; then
+   printf "%s\n" "Invalid astyle version: '$astyle_version'" \
+          "Please use: '$ASTYLE_VER'" 1>&2
+   exit 1
+fi
+
+FORMAT_LIST="$(git ls-files '*.cpp' '*.hpp' '*.c' '*.h' | \
+   grep -v -E '^(general/tinyxml2\.cpp|tests/unit/catch\.hpp)$')"
+if [ -n "$FORMAT_LIST" ]; then
+   if [ -t 1 ]; then
+      printf "%s\n" "$FORMAT_LIST" | xargs astyle $ASTYLE_OPTS
    else
-     printf "%s\n" "$make_style_out" 1>&2
+      style_out="$(printf "%s\n" "$FORMAT_LIST" | xargs astyle $ASTYLE_OPTS 2>&1)"
+      if [ "$?" -eq 0 ]; then
+         printf "%s\n" "$style_out"
+      else
+         printf "%s\n" "$style_out" 1>&2
+      fi
    fi
 fi
+
+cout_matches="$(grep -R -n 'std::cout' general linalg mesh fem 2>/dev/null | \
+   grep -v -E '^general/error\.cpp:|^general/globals\.(cpp|hpp):' || true)"
+if [ -n "$cout_matches" ]; then
+   printf "%s\n" "Use mfem::out instead of std::cout:" 1>&2
+   printf "%s\n" "$cout_matches" 1>&2
+fi
+
+cerr_matches="$(grep -R -n 'std::cerr' general linalg mesh fem 2>/dev/null | \
+   grep -v -E '^general/error\.cpp:|^general/globals\.(cpp|hpp):' | \
+   grep -v cerrno || true)"
+if [ -n "$cerr_matches" ]; then
+   printf "%s\n" "Use mfem::err instead of std::cerr:" 1>&2
+   printf "%s\n" "$cerr_matches" 1>&2
+fi
+
 git --no-pager diff 1>&2
 
 # Return to the original directory
@@ -72,12 +101,13 @@ test_name="$(basename "$0")"
 if [ -s "$test_name.err" ]; then
     cat >  $test_name.msg <<EOF
 
-To correct this error, run 'make style' and make sure that:
+To correct this error, run Artistic Style with 'config/mfem.astylerc' and make
+sure that:
 
 1) You are using Artistic Style 3.1 ("astyle --version").
 2) There is no use of std::cout or std::cerr inside the library code (examples
    and miniapps are OK). Use mfem::out and mfem::err instead.
-3) Run "make style" to apply astyle formatting and verify your code.
+3) Re-run this script and verify that the resulting 'git diff' is empty.
 
 Please contact a member of the MFEM team if you have questions.
 

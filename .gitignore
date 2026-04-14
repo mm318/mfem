@@ -1,7 +1,6 @@
 # ------------------------------------------------------------------------------
 # Ignore files that are generated from the repository sources by either building
-# the code or running it. These should be the same as the files erased by
-# `make distclean`.
+# the code or running it.
 #
 # Also ignore OS-specific files like .DS_Store on Mac
 # ------------------------------------------------------------------------------
@@ -11,10 +10,6 @@
 *.o.tmp
 /libmfem.*
 /miniapps/common/libmfem-common.*
-
-# CMake generated files
-CMakeCache.txt
-CMakeFiles/
 
 # Clangd server cache
 *.cache*
@@ -38,12 +33,8 @@ CMakeFiles/
 /zig-out/
 
 # Generated files in main directory, config/ and docs/
-/deps.mk
 config/_config.hpp
-config/config.mk
 config/sample-runs-build.log
-config/user.cmake
-config/user.mk
 doc/CodeDocumentation.conf
 doc/CodeDocumentation.html
 doc/CodeDocumentation

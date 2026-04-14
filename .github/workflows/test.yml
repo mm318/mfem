@@ -1,0 +1,62 @@
+# Copyright (c) 2010-2025, Lawrence Livermore National Security, LLC. Produced
+# at the Lawrence Livermore National Laboratory. All Rights reserved. See files
+# LICENSE and NOTICE for details. LLNL-CODE-806117.
+#
+# This file is part of the MFEM library. For more information and source code
+# availability visit https://mfem.org.
+#
+# MFEM is free software; you can redistribute it and/or modify it under the
+# terms of the BSD-3 license. We welcome feedback and contributions, see file
+# CONTRIBUTING.md for details.
+
+name: "Tests"
+
+on:
+  push:
+    branches:
+      - master
+      - next
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  ZIG_VERSION: 0.16.0
+
+jobs:
+  zig-build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: debug-static
+            optimize: Debug
+            extra_args: ""
+          - name: release-static
+            optimize: ReleaseSafe
+            extra_args: ""
+          - name: release-shared
+            optimize: ReleaseSafe
+            extra_args: "-Dshared=true"
+          - name: release-single
+            optimize: ReleaseSafe
+            extra_args: "-Dprecision=single"
+
+    name: ${{ matrix.name }}
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: mlugg/setup-zig@v2
+        with:
+          version: ${{ env.ZIG_VERSION }}
+
+      - name: Check build script formatting
+        run: zig fmt --check build.zig
+
+      - name: Build
+        run: zig build -Doptimize=${{ matrix.optimize }} ${{ matrix.extra_args }} --summary all

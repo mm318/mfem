@@ -16,10 +16,10 @@ We welcome contributions and feedback from the community. Please see the file
 [CONTRIBUTING.md](CONTRIBUTING.md) for additional details about our development
 process.
 
-* For building instructions, see the file [INSTALL](INSTALL), or type "make help".
+* For build instructions, see the file [INSTALL](INSTALL).
 
-* A Zig 0.16.0 build script is available for the default serial MFEM library
-  build: run `zig build`.
+* A Zig 0.16.0 build script is available for the current MFEM library build:
+  run `zig build`.
 
 * Copyright and licensing information can be found in files [LICENSE](LICENSE) and [NOTICE](NOTICE).
 

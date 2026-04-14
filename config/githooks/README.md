@@ -23,9 +23,14 @@ not add any large files to the repo.
 
 ### Setup
 
-To setup the git hooks, run `make hooks`, which creates symlinks to the hooks in
-the `.git/hooks` directory. Individual hooks can be enabled by manually creating
-symlinks.
+To setup the git hooks, create symlinks in `.git/hooks` manually. For example:
+
+```bash
+ln -s ../../config/githooks/pre-commit .git/hooks/pre-commit
+ln -s ../../config/githooks/pre-push .git/hooks/pre-push
+```
+
+Individual hooks can be enabled by creating only the symlinks you want.
 
 (You may also copy the scripts directly and customize them further, but this way
 you may miss additional updates in the future.)

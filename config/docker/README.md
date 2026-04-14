@@ -2,10 +2,7 @@
 
 We provide a [Dockerfile.base](Dockerfile.base) to build an ubuntu base image,
 and a [Dockerfile](Dockerfile) to build a smaller one with a multi-stage build.
-You can use this image for a demo of using mfem! 🎉️
-
-Updated containers are built and deployed on merges to the main branch and releases.
-If you want to request a build on demand, you can [manually run the workflow](https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow) thanks to the workflow dispatch event.
+You can use these images for manual MFEM experiments and development.
 
 ## Usage
 
@@ -97,13 +94,6 @@ You can also explore the "mini apps," also in share/mfem, but under miniapps.
 # This is run from the examples directory
 $ cd ../miniapps
 ```
-```bash
-$ ls
-CMakeLists.txt  common            meshing  nurbs        shifted  toys
-adjoint         electromagnetics  mtop     parelag      solvers
-autodiff        gslib             fluids   performance  tools
-```
-
 And an example in "toys"
 
 ```bash

@@ -40,14 +40,20 @@ fi
 shift
 cd $mfem_dir
 
-# Test the documentation of some make targets
-make help
-make distclean
-# make config MFEM_USE_MPI=YES
-# make status
-
 # Test the build of the Doxygen documentation
-cd doc; make clean; make
+cd doc
+rm -rf CodeDocumentation CodeDocumentation.conf CodeDocumentation.html
+rm -f undoc.log warnings.log
+sed -e "s%@MFEM_SOURCE_DIR@%$mfem_dir%g" CodeDocumentation.conf.in \
+  > CodeDocumentation.conf
+doxygen CodeDocumentation.conf
+printf '%s\n' \
+  '<meta http-equiv="REFRESH" content="0;URL=CodeDocumentation/html/index.html">' \
+  > CodeDocumentation.html
+cat warnings.log 1>&2
+{ cat CodeDocumentation.conf; \
+  printf 'GENERATE_HTML=NO\nEXTRACT_ALL=NO\nWARN_LOGFILE=undoc.log\nQUIET=YES\n'; \
+} | doxygen - > /dev/null 2>&1
 
 # Return to the original directory
 cd $cur_dir
@@ -61,8 +67,8 @@ To correct this error, make sure that the Doxygen comments in the code use
 correct syntax.
 
 See the Doxygen documentation for specific syntax (e.g. @a, @brief, etc.),
-and the 'makefile' and 'CodeDocumentation.conf.in' files in the 'doc/' directory
-for additional details.
+and the 'CodeDocumentation.conf.in' file in the 'doc/' directory for
+additional details.
 
 Please contact a member of the MFEM team if you have questions.
 
