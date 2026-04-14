@@ -33,6 +33,9 @@ CMakeFiles/
 
 # Typical build directory
 /build/
+/.zig-cache/
+/zig-pkg/
+/zig-out/
 
 # Generated files in main directory, config/ and docs/
 /deps.mk

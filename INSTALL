@@ -57,9 +57,9 @@ as CUDA, HIP, OCCA, OpenMP and RAJA.
   with (optionally) support for CUDA and OpenMP
   https://github.com/LLNL/RAJA
 
-The library supports two build systems: one based on GNU make, and a second one
-based on CMake. Both build systems are described below. Some hints for building
-without GNU make or CMake can be found at the end of this file.
+The library supports three build systems: Zig, GNU make, and CMake. The main
+entry points for each are described below. Some hints for building without
+these build systems can be found at the end of this file.
 
 In addition to the native build systems, MFEM packages are also available in the
 following package managers:
@@ -72,6 +72,24 @@ following package managers:
 We also recommend downloading and building the MFEM-based GLVis visualization
 tool which can be used to visualize the meshes and solution in MFEM's examples
 and miniapps. See https://glvis.org and https://mfem.org/building.
+
+Quick start with Zig
+====================
+The repository includes a Zig 0.16.0 build script for the default serial MFEM
+library build.
+
+Serial/default library build:
+   zig build
+
+Selected configuration options:
+   zig build -Dshared=true
+   zig build -Dprecision=single
+   zig build -Dexceptions=true
+   zig build -Dthread-safe=true
+   zig build -Dmemalloc=false
+   zig build -Dsimd=true
+
+The Zig build installs `libmfem` into `zig-out/lib`.
 
 Quick start with GNU make
 =========================

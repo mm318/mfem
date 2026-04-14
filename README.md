@@ -18,6 +18,9 @@ process.
 
 * For building instructions, see the file [INSTALL](INSTALL), or type "make help".
 
+* A Zig 0.16.0 build script is available for the default serial MFEM library
+  build: run `zig build`.
+
 * Copyright and licensing information can be found in files [LICENSE](LICENSE) and [NOTICE](NOTICE).
 
 * The best starting point for new users interested in MFEM's features is to
