@@ -32,13 +32,14 @@ EOF
 esac
 
 # Setup
-cur_dir=`pwd`
+cur_dir=$(pwd)
 mfem_dir=$1
 if [ "$mfem_dir" = "" ]; then
     mfem_dir="../.."
 fi
 shift
-cd $mfem_dir
+mfem_dir=$(cd "$mfem_dir" && pwd)
+cd "$mfem_dir"
 
 # Test the build of the Doxygen documentation
 cd doc

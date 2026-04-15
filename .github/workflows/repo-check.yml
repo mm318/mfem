@@ -97,7 +97,8 @@ jobs:
 
       - name: get astyle
         run: |
-          sudo apt-get install astyle
+          sudo apt-get update
+          sudo apt-get install -y astyle
 
       - name: style check
         run: |
@@ -114,7 +115,8 @@ jobs:
 
       - name: get doxygen and graphviz
         run: |
-          sudo apt-get install doxygen graphviz
+          sudo apt-get update
+          sudo apt-get install -y doxygen graphviz
 
       - name: update doxygen config file
         run: |
@@ -143,7 +145,9 @@ jobs:
         run: |
           # We override origin to make sure we point to the main repo.
           # This is to have consistent test results on PRs from forks.
-          git remote remove origin
+          if git remote get-url origin >/dev/null 2>&1; then
+            git remote remove origin
+          fi
           git remote add origin https://github.com/mfem/mfem.git
           git checkout -b gh-actions-branch-history
           ./config/githooks/pre-push --history
