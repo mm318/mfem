@@ -117,27 +117,28 @@ The MFEM source code has the following structure:
   │   ├── pumi
   │   ├── sundials
   |   └── superlu
-  ├── fem
-  │   ├── ceed
-  │   ├── dfem
-  │   ├── eltrans
-  │   ├── fe
-  │   ├── gslib
-  │   ├── integ
-  │   ├── lor
-  │   ├── moonolith
-  │   ├── qinterp
-  │   └── tmop
-  │   |   ├── assemble
-  │   |   ├── metrics
-  │   |   ├── mult
-  │   |   └── tools
-  ├── general
-  ├── linalg
-  │   ├── batched
-  │   └── simd
-  ├── mesh
-  │   └── submesh
+  ├── core
+  │   ├── fem
+  │   │   ├── ceed
+  │   │   ├── dfem
+  │   │   ├── eltrans
+  │   │   ├── fe
+  │   │   ├── gslib
+  │   │   ├── integ
+  │   │   ├── lor
+  │   │   ├── moonolith
+  │   │   ├── qinterp
+  │   │   └── tmop
+  │   │       ├── assemble
+  │   │       ├── metrics
+  │   │       ├── mult
+  │   │       └── tools
+  │   ├── general
+  │   ├── linalg
+  │   │   ├── batched
+  │   │   └── simd
+  │   └── mesh
+  │       └── submesh
   ├── miniapps
   │   ├── adjoint
   │   ├── autodiff
@@ -167,7 +168,6 @@ The MFEM source code has the following structure:
   └── tests
       ├── benchmarks
       ├── convergence
-      ├── gitlab
       ├── mem_manager
       ├── par-mesh-format
       ├── scripts
@@ -176,9 +176,9 @@ The MFEM source code has the following structure:
 
 #### Main directories and classes
 
-The main directories are `fem/`, `mesh/` and `linalg/` containing the C++
-classes implementing the finite element, mesh and linear algebra concepts
-respectively.
+The main implementation directories are `core/fem/`, `core/mesh/`,
+`core/linalg/` and `core/general/`, containing the finite element, mesh,
+linear algebra and utility code respectively.
 
 - The main mesh classes are:
   + [`Mesh`](https://docs.mfem.org/html/classmfem_1_1Mesh.html)
@@ -229,7 +229,7 @@ device/host memory manager.
   + the [`cuda.hpp`](https://docs.mfem.org/html/cuda_8hpp.html) and [`occa.hpp`](https://docs.mfem.org/html/occa_8hpp.html) files
 
 #### Utilities, building and documentation
-- The `general/` directory contains C++ classes that serve as utilities for
+- The `core/general/` directory contains C++ classes that serve as utilities for
   communication, error handling, arrays, (Boolean) tables, timing, etc.
 - The `config/` directory contains build-related files, both for the plain
   Makefile and the CMake build options.

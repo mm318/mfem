@@ -13,7 +13,7 @@
 
 #ifdef MFEM_USE_BENCHMARK
 
-#include "fem/tmop.hpp"
+#include "core/fem/tmop.hpp"
 #include <cassert>
 #include <memory>
 #include <cmath>

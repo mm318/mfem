@@ -16,7 +16,7 @@
 #include "unit_tests.hpp"
 
 // must be included after mfem.hpp
-#include "general/reducers.hpp"
+#include "core/general/reducers.hpp"
 
 using namespace mfem;
 

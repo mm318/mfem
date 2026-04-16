@@ -12,9 +12,9 @@
 #ifndef MFEM_ELASTICITY_MAT_NEOHOOKEAN_HPP
 #define MFEM_ELASTICITY_MAT_NEOHOOKEAN_HPP
 
-#include "general/enzyme.hpp"
+#include "core/general/enzyme.hpp"
 #include "gradient_type.hpp"
-#include "linalg/tensor.hpp"
+#include "core/linalg/tensor.hpp"
 #include "mfem.hpp"
 
 using mfem::future::tensor;

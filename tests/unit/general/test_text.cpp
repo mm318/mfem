@@ -13,7 +13,7 @@
 using namespace mfem;
 
 #include "unit_tests.hpp"
-#include "general/text.hpp"
+#include "core/general/text.hpp"
 
 TEST_CASE("String Manipulation", "[General]")
 {

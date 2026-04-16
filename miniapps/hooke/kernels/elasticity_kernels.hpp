@@ -13,7 +13,7 @@
 #define MFEM_ELASTICITY_KERNELS_HPP
 
 #include "kernel_helpers.hpp"
-#include "linalg/vector.hpp"
+#include "core/linalg/vector.hpp"
 
 using mfem::future::tensor;
 using mfem::future::make_tensor;

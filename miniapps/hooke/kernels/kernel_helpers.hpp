@@ -13,7 +13,7 @@
 #define MFEM_ELASTICITY_KERNEL_HELPERS_HPP
 
 #include "mfem.hpp"
-#include "linalg/tensor.hpp"
+#include "core/linalg/tensor.hpp"
 
 namespace mfem
 {

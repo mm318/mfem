@@ -934,32 +934,32 @@ WARN_LOGFILE           = warnings.log
 # Note: If this tag is empty the current directory is searched.
 
 INPUT                  = @MFEM_SOURCE_DIR@/doc/CodeDocumentation.dox \
-                         @MFEM_SOURCE_DIR@/mfem.hpp \
+                         @MFEM_SOURCE_DIR@/core/mfem.hpp \
                          @MFEM_SOURCE_DIR@/config \
-                         @MFEM_SOURCE_DIR@/general \
-                         @MFEM_SOURCE_DIR@/linalg \
-                         @MFEM_SOURCE_DIR@/linalg/batched \
-                         @MFEM_SOURCE_DIR@/linalg/simd \
-                         @MFEM_SOURCE_DIR@/mesh \
-                         @MFEM_SOURCE_DIR@/mesh/submesh \
-                         @MFEM_SOURCE_DIR@/fem \
-                         @MFEM_SOURCE_DIR@/fem/ceed \
-                         @MFEM_SOURCE_DIR@/fem/ceed/integrators \
-                         @MFEM_SOURCE_DIR@/fem/ceed/integrators/convection \
-                         @MFEM_SOURCE_DIR@/fem/ceed/integrators/diffusion \
-                         @MFEM_SOURCE_DIR@/fem/ceed/integrators/mass \
-                         @MFEM_SOURCE_DIR@/fem/ceed/integrators/nlconvection \
-                         @MFEM_SOURCE_DIR@/fem/ceed/interface \
-                         @MFEM_SOURCE_DIR@/fem/ceed/solvers \
-                         @MFEM_SOURCE_DIR@/fem/dfem \
-                         @MFEM_SOURCE_DIR@/fem/eltrans \
-                         @MFEM_SOURCE_DIR@/fem/fe \
-                         @MFEM_SOURCE_DIR@/fem/gslib \
-                         @MFEM_SOURCE_DIR@/fem/integ \
-                         @MFEM_SOURCE_DIR@/fem/lor \
-                         @MFEM_SOURCE_DIR@/fem/moonolith \
-                         @MFEM_SOURCE_DIR@/fem/qinterp \
-                         @MFEM_SOURCE_DIR@/fem/tmop \
+                         @MFEM_SOURCE_DIR@/core/general \
+                         @MFEM_SOURCE_DIR@/core/linalg \
+                         @MFEM_SOURCE_DIR@/core/linalg/batched \
+                         @MFEM_SOURCE_DIR@/core/linalg/simd \
+                         @MFEM_SOURCE_DIR@/core/mesh \
+                         @MFEM_SOURCE_DIR@/core/mesh/submesh \
+                         @MFEM_SOURCE_DIR@/core/fem \
+                         @MFEM_SOURCE_DIR@/core/fem/ceed \
+                         @MFEM_SOURCE_DIR@/core/fem/ceed/integrators \
+                         @MFEM_SOURCE_DIR@/core/fem/ceed/integrators/convection \
+                         @MFEM_SOURCE_DIR@/core/fem/ceed/integrators/diffusion \
+                         @MFEM_SOURCE_DIR@/core/fem/ceed/integrators/mass \
+                         @MFEM_SOURCE_DIR@/core/fem/ceed/integrators/nlconvection \
+                         @MFEM_SOURCE_DIR@/core/fem/ceed/interface \
+                         @MFEM_SOURCE_DIR@/core/fem/ceed/solvers \
+                         @MFEM_SOURCE_DIR@/core/fem/dfem \
+                         @MFEM_SOURCE_DIR@/core/fem/eltrans \
+                         @MFEM_SOURCE_DIR@/core/fem/fe \
+                         @MFEM_SOURCE_DIR@/core/fem/gslib \
+                         @MFEM_SOURCE_DIR@/core/fem/integ \
+                         @MFEM_SOURCE_DIR@/core/fem/lor \
+                         @MFEM_SOURCE_DIR@/core/fem/moonolith \
+                         @MFEM_SOURCE_DIR@/core/fem/qinterp \
+                         @MFEM_SOURCE_DIR@/core/fem/tmop \
                          @MFEM_SOURCE_DIR@/examples \
                          @MFEM_SOURCE_DIR@/examples/amgx \
                          @MFEM_SOURCE_DIR@/examples/caliper \
@@ -1056,9 +1056,9 @@ RECURSIVE              = NO
 
 EXCLUDE                = @MFEM_SOURCE_DIR@/config/_config.hpp \
                          @MFEM_SOURCE_DIR@/config/get_hypre_version.cpp \
-                         @MFEM_SOURCE_DIR@/general/tinyxml2.h \
-                         @MFEM_SOURCE_DIR@/general/tinyxml2.cpp \
-                         @MFEM_SOURCE_DIR@/linalg/lapack.hpp
+                         @MFEM_SOURCE_DIR@/core/general/tinyxml2.h \
+                         @MFEM_SOURCE_DIR@/core/general/tinyxml2.cpp \
+                         @MFEM_SOURCE_DIR@/core/linalg/lapack.hpp
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded

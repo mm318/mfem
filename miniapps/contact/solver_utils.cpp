@@ -12,19 +12,19 @@
 #include "solver_utils.hpp"
 
 #ifdef MFEM_USE_MUMPS
-#include "linalg/mumps.hpp"
+#include "core/linalg/mumps.hpp"
 #endif
 
 #ifdef MFEM_USE_MKL_CPARDISO
-#include "linalg/cpardiso.hpp"
+#include "core/linalg/cpardiso.hpp"
 #endif
 
 #ifdef MFEM_USE_SUPERLU
-#include "linalg/superlu.hpp"
+#include "core/linalg/superlu.hpp"
 #endif
 
 #ifdef MFEM_USE_STRUMPACK
-#include "linalg/strumpack.hpp"
+#include "core/linalg/strumpack.hpp"
 #endif
 
 

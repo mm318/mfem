@@ -63,7 +63,7 @@ if [ "$astyle_version" != "$ASTYLE_VER" ]; then
 fi
 
 FORMAT_LIST="$(git ls-files '*.cpp' '*.hpp' '*.c' '*.h' | \
-   grep -v -E '^(general/tinyxml2\.(cpp|h)|fem/picojson\.h|fem/ceed/integrators/.+/.+_qf\.h|tests/unit/catch\.hpp)$')"
+   grep -v -E '^(core/general/tinyxml2\.(cpp|h)|core/fem/picojson\.h|core/fem/ceed/integrators/.+/.+_qf\.h|tests/unit/catch\.hpp)$')"
 if [ -n "$FORMAT_LIST" ]; then
    if [ -t 1 ]; then
       printf "%s\n" "$FORMAT_LIST" | xargs astyle $ASTYLE_OPTS

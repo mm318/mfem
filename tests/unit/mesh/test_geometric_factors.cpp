@@ -10,7 +10,7 @@
 // CONTRIBUTING.md for details.
 
 #include "mfem.hpp"
-#include "linalg/dtensor.hpp"
+#include "core/linalg/dtensor.hpp"
 #include "unit_tests.hpp"
 
 using namespace mfem;

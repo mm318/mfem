@@ -12,7 +12,7 @@
 #ifndef MFEM_ELASTICITY_MAT_LIN_ELAST_HPP
 #define MFEM_ELASTICITY_MAT_LIN_ELAST_HPP
 
-#include "linalg/tensor.hpp"
+#include "core/linalg/tensor.hpp"
 #include "mfem.hpp"
 
 using mfem::future::tensor;

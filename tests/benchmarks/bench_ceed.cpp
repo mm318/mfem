@@ -23,10 +23,10 @@
 #include <cassert>
 #include <string>
 
-#include "fem/qinterp/det.hpp" // IWYU pragma: keep
-#include "fem/qinterp/grad.hpp" // IWYU pragma: keep
-#include "fem/integ/lininteg_domain_kernels.hpp" // IWYU pragma: keep
-#include "fem/integ/bilininteg_vecdiffusion_pa.hpp" // IWYU pragma: keep
+#include "core/fem/qinterp/det.hpp" // IWYU pragma: keep
+#include "core/fem/qinterp/grad.hpp" // IWYU pragma: keep
+#include "core/fem/integ/lininteg_domain_kernels.hpp" // IWYU pragma: keep
+#include "core/fem/integ/bilininteg_vecdiffusion_pa.hpp" // IWYU pragma: keep
 
 // Custom benchmark arguments generator
 static void CustomArguments(bmi::Benchmark *b) noexcept

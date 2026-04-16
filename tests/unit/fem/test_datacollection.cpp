@@ -11,7 +11,7 @@
 
 #include "mfem.hpp"
 #include "unit_tests.hpp"
-#include "general/tinyxml2.h"
+#include "core/general/tinyxml2.h"
 #include <stdio.h>
 
 #ifndef _WIN32

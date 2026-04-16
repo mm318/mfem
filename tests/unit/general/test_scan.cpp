@@ -16,7 +16,7 @@
 #include "unit_tests.hpp"
 
 // must be included after mfem.hpp
-#include "general/scan.hpp"
+#include "core/general/scan.hpp"
 
 using namespace mfem;
 

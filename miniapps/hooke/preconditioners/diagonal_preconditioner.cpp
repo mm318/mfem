@@ -10,7 +10,7 @@
 // CONTRIBUTING.md for details.
 
 #include "diagonal_preconditioner.hpp"
-#include "linalg/tensor.hpp"
+#include "core/linalg/tensor.hpp"
 
 using mfem::future::tensor;
 

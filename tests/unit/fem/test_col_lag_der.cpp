@@ -12,7 +12,7 @@
 #include "mfem.hpp"
 #include "unit_tests.hpp"
 
-#include "fem/qinterp/grad.hpp"
+#include "core/fem/qinterp/grad.hpp"
 
 using namespace std;
 using namespace mfem;

@@ -20,7 +20,7 @@
 
 #include <unordered_map>
 #include <cstring>
-#include "linalg/kernels.hpp"
+#include "core/linalg/kernels.hpp"
 
 #if defined(MFEM_SEDOV_MPI) && !defined(MFEM_USE_MPI)
 #error "Cannot use MFEM_SEDOV_MPI without MFEM_USE_MPI!"

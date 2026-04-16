@@ -11,7 +11,7 @@
 
 #include "mfem.hpp"
 #include "unit_tests.hpp"
-#include "linalg/dtensor.hpp"
+#include "core/linalg/dtensor.hpp"
 
 using namespace mfem;
 
