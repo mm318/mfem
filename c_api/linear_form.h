@@ -31,6 +31,7 @@ void CMFEM_LinearForm_AddBdrFaceIntegrator_DGDirichletLFIntegrator(
 void CMFEM_LinearForm_AddBoundaryIntegrator_VectorBoundaryLFIntegrator(
    CMFEM_LinearForm *linear_form, const CMFEM_VectorArrayCoefficient *coefficient);
 void CMFEM_LinearForm_Assemble(CMFEM_LinearForm *linear_form);
+void CMFEM_LinearForm_Update(CMFEM_LinearForm *linear_form);
 
 CMFEM_END_EXTERN_C
 

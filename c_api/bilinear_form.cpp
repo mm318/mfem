@@ -40,6 +40,12 @@ extern "C" {
          mfem::AssemblyLevel::ELEMENT);
    }
 
+   void CMFEM_BilinearForm_SetDiagonalPolicyOne(CMFEM_BilinearForm *bilinear_form)
+   {
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->SetDiagonalPolicy(
+         mfem::Operator::DiagonalPolicy::DIAG_ONE);
+   }
+
    void CMFEM_BilinearForm_EnableSparseMatrixSorting(CMFEM_BilinearForm
                                                      *bilinear_form,
                                                      int enable)
@@ -230,6 +236,26 @@ extern "C" {
          cmfem::VectorRef(B));
    }
 
+   void CMFEM_BilinearForm_FormLinearSystemSparseMatrixCopyInterior(
+      CMFEM_BilinearForm *bilinear_form,
+      const CMFEM_ArrayInt *ess_tdof_list,
+      CMFEM_GridFunction *x,
+      CMFEM_LinearForm *b,
+      CMFEM_SparseMatrix *A,
+      CMFEM_Vector *X,
+      CMFEM_Vector *B,
+      int copy_interior)
+   {
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->FormLinearSystem(
+         cmfem::ArrayIntRef(ess_tdof_list),
+         *cmfem::As<mfem::GridFunction>(x),
+         *cmfem::As<mfem::LinearForm>(b),
+         *cmfem::As<mfem::SparseMatrix>(A),
+         cmfem::VectorRef(X),
+         cmfem::VectorRef(B),
+         copy_interior);
+   }
+
    void CMFEM_BilinearForm_FormLinearSystemOperator(
       CMFEM_BilinearForm *bilinear_form,
       const CMFEM_ArrayInt *ess_tdof_list,
@@ -248,6 +274,26 @@ extern "C" {
          cmfem::VectorRef(B));
    }
 
+   void CMFEM_BilinearForm_FormLinearSystemOperatorCopyInterior(
+      CMFEM_BilinearForm *bilinear_form,
+      const CMFEM_ArrayInt *ess_tdof_list,
+      CMFEM_GridFunction *x,
+      CMFEM_LinearForm *b,
+      CMFEM_OperatorPtr *A,
+      CMFEM_Vector *X,
+      CMFEM_Vector *B,
+      int copy_interior)
+   {
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->FormLinearSystem(
+         cmfem::ArrayIntRef(ess_tdof_list),
+         *cmfem::As<mfem::GridFunction>(x),
+         *cmfem::As<mfem::LinearForm>(b),
+         cmfem::OperatorPtrRef(A),
+         cmfem::VectorRef(X),
+         cmfem::VectorRef(B),
+         copy_interior);
+   }
+
    void CMFEM_BilinearForm_RecoverFEMSolution(const CMFEM_BilinearForm
                                               *bilinear_form,
                                               const CMFEM_Vector *X,
@@ -259,6 +305,11 @@ extern "C" {
             cmfem::VectorRef(X),
             *cmfem::As<const mfem::LinearForm>(b),
             *cmfem::As<mfem::GridFunction>(x));
+   }
+
+   void CMFEM_BilinearForm_Update(CMFEM_BilinearForm *bilinear_form)
+   {
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->Update();
    }
 
 } // extern "C"

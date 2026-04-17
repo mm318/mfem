@@ -30,9 +30,20 @@ typedef struct CMFEM_OperatorPtr CMFEM_OperatorPtr;
 typedef struct CMFEM_OperatorJacobiSmoother CMFEM_OperatorJacobiSmoother;
 typedef struct CMFEM_ConstantCoefficient CMFEM_ConstantCoefficient;
 typedef struct CMFEM_FunctionCoefficient CMFEM_FunctionCoefficient;
+typedef struct CMFEM_VectorConstantCoefficient CMFEM_VectorConstantCoefficient;
 typedef struct CMFEM_PWConstCoefficient CMFEM_PWConstCoefficient;
 typedef struct CMFEM_VectorArrayCoefficient CMFEM_VectorArrayCoefficient;
 typedef struct CMFEM_VectorFunctionCoefficient CMFEM_VectorFunctionCoefficient;
+typedef struct CMFEM_CoefficientRefiner CMFEM_CoefficientRefiner;
+typedef struct CMFEM_DiffusionIntegrator CMFEM_DiffusionIntegrator;
+typedef struct CMFEM_ElasticityIntegrator CMFEM_ElasticityIntegrator;
+typedef struct CMFEM_ZienkiewiczZhuEstimator CMFEM_ZienkiewiczZhuEstimator;
+typedef struct CMFEM_LSZienkiewiczZhuEstimator CMFEM_LSZienkiewiczZhuEstimator;
+typedef struct CMFEM_KellyErrorEstimator CMFEM_KellyErrorEstimator;
+typedef struct CMFEM_ThresholdRefiner CMFEM_ThresholdRefiner;
+typedef struct CMFEM_ThresholdDerefiner CMFEM_ThresholdDerefiner;
+typedef struct CMFEM_L2_FECollection CMFEM_L2_FECollection;
+typedef struct CMFEM_VisItDataCollection CMFEM_VisItDataCollection;
 
 #define CMFEM_STORAGE(Name, Size) struct CMFEM_##Name { char data[Size]; }
 

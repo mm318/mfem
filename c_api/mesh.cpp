@@ -118,6 +118,12 @@ extern "C" {
       return cmfem::As<const mfem::Mesh>(mesh)->GetNE();
    }
 
+   int CMFEM_Mesh_GetElementType(const CMFEM_Mesh *mesh, int index)
+   {
+      return static_cast<int>(cmfem::As<const mfem::Mesh>(mesh)->GetElementType(
+                                 index));
+   }
+
    void CMFEM_Mesh_AddVertex(CMFEM_Mesh *mesh, const double *coords)
    {
       cmfem::As<mfem::Mesh>(mesh)->AddVertex(coords);
@@ -151,6 +157,11 @@ extern "C" {
    void CMFEM_Mesh_UniformRefinement(CMFEM_Mesh *mesh)
    {
       cmfem::As<mfem::Mesh>(mesh)->UniformRefinement();
+   }
+
+   void CMFEM_Mesh_Finalize(CMFEM_Mesh *mesh, int refine, int fix_orientation)
+   {
+      cmfem::As<mfem::Mesh>(mesh)->Finalize(refine != 0, fix_orientation != 0);
    }
 
    void CMFEM_Mesh_RefineAtVertex3(CMFEM_Mesh *mesh, double x, double y,

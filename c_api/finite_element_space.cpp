@@ -44,6 +44,17 @@ extern "C" {
                                              cmfem::As<mfem::RT_FECollection>(fec)));
    }
 
+   CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshL2VDim(
+      CMFEM_Mesh *mesh,
+      CMFEM_L2_FECollection *fec,
+      int vdim)
+   {
+      return reinterpret_cast<CMFEM_FiniteElementSpace *>(
+                new mfem::FiniteElementSpace(cmfem::As<mfem::Mesh>(mesh),
+                                             cmfem::As<mfem::L2_FECollection>(fec),
+                                             vdim));
+   }
+
    CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshDG(CMFEM_Mesh *mesh,
                                                                 CMFEM_DG_FECollection *fec)
    {
@@ -89,6 +100,16 @@ extern "C" {
       cmfem::As<const mfem::FiniteElementSpace>(fespace)->GetEssentialTrueDofs(
          cmfem::ArrayIntRef(ess_bdr),
          cmfem::ArrayIntRef(ess_tdof_list));
+   }
+
+   void CMFEM_FiniteElementSpace_Update(CMFEM_FiniteElementSpace *fespace)
+   {
+      cmfem::As<mfem::FiniteElementSpace>(fespace)->Update();
+   }
+
+   void CMFEM_FiniteElementSpace_UpdatesFinished(CMFEM_FiniteElementSpace *fespace)
+   {
+      cmfem::As<mfem::FiniteElementSpace>(fespace)->UpdatesFinished();
    }
 
 } // extern "C"

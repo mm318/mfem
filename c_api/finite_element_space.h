@@ -15,6 +15,10 @@ CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshND(CMFEM_Mesh *mesh,
                                                              CMFEM_ND_FECollection *fec);
 CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshRT(CMFEM_Mesh *mesh,
                                                              CMFEM_RT_FECollection *fec);
+CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshL2VDim(
+   CMFEM_Mesh *mesh,
+   CMFEM_L2_FECollection *fec,
+   int vdim);
 CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshDG(
    CMFEM_Mesh *mesh, CMFEM_DG_FECollection *fec);
 CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshDGInterface(
@@ -27,6 +31,9 @@ void CMFEM_FiniteElementSpace_GetBoundaryTrueDofs(const CMFEM_FiniteElementSpace
 void CMFEM_FiniteElementSpace_GetEssentialTrueDofs(const
                                                    CMFEM_FiniteElementSpace *fespace, const CMFEM_ArrayInt *ess_bdr,
                                                    CMFEM_ArrayInt *ess_tdof_list);
+void CMFEM_FiniteElementSpace_Update(CMFEM_FiniteElementSpace *fespace);
+void CMFEM_FiniteElementSpace_UpdatesFinished(CMFEM_FiniteElementSpace
+                                              *fespace);
 
 CMFEM_END_EXTERN_C
 

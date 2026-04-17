@@ -95,4 +95,9 @@ extern "C" {
       cmfem::As<mfem::LinearForm>(linear_form)->Assemble();
    }
 
+   void CMFEM_LinearForm_Update(CMFEM_LinearForm *linear_form)
+   {
+      cmfem::As<mfem::LinearForm>(linear_form)->Update();
+   }
+
 } // extern "C"

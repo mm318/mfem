@@ -15,4 +15,15 @@ extern "C" {
            << std::flush;
    }
 
+   void CMFEM_SendMeshToGLVis(const CMFEM_Mesh *mesh,
+                              const char *host,
+                              int port)
+   {
+      mfem::socketstream sock(host, port);
+      sock.precision(8);
+      sock << "mesh\n"
+           << *cmfem::As<const mfem::Mesh>(mesh)
+           << std::flush;
+   }
+
 } // extern "C"

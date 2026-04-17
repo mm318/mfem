@@ -26,6 +26,42 @@ extern "C" {
                                                       (value);
    }
 
+   void CMFEM_GridFunction_ProjectBdrCoefficient_ConstantCoefficient(
+      CMFEM_GridFunction *grid_function,
+      const CMFEM_ConstantCoefficient *coefficient,
+      const CMFEM_ArrayInt *attributes)
+   {
+      auto &coef = const_cast<mfem::ConstantCoefficient &>(
+                      *cmfem::As<const mfem::ConstantCoefficient>(coefficient));
+      cmfem::As<mfem::GridFunction>(grid_function)->ProjectBdrCoefficient(
+         coef,
+         cmfem::ArrayIntRef(attributes));
+   }
+
+   void CMFEM_GridFunction_ProjectBdrCoefficient_FunctionCoefficient(
+      CMFEM_GridFunction *grid_function,
+      const CMFEM_FunctionCoefficient *coefficient,
+      const CMFEM_ArrayInt *attributes)
+   {
+      auto &coef = const_cast<mfem::FunctionCoefficient &>(
+                      *cmfem::As<const mfem::FunctionCoefficient>(coefficient));
+      cmfem::As<mfem::GridFunction>(grid_function)->ProjectBdrCoefficient(
+         coef,
+         cmfem::ArrayIntRef(attributes));
+   }
+
+   void CMFEM_GridFunction_ProjectBdrCoefficient_VectorConstantCoefficient(
+      CMFEM_GridFunction *grid_function,
+      const CMFEM_VectorConstantCoefficient *coefficient,
+      const CMFEM_ArrayInt *attributes)
+   {
+      auto &coef = const_cast<mfem::VectorConstantCoefficient &>(
+                      *cmfem::As<const mfem::VectorConstantCoefficient>(coefficient));
+      cmfem::As<mfem::GridFunction>(grid_function)->ProjectBdrCoefficient(
+         coef,
+         cmfem::ArrayIntRef(attributes));
+   }
+
    void CMFEM_GridFunction_ProjectVectorFunctionCoefficient(
       CMFEM_GridFunction *grid_function,
       const CMFEM_VectorFunctionCoefficient *coefficient)
@@ -64,6 +100,11 @@ extern "C" {
    {
       *cmfem::As<mfem::GridFunction>(grid_function) *= static_cast<mfem::real_t>
                                                        (scale);
+   }
+
+   void CMFEM_GridFunction_Update(CMFEM_GridFunction *grid_function)
+   {
+      cmfem::As<mfem::GridFunction>(grid_function)->Update();
    }
 
    void CMFEM_GridFunction_Save(const CMFEM_GridFunction *grid_function,

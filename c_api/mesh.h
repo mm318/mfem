@@ -5,6 +5,18 @@
 
 CMFEM_STORAGE(Mesh, 5712);
 
+enum CMFEM_ElementType
+{
+   CMFEM_ELEMENT_POINT = 0,
+   CMFEM_ELEMENT_SEGMENT = 1,
+   CMFEM_ELEMENT_TRIANGLE = 2,
+   CMFEM_ELEMENT_QUADRILATERAL = 3,
+   CMFEM_ELEMENT_TETRAHEDRON = 4,
+   CMFEM_ELEMENT_HEXAHEDRON = 5,
+   CMFEM_ELEMENT_WEDGE = 6,
+   CMFEM_ELEMENT_PYRAMID = 7,
+};
+
 CMFEM_BEGIN_EXTERN_C
 
 CMFEM_Mesh CMFEM_Mesh_Construct(void);
@@ -23,6 +35,7 @@ void CMFEM_Mesh_Delete(CMFEM_Mesh *mesh);
 int CMFEM_Mesh_Dimension(const CMFEM_Mesh *mesh);
 int CMFEM_Mesh_SpaceDimension(const CMFEM_Mesh *mesh);
 int CMFEM_Mesh_GetNE(const CMFEM_Mesh *mesh);
+int CMFEM_Mesh_GetElementType(const CMFEM_Mesh *mesh, int index);
 void CMFEM_Mesh_AddVertex(CMFEM_Mesh *mesh, const double *coords);
 void CMFEM_Mesh_AddTriangle(CMFEM_Mesh *mesh, const int *indices,
                             int attribute);
@@ -32,6 +45,7 @@ void CMFEM_Mesh_FinalizeTriMesh(CMFEM_Mesh *mesh, int generate_edges,
 void CMFEM_Mesh_FinalizeQuadMesh(CMFEM_Mesh *mesh, int generate_edges,
                                  int refine, int fix_orientation);
 void CMFEM_Mesh_UniformRefinement(CMFEM_Mesh *mesh);
+void CMFEM_Mesh_Finalize(CMFEM_Mesh *mesh, int refine, int fix_orientation);
 void CMFEM_Mesh_RefineAtVertex3(CMFEM_Mesh *mesh, double x, double y, double z);
 void CMFEM_Mesh_RandomRefinement(CMFEM_Mesh *mesh, double probability);
 int CMFEM_Mesh_BoundaryAttributesSize(const CMFEM_Mesh *mesh);

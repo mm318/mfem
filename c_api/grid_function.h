@@ -10,6 +10,18 @@ CMFEM_BEGIN_EXTERN_C
 CMFEM_GridFunction *CMFEM_GridFunction_New(CMFEM_FiniteElementSpace *fespace);
 void CMFEM_GridFunction_Delete(CMFEM_GridFunction *grid_function);
 void CMFEM_GridFunction_Assign(CMFEM_GridFunction *grid_function, double value);
+void CMFEM_GridFunction_ProjectBdrCoefficient_ConstantCoefficient(
+   CMFEM_GridFunction *grid_function,
+   const CMFEM_ConstantCoefficient *coefficient,
+   const CMFEM_ArrayInt *attributes);
+void CMFEM_GridFunction_ProjectBdrCoefficient_FunctionCoefficient(
+   CMFEM_GridFunction *grid_function,
+   const CMFEM_FunctionCoefficient *coefficient,
+   const CMFEM_ArrayInt *attributes);
+void CMFEM_GridFunction_ProjectBdrCoefficient_VectorConstantCoefficient(
+   CMFEM_GridFunction *grid_function,
+   const CMFEM_VectorConstantCoefficient *coefficient,
+   const CMFEM_ArrayInt *attributes);
 void CMFEM_GridFunction_ProjectVectorFunctionCoefficient(
    CMFEM_GridFunction *grid_function,
    const CMFEM_VectorFunctionCoefficient *coefficient);
@@ -22,6 +34,7 @@ double CMFEM_GridFunction_ComputeL2ErrorVectorFunctionCoefficient(
 void CMFEM_GridFunction_Add(CMFEM_GridFunction *grid_function,
                             const CMFEM_GridFunction *other);
 void CMFEM_GridFunction_Scale(CMFEM_GridFunction *grid_function, double scale);
+void CMFEM_GridFunction_Update(CMFEM_GridFunction *grid_function);
 void CMFEM_GridFunction_Save(const CMFEM_GridFunction *grid_function,
                              const char *path, int precision);
 

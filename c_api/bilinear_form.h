@@ -14,6 +14,7 @@ void CMFEM_BilinearForm_SetAssemblyLevelPartial(CMFEM_BilinearForm
 void CMFEM_BilinearForm_SetAssemblyLevelFull(CMFEM_BilinearForm *bilinear_form);
 void CMFEM_BilinearForm_SetAssemblyLevelElement(CMFEM_BilinearForm
                                                 *bilinear_form);
+void CMFEM_BilinearForm_SetDiagonalPolicyOne(CMFEM_BilinearForm *bilinear_form);
 void CMFEM_BilinearForm_EnableSparseMatrixSorting(CMFEM_BilinearForm
                                                   *bilinear_form, int enable);
 void CMFEM_BilinearForm_AddDomainIntegrator_Diffusion(CMFEM_BilinearForm
@@ -66,12 +67,31 @@ void CMFEM_BilinearForm_Finalize(CMFEM_BilinearForm *bilinear_form);
 void CMFEM_BilinearForm_FormLinearSystemSparseMatrix(CMFEM_BilinearForm
                                                      *bilinear_form, const CMFEM_ArrayInt *ess_tdof_list, CMFEM_GridFunction *x,
                                                      CMFEM_LinearForm *b, CMFEM_SparseMatrix *A, CMFEM_Vector *X, CMFEM_Vector *B);
+void CMFEM_BilinearForm_FormLinearSystemSparseMatrixCopyInterior(
+   CMFEM_BilinearForm *bilinear_form,
+   const CMFEM_ArrayInt *ess_tdof_list,
+   CMFEM_GridFunction *x,
+   CMFEM_LinearForm *b,
+   CMFEM_SparseMatrix *A,
+   CMFEM_Vector *X,
+   CMFEM_Vector *B,
+   int copy_interior);
 void CMFEM_BilinearForm_FormLinearSystemOperator(CMFEM_BilinearForm
                                                  *bilinear_form, const CMFEM_ArrayInt *ess_tdof_list, CMFEM_GridFunction *x,
                                                  CMFEM_LinearForm *b, CMFEM_OperatorPtr *A, CMFEM_Vector *X, CMFEM_Vector *B);
+void CMFEM_BilinearForm_FormLinearSystemOperatorCopyInterior(
+   CMFEM_BilinearForm *bilinear_form,
+   const CMFEM_ArrayInt *ess_tdof_list,
+   CMFEM_GridFunction *x,
+   CMFEM_LinearForm *b,
+   CMFEM_OperatorPtr *A,
+   CMFEM_Vector *X,
+   CMFEM_Vector *B,
+   int copy_interior);
 void CMFEM_BilinearForm_RecoverFEMSolution(const CMFEM_BilinearForm
                                            *bilinear_form, const CMFEM_Vector *X, const CMFEM_LinearForm *b,
                                            CMFEM_GridFunction *x);
+void CMFEM_BilinearForm_Update(CMFEM_BilinearForm *bilinear_form);
 
 CMFEM_END_EXTERN_C
 
