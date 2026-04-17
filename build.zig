@@ -1,20 +1,34 @@
 const std = @import("std");
 
+// Supported floating-point configurations for the generated config header.
 const Precision = enum {
     double,
     single,
 };
 
+// Common compiler flags for MFEM C++ translation units.
 const cxx_flags = &.{
     "-std=c++17",
 };
 
+// Common compiler flags for C translation units.
+const c_flags = &.{
+    "-std=c17",
+};
+
+// Extra flags for C++ executables that need runtime path helpers pre-included.
 const executable_cxx_flags = &.{
     "-std=c++17",
     "-include",
     "config/runtime_paths.hpp",
 };
 
+// Runtime path resolution is shared by the library and installed executables.
+const runtime_c_sources: []const []const u8 = &.{
+    "config/runtime_paths.c",
+};
+
+// Core MFEM implementation sources grouped by major subsystem.
 const general_sources: []const []const u8 = &.{
     "core/general/array.cpp",
     "core/general/binaryio.cpp",
@@ -383,6 +397,14 @@ const example_main_sources: []const []const u8 = &.{
     // "examples/cpp/superlu/ex1p.cpp", // SuperLU_DIST + MPI
 };
 
+const c_example_main_sources: []const []const u8 = &.{
+    "examples/c/ex0.c",
+    "examples/c/ex1.c",
+    "examples/c/ex2.c",
+    "examples/c/ex3.c",
+    "examples/c/ex4.c",
+};
+
 const miniapp_main_sources: []const []const u8 = &.{
     // "miniapps/adjoint/adjoint_advection_diffusion.cpp", // SUNDIALS
     // "miniapps/adjoint/cvsRoberts_ASAi_dns.cpp", // SUNDIALS
@@ -518,16 +540,18 @@ const InstalledExecutable = struct {
 };
 
 pub fn build(b: *std.Build) void {
+    // Resolve the user-selected target triple and optimization mode.
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
+    // Expose the supported MFEM build toggles as Zig build options.
     const shared = b.option(bool, "shared", "Build MFEM as a shared library") orelse false;
     const precision = b.option(Precision, "precision", "Floating-point precision") orelse .double;
-    const use_exceptions = b.option(bool, "exceptions", "Enable MFEM exceptions") orelse false;
     const thread_safe = b.option(bool, "thread-safe", "Enable MFEM thread safety") orelse false;
     const use_memalloc = b.option(bool, "memalloc", "Enable MFEM internal MEMALLOC") orelse true;
     const use_simd = b.option(bool, "simd", "Enable MFEM SIMD code paths") orelse false;
 
+    // Generate MFEM's config header from the selected Zig build options.
     const write_files = b.addWriteFiles();
     const io = b.graph.io;
     _ = write_files.add("config/_config.hpp", mfemConfigHeader(
@@ -536,12 +560,15 @@ pub fn build(b: *std.Build) void {
         optimize,
         shared,
         precision,
-        use_exceptions,
         thread_safe,
         use_memalloc,
         use_simd,
     ));
     const generated_config_dir = write_files.getDirectory();
+    const c_api_sources = collectCppSourcesUnder(b, io, "c_api") catch @panic("OOM");
+
+    // Install the repository data files and test fixtures used by the
+    // installed examples, miniapps, and tests.
     const install_repo_data = b.addInstallDirectory(.{
         .source_dir = b.path("data"),
         .install_dir = .prefix,
@@ -576,6 +603,7 @@ pub fn build(b: *std.Build) void {
     });
     b.getInstallStep().dependOn(&install_miniapps_multidomain_fixtures.step);
 
+    // Build the main MFEM library from the selected core source groups.
     const mfem = b.addLibrary(.{
         .name = "mfem",
         .linkage = if (shared) .dynamic else .static,
@@ -597,17 +625,37 @@ pub fn build(b: *std.Build) void {
     addSourceGroup(mfem.root_module, b, linalg_sources, cxx_flags);
     addSourceGroup(mfem.root_module, b, mesh_sources, cxx_flags);
     addSourceGroup(mfem.root_module, b, fem_sources, cxx_flags);
+    addSourceGroup(mfem.root_module, b, runtime_c_sources, c_flags);
 
+    // Install the library so downstream build steps can depend on the final
+    // zig-out layout rather than cache-only artifacts.
     const install_mfem = b.addInstallArtifact(mfem, .{});
     b.getInstallStep().dependOn(&install_mfem.step);
 
+    // Build the C wrapper library on top of the C++ MFEM library.
+    const mfem_c_api = b.addLibrary(.{
+        .name = "mfem_c_api",
+        .linkage = .static,
+        .root_module = b.createModule(.{
+            .target = target,
+            .optimize = optimize,
+            .link_libc = true,
+            .link_libcpp = true,
+        }),
+    });
+    configureMfemModule(mfem_c_api.root_module, b, generated_config_dir);
+    mfem_c_api.root_module.addIncludePath(b.path("c_api"));
+    mfem_c_api.root_module.linkLibrary(mfem);
+    addSourceGroup(mfem_c_api.root_module, b, c_api_sources, cxx_flags);
+
+    // Build and install the serial C++ examples.
     const examples_step = b.step("examples", "Build the serial example executables into zig-out/bin/examples/cpp");
     examples_step.dependOn(&install_mfem.step);
     examples_step.dependOn(&install_repo_data.step);
     for (example_main_sources) |main_source| {
         const install_name = sourceStem(main_source);
         const artifact_name = sanitizeArtifactName(b, "example", main_source) catch @panic("OOM");
-        const exe = addExecutable(
+        const exe = addCppExecutable(
             b,
             target,
             optimize,
@@ -621,8 +669,32 @@ pub fn build(b: *std.Build) void {
         examples_step.dependOn(&installed.step.step);
     }
 
+    // Build and install the serial C examples that exercise the CMFEM wrapper.
+    const c_examples_step = b.step("c_examples", "Build the C example executables into zig-out/bin/examples/c");
+    c_examples_step.dependOn(&install_mfem.step);
+    c_examples_step.dependOn(&install_repo_data.step);
+    for (c_example_main_sources) |main_source| {
+        const install_name = sourceStem(main_source);
+        const artifact_name = sanitizeArtifactName(b, "c_example", main_source) catch @panic("OOM");
+        const exe = addCExecutable(
+            b,
+            target,
+            optimize,
+            generated_config_dir,
+            mfem,
+            mfem_c_api,
+            artifact_name,
+            &.{main_source},
+            &.{"examples/c", "c_api"},
+        );
+        const installed = installExecutable(b, exe, "examples/c", install_name);
+        c_examples_step.dependOn(&installed.step.step);
+    }
+
+    // Collect shared support sources that miniapps reuse across executables.
     const miniapps_common_sources = collectCppSourcesUnder(b, io, "miniapps/common") catch @panic("OOM");
 
+    // Build and install the supported serial miniapps.
     const miniapps_step = b.step("miniapps", "Build the serial miniapp executables into zig-out/bin/miniapps");
     miniapps_step.dependOn(&install_mfem.step);
     miniapps_step.dependOn(&install_repo_data.step);
@@ -634,7 +706,7 @@ pub fn build(b: *std.Build) void {
 
         const install_name = sourceStem(main_source);
         const artifact_name = sanitizeArtifactName(b, "miniapp", main_source) catch @panic("OOM");
-        const exe = addExecutable(
+        const exe = addCppExecutable(
             b,
             target,
             optimize,
@@ -648,6 +720,8 @@ pub fn build(b: *std.Build) void {
         miniapps_step.dependOn(&installed.step.step);
     }
 
+    // Build the supported tests, install them under zig-out/bin/tests, and run
+    // each installed executable from that final location.
     const test_step = b.step("test", "Build zig-out/bin/tests and run the supported test executables");
     test_step.dependOn(&install_repo_data.step);
     test_step.dependOn(&install_test_fixture_data.step);
@@ -703,7 +777,7 @@ pub fn build(b: *std.Build) void {
         appendUniqueSource(&sources, spec.main_source) catch @panic("OOM");
         appendUniqueSources(&sources, spec.extra_sources) catch @panic("OOM");
 
-        const exe = addExecutable(
+        const exe = addCppExecutable(
             b,
             target,
             optimize,
@@ -728,6 +802,7 @@ pub fn build(b: *std.Build) void {
     }
 }
 
+// Apply the include path and config macro setup shared by every MFEM artifact.
 fn configureMfemModule(
     module: *std.Build.Module,
     b: *std.Build,
@@ -740,7 +815,9 @@ fn configureMfemModule(
     module.addCMacro("MFEM_CONFIG_FILE", "\"config/_config.hpp\"");
 }
 
-fn addExecutable(
+// Create a C++ executable that links against MFEM and installs runtime path
+// helpers via a forced include.
+fn addCppExecutable(
     b: *std.Build,
     target: std.Build.ResolvedTarget,
     optimize: std.builtin.OptimizeMode,
@@ -770,6 +847,40 @@ fn addExecutable(
     return exe;
 }
 
+// Create a C executable that links against both MFEM and the CMFEM wrapper.
+fn addCExecutable(
+    b: *std.Build,
+    target: std.Build.ResolvedTarget,
+    optimize: std.builtin.OptimizeMode,
+    generated_config_dir: std.Build.LazyPath,
+    mfem: *std.Build.Step.Compile,
+    mfem_c_api: *std.Build.Step.Compile,
+    artifact_name: []const u8,
+    sources: []const []const u8,
+    extra_include_paths: []const []const u8,
+) *std.Build.Step.Compile {
+    const exe = b.addExecutable(.{
+        .name = artifact_name,
+        .root_module = b.createModule(.{
+            .target = target,
+            .optimize = optimize,
+            .link_libc = true,
+            .link_libcpp = true,
+        }),
+    });
+
+    configureMfemModule(exe.root_module, b, generated_config_dir);
+    for (extra_include_paths) |path| {
+        exe.root_module.addIncludePath(b.path(path));
+    }
+    exe.root_module.linkLibrary(mfem);
+    exe.root_module.linkLibrary(mfem_c_api);
+    addSourceGroup(exe.root_module, b, sources, c_flags);
+
+    return exe;
+}
+
+// Add a set of C/C++ translation units to an existing Zig module.
 fn addSourceGroup(
     module: *std.Build.Module,
     b: *std.Build,
@@ -785,6 +896,7 @@ fn addSourceGroup(
     });
 }
 
+// Install an executable into a flat group directory under zig-out/bin.
 fn installExecutable(
     b: *std.Build,
     exe: *std.Build.Step.Compile,
@@ -801,6 +913,7 @@ fn installExecutable(
     };
 }
 
+// Compute the installed relative path for an executable within a group.
 fn executableInstallRelPath(
     b: *std.Build,
     exe: *std.Build.Step.Compile,
@@ -814,12 +927,14 @@ fn executableInstallRelPath(
     });
 }
 
+// Strip the extension from a source path to derive the installed executable name.
 fn sourceStem(source_path: []const u8) []const u8 {
     const basename = std.fs.path.basename(source_path);
     const extension = std.fs.path.extension(basename);
     return basename[0 .. basename.len - extension.len];
 }
 
+// Recursively collect C++ sources under a directory.
 fn appendCppSourcesUnder(
     allocator: std.mem.Allocator,
     io: std.Io,
@@ -844,6 +959,7 @@ fn appendCppSourcesUnder(
     }
 }
 
+// Return the sorted list of C++ sources under a directory.
 fn collectCppSourcesUnder(
     b: *std.Build,
     io: std.Io,
@@ -855,6 +971,8 @@ fn collectCppSourcesUnder(
     return list.toOwnedSlice();
 }
 
+// Collect support sources for an executable by taking sibling .cpp files that
+// do not define their own main function.
 fn collectSupportSourcesForExecutable(
     b: *std.Build,
     io: std.Io,
@@ -873,6 +991,8 @@ fn collectSupportSourcesForExecutable(
     return list.toOwnedSlice();
 }
 
+// Collect all non-main C++ sources under a directory while skipping unsupported
+// subtrees such as libCEED tests.
 fn collectNonMainSourcesUnder(
     b: *std.Build,
     io: std.Io,
@@ -893,6 +1013,8 @@ fn collectNonMainSourcesUnder(
     return list.toOwnedSlice();
 }
 
+// Detect whether a translation unit defines a main function and should
+// therefore be treated as a standalone executable entry point.
 fn fileHasMain(
     allocator: std.mem.Allocator,
     io: std.Io,
@@ -905,6 +1027,7 @@ fn fileHasMain(
         std.mem.indexOf(u8, contents, "int main (") != null;
 }
 
+// Append a source path only if it has not already been added to the list.
 fn appendUniqueSource(
     list: *std.array_list.Managed([]const u8),
     item: []const u8,
@@ -915,6 +1038,7 @@ fn appendUniqueSource(
     try list.append(item);
 }
 
+// Append a list of sources while preserving uniqueness.
 fn appendUniqueSources(
     list: *std.array_list.Managed([]const u8),
     items: []const []const u8,
@@ -924,6 +1048,7 @@ fn appendUniqueSources(
     }
 }
 
+// Convert a source path into a stable artifact name that Zig accepts.
 fn sanitizeArtifactName(
     b: *std.Build,
     prefix: []const u8,
@@ -941,17 +1066,19 @@ fn sanitizeArtifactName(
     return name.toOwnedSlice();
 }
 
+// Lexicographic comparator used when sorting source path lists.
 fn lessThanString(_: void, lhs: []const u8, rhs: []const u8) bool {
     return std.mem.lessThan(u8, lhs, rhs);
 }
 
+// Generate MFEM's config header so the Zig build produces the same compile-time
+// feature macros that the C++ sources expect from other build systems.
 fn mfemConfigHeader(
     b: *std.Build,
     target: std.Build.ResolvedTarget,
     optimize: std.builtin.OptimizeMode,
     shared: bool,
     precision: Precision,
-    use_exceptions: bool,
     thread_safe: bool,
     use_memalloc: bool,
     use_simd: bool,
@@ -980,7 +1107,6 @@ fn mfemConfigHeader(
         \\{s}
         \\{s}
         \\{s}
-        \\{s}
         \\#define MFEM_TIMER_TYPE {d}
         \\
         \\#endif // MFEM_CONFIG_HEADER
@@ -993,7 +1119,6 @@ fn mfemConfigHeader(
                 .single => "#define MFEM_USE_SINGLE",
             },
             if (optimize == .Debug) "#define MFEM_DEBUG" else "",
-            if (use_exceptions) "#define MFEM_USE_EXCEPTIONS" else "",
             if (thread_safe) "#define MFEM_THREAD_SAFE" else "",
             if (use_memalloc) "#define MFEM_USE_MEMALLOC" else "",
             if (use_simd) "#define MFEM_USE_SIMD" else "",

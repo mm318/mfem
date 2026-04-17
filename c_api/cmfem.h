@@ -1,0 +1,28 @@
+#ifndef CMFEM_H
+#define CMFEM_H
+
+#include "array_int.h"
+#include "vector.h"
+#include "mesh.h"
+#include "h1_fe_collection.h"
+#include "nd_fe_collection.h"
+#include "rt_fe_collection.h"
+#include "dg_interface_fe_collection.h"
+#include "finite_element_space.h"
+#include "grid_function.h"
+#include "linear_form.h"
+#include "bilinear_form.h"
+#include "sparse_matrix.h"
+#include "gs_smoother.h"
+#include "device.h"
+#include "operator_ptr.h"
+#include "operator_jacobi_smoother.h"
+#include "constant_coefficient.h"
+#include "pw_const_coefficient.h"
+#include "vector_array_coefficient.h"
+#include "vector_function_coefficient.h"
+#include "runtime.h"
+#include "solvers.h"
+#include "visualization.h"
+
+#endif
