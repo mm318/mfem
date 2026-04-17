@@ -13,6 +13,9 @@ void CMFEM_GridFunction_Assign(CMFEM_GridFunction *grid_function, double value);
 void CMFEM_GridFunction_ProjectVectorFunctionCoefficient(
    CMFEM_GridFunction *grid_function,
    const CMFEM_VectorFunctionCoefficient *coefficient);
+double CMFEM_GridFunction_ComputeL2ErrorFunctionCoefficient(
+   const CMFEM_GridFunction *grid_function,
+   const CMFEM_FunctionCoefficient *coefficient);
 double CMFEM_GridFunction_ComputeL2ErrorVectorFunctionCoefficient(
    const CMFEM_GridFunction *grid_function,
    const CMFEM_VectorFunctionCoefficient *coefficient);

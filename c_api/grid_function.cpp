@@ -35,6 +35,15 @@ extern "C" {
       cmfem::As<mfem::GridFunction>(grid_function)->ProjectCoefficient(coef);
    }
 
+   double CMFEM_GridFunction_ComputeL2ErrorFunctionCoefficient(
+      const CMFEM_GridFunction *grid_function,
+      const CMFEM_FunctionCoefficient *coefficient)
+   {
+      auto &coef = const_cast<mfem::FunctionCoefficient &>(
+                      *cmfem::As<const mfem::FunctionCoefficient>(coefficient));
+      return cmfem::As<const mfem::GridFunction>(grid_function)->ComputeL2Error(coef);
+   }
+
    double CMFEM_GridFunction_ComputeL2ErrorVectorFunctionCoefficient(
       const CMFEM_GridFunction *grid_function,
       const CMFEM_VectorFunctionCoefficient *coefficient)

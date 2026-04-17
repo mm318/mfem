@@ -65,6 +65,28 @@ extern "C" {
          new mfem::DiffusionIntegrator(coef));
    }
 
+   void CMFEM_BilinearForm_AddDomainIntegrator_MassCoefficient(
+      CMFEM_BilinearForm *bilinear_form,
+      const CMFEM_ConstantCoefficient *coefficient)
+   {
+      auto &coef = const_cast<mfem::ConstantCoefficient &>(
+                      *cmfem::As<const mfem::ConstantCoefficient>(coefficient));
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->AddDomainIntegrator(
+         new mfem::MassIntegrator(coef));
+   }
+
+   void CMFEM_BilinearForm_AddDomainIntegrator_DiffusionCoefficientMarker(
+      CMFEM_BilinearForm *bilinear_form,
+      const CMFEM_ConstantCoefficient *coefficient,
+      const CMFEM_ArrayInt *marker)
+   {
+      auto &coef = const_cast<mfem::ConstantCoefficient &>(
+                      *cmfem::As<const mfem::ConstantCoefficient>(coefficient));
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->AddDomainIntegrator(
+         new mfem::DiffusionIntegrator(coef),
+         const_cast<mfem::Array<int> &>(cmfem::ArrayIntRef(marker)));
+   }
+
    void CMFEM_BilinearForm_AddDomainIntegrator_Elasticity(
       CMFEM_BilinearForm *bilinear_form,
       const CMFEM_PWConstCoefficient *lambda,
@@ -124,9 +146,70 @@ extern "C" {
          cmfem::ArrayIntRef(ess_tdof_list));
    }
 
+   void CMFEM_BilinearForm_AddInteriorFaceIntegrator_DGDiffusionIntegrator(
+      CMFEM_BilinearForm *bilinear_form,
+      const CMFEM_ConstantCoefficient *coefficient,
+      double sigma,
+      double kappa)
+   {
+      auto &coef = const_cast<mfem::ConstantCoefficient &>(
+                      *cmfem::As<const mfem::ConstantCoefficient>(coefficient));
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->AddInteriorFaceIntegrator(
+         new mfem::DGDiffusionIntegrator(
+            coef,
+            static_cast<mfem::real_t>(sigma),
+            static_cast<mfem::real_t>(kappa)));
+   }
+
+   void CMFEM_BilinearForm_AddBdrFaceIntegrator_DGDiffusionIntegrator(
+      CMFEM_BilinearForm *bilinear_form,
+      const CMFEM_ConstantCoefficient *coefficient,
+      double sigma,
+      double kappa)
+   {
+      auto &coef = const_cast<mfem::ConstantCoefficient &>(
+                      *cmfem::As<const mfem::ConstantCoefficient>(coefficient));
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->AddBdrFaceIntegrator(
+         new mfem::DGDiffusionIntegrator(
+            coef,
+            static_cast<mfem::real_t>(sigma),
+            static_cast<mfem::real_t>(kappa)));
+   }
+
+   void CMFEM_BilinearForm_AddInteriorFaceIntegrator_DGDiffusionBR2Integrator(
+      CMFEM_BilinearForm *bilinear_form,
+      const CMFEM_FiniteElementSpace *fespace,
+      double eta)
+   {
+      auto &fespace_ref = const_cast<mfem::FiniteElementSpace &>(
+                             *cmfem::As<const mfem::FiniteElementSpace>(fespace));
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->AddInteriorFaceIntegrator(
+         new mfem::DGDiffusionBR2Integrator(
+            fespace_ref,
+            static_cast<mfem::real_t>(eta)));
+   }
+
+   void CMFEM_BilinearForm_AddBdrFaceIntegrator_DGDiffusionBR2Integrator(
+      CMFEM_BilinearForm *bilinear_form,
+      const CMFEM_FiniteElementSpace *fespace,
+      double eta)
+   {
+      auto &fespace_ref = const_cast<mfem::FiniteElementSpace &>(
+                             *cmfem::As<const mfem::FiniteElementSpace>(fespace));
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->AddBdrFaceIntegrator(
+         new mfem::DGDiffusionBR2Integrator(
+            fespace_ref,
+            static_cast<mfem::real_t>(eta)));
+   }
+
    void CMFEM_BilinearForm_Assemble(CMFEM_BilinearForm *bilinear_form)
    {
       cmfem::As<mfem::BilinearForm>(bilinear_form)->Assemble();
+   }
+
+   void CMFEM_BilinearForm_Finalize(CMFEM_BilinearForm *bilinear_form)
+   {
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->Finalize();
    }
 
    void CMFEM_BilinearForm_FormLinearSystemSparseMatrix(

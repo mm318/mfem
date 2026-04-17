@@ -15,6 +15,8 @@ CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshND(CMFEM_Mesh *mesh,
                                                              CMFEM_ND_FECollection *fec);
 CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshRT(CMFEM_Mesh *mesh,
                                                              CMFEM_RT_FECollection *fec);
+CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshDG(
+   CMFEM_Mesh *mesh, CMFEM_DG_FECollection *fec);
 CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshDGInterface(
    CMFEM_Mesh *mesh, CMFEM_DG_Interface_FECollection *fec);
 void CMFEM_FiniteElementSpace_Delete(CMFEM_FiniteElementSpace *fespace);

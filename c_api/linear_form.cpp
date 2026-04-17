@@ -30,6 +30,29 @@ extern "C" {
          new mfem::DomainLFIntegrator(coef));
    }
 
+   void CMFEM_LinearForm_AddDomainIntegrator_DomainLFIntegrator_FunctionCoefficient(
+      CMFEM_LinearForm *linear_form,
+      const CMFEM_FunctionCoefficient *coefficient)
+   {
+      auto &coef = const_cast<mfem::FunctionCoefficient &>(
+                      *cmfem::As<const mfem::FunctionCoefficient>(coefficient));
+      cmfem::As<mfem::LinearForm>(linear_form)->AddDomainIntegrator(
+         new mfem::DomainLFIntegrator(coef));
+   }
+
+   void
+   CMFEM_LinearForm_AddDomainIntegrator_DomainLFIntegrator_ConstantCoefficientMarker(
+      CMFEM_LinearForm *linear_form,
+      const CMFEM_ConstantCoefficient *coefficient,
+      const CMFEM_ArrayInt *marker)
+   {
+      auto &coef = const_cast<mfem::ConstantCoefficient &>(
+                      *cmfem::As<const mfem::ConstantCoefficient>(coefficient));
+      cmfem::As<mfem::LinearForm>(linear_form)->AddDomainIntegrator(
+         new mfem::DomainLFIntegrator(coef),
+         const_cast<mfem::Array<int> &>(cmfem::ArrayIntRef(marker)));
+   }
+
    void CMFEM_LinearForm_AddDomainIntegrator_VectorFEDomainLFIntegrator(
       CMFEM_LinearForm *linear_form,
       const CMFEM_VectorFunctionCoefficient *coefficient)
@@ -38,6 +61,23 @@ extern "C" {
                       *cmfem::As<const mfem::VectorFunctionCoefficient>(coefficient));
       cmfem::As<mfem::LinearForm>(linear_form)->AddDomainIntegrator(
          new mfem::VectorFEDomainLFIntegrator(coef));
+   }
+
+   void CMFEM_LinearForm_AddBdrFaceIntegrator_DGDirichletLFIntegrator(
+      CMFEM_LinearForm *linear_form,
+      const CMFEM_ConstantCoefficient *u_coeff,
+      const CMFEM_ConstantCoefficient *q_coeff,
+      double sigma,
+      double kappa)
+   {
+      auto &u_ref = const_cast<mfem::ConstantCoefficient &>(
+                       *cmfem::As<const mfem::ConstantCoefficient>(u_coeff));
+      auto &q_ref = const_cast<mfem::ConstantCoefficient &>(
+                       *cmfem::As<const mfem::ConstantCoefficient>(q_coeff));
+      cmfem::As<mfem::LinearForm>(linear_form)->AddBdrFaceIntegrator(
+         new mfem::DGDirichletLFIntegrator(
+            u_ref, q_ref, static_cast<mfem::real_t>(sigma),
+            static_cast<mfem::real_t>(kappa)));
    }
 
    void CMFEM_LinearForm_AddBoundaryIntegrator_VectorBoundaryLFIntegrator(

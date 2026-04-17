@@ -44,6 +44,14 @@ extern "C" {
                                              cmfem::As<mfem::RT_FECollection>(fec)));
    }
 
+   CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshDG(CMFEM_Mesh *mesh,
+                                                                CMFEM_DG_FECollection *fec)
+   {
+      return reinterpret_cast<CMFEM_FiniteElementSpace *>(
+                new mfem::FiniteElementSpace(cmfem::As<mfem::Mesh>(mesh),
+                                             cmfem::As<mfem::DG_FECollection>(fec)));
+   }
+
    CMFEM_FiniteElementSpace *
    CMFEM_FiniteElementSpace_NewMeshDGInterface(CMFEM_Mesh *mesh,
                                                CMFEM_DG_Interface_FECollection *fec)
