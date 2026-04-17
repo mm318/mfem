@@ -54,14 +54,14 @@ extern "C" {
          enable != 0);
    }
 
-   void CMFEM_BilinearForm_AddDomainIntegrator_Diffusion(CMFEM_BilinearForm
-                                                         *bilinear_form)
+   void CMFEM_BilinearForm_AddDomainIntegratorDi(CMFEM_BilinearForm
+                                                 *bilinear_form)
    {
       cmfem::As<mfem::BilinearForm>(bilinear_form)->AddDomainIntegrator(
          new mfem::DiffusionIntegrator());
    }
 
-   void CMFEM_BilinearForm_AddDomainIntegrator_DiffusionCoefficient(
+   void CMFEM_BilinearForm_AddDomainIntegratorDiCc(
       CMFEM_BilinearForm *bilinear_form,
       const CMFEM_ConstantCoefficient *coefficient)
    {
@@ -71,7 +71,7 @@ extern "C" {
          new mfem::DiffusionIntegrator(coef));
    }
 
-   void CMFEM_BilinearForm_AddDomainIntegrator_MassCoefficient(
+   void CMFEM_BilinearForm_AddDomainIntegratorMiCc(
       CMFEM_BilinearForm *bilinear_form,
       const CMFEM_ConstantCoefficient *coefficient)
    {
@@ -81,7 +81,7 @@ extern "C" {
          new mfem::MassIntegrator(coef));
    }
 
-   void CMFEM_BilinearForm_AddDomainIntegrator_DiffusionCoefficientMarker(
+   void CMFEM_BilinearForm_AddDomainIntegratorDiCcMarker(
       CMFEM_BilinearForm *bilinear_form,
       const CMFEM_ConstantCoefficient *coefficient,
       const CMFEM_ArrayInt *marker)
@@ -93,7 +93,7 @@ extern "C" {
          const_cast<mfem::Array<int> &>(cmfem::ArrayIntRef(marker)));
    }
 
-   void CMFEM_BilinearForm_AddDomainIntegrator_Elasticity(
+   void CMFEM_BilinearForm_AddDomainIntegratorEi(
       CMFEM_BilinearForm *bilinear_form,
       const CMFEM_PWConstCoefficient *lambda,
       const CMFEM_PWConstCoefficient *mu)
@@ -106,7 +106,7 @@ extern "C" {
          new mfem::ElasticityIntegrator(lambda_ref, mu_ref));
    }
 
-   void CMFEM_BilinearForm_AddDomainIntegrator_CurlCurl(
+   void CMFEM_BilinearForm_AddDomainIntegratorCci(
       CMFEM_BilinearForm *bilinear_form,
       const CMFEM_ConstantCoefficient *coefficient)
    {
@@ -116,7 +116,7 @@ extern "C" {
          new mfem::CurlCurlIntegrator(coef));
    }
 
-   void CMFEM_BilinearForm_AddDomainIntegrator_VectorFEMass(
+   void CMFEM_BilinearForm_AddDomainIntegratorVmi(
       CMFEM_BilinearForm *bilinear_form,
       const CMFEM_ConstantCoefficient *coefficient)
    {
@@ -126,7 +126,7 @@ extern "C" {
          new mfem::VectorFEMassIntegrator(coef));
    }
 
-   void CMFEM_BilinearForm_AddDomainIntegrator_DivDiv(
+   void CMFEM_BilinearForm_AddDomainIntegratorDdi(
       CMFEM_BilinearForm *bilinear_form,
       const CMFEM_ConstantCoefficient *coefficient)
    {
@@ -152,7 +152,7 @@ extern "C" {
          cmfem::ArrayIntRef(ess_tdof_list));
    }
 
-   void CMFEM_BilinearForm_AddInteriorFaceIntegrator_DGDiffusionIntegrator(
+   void CMFEM_BilinearForm_AddInteriorFaceIntegratorDgd(
       CMFEM_BilinearForm *bilinear_form,
       const CMFEM_ConstantCoefficient *coefficient,
       double sigma,
@@ -167,7 +167,7 @@ extern "C" {
             static_cast<mfem::real_t>(kappa)));
    }
 
-   void CMFEM_BilinearForm_AddBdrFaceIntegrator_DGDiffusionIntegrator(
+   void CMFEM_BilinearForm_AddBdrFaceIntegratorDgd(
       CMFEM_BilinearForm *bilinear_form,
       const CMFEM_ConstantCoefficient *coefficient,
       double sigma,
@@ -182,7 +182,7 @@ extern "C" {
             static_cast<mfem::real_t>(kappa)));
    }
 
-   void CMFEM_BilinearForm_AddInteriorFaceIntegrator_DGDiffusionBR2Integrator(
+   void CMFEM_BilinearForm_AddInteriorFaceIntegratorDgb(
       CMFEM_BilinearForm *bilinear_form,
       const CMFEM_FiniteElementSpace *fespace,
       double eta)
@@ -195,7 +195,7 @@ extern "C" {
             static_cast<mfem::real_t>(eta)));
    }
 
-   void CMFEM_BilinearForm_AddBdrFaceIntegrator_DGDiffusionBR2Integrator(
+   void CMFEM_BilinearForm_AddBdrFaceIntegratorDgb(
       CMFEM_BilinearForm *bilinear_form,
       const CMFEM_FiniteElementSpace *fespace,
       double eta)
@@ -218,7 +218,7 @@ extern "C" {
       cmfem::As<mfem::BilinearForm>(bilinear_form)->Finalize();
    }
 
-   void CMFEM_BilinearForm_FormLinearSystemSparseMatrix(
+   void CMFEM_BilinearForm_FormLinearSystemSm(
       CMFEM_BilinearForm *bilinear_form,
       const CMFEM_ArrayInt *ess_tdof_list,
       CMFEM_GridFunction *x,
@@ -236,7 +236,7 @@ extern "C" {
          cmfem::VectorRef(B));
    }
 
-   void CMFEM_BilinearForm_FormLinearSystemSparseMatrixCopyInterior(
+   void CMFEM_BilinearForm_FormLinearSystemSmCopyInterior(
       CMFEM_BilinearForm *bilinear_form,
       const CMFEM_ArrayInt *ess_tdof_list,
       CMFEM_GridFunction *x,
@@ -256,7 +256,7 @@ extern "C" {
          copy_interior);
    }
 
-   void CMFEM_BilinearForm_FormLinearSystemOperator(
+   void CMFEM_BilinearForm_FormLinearSystemOp(
       CMFEM_BilinearForm *bilinear_form,
       const CMFEM_ArrayInt *ess_tdof_list,
       CMFEM_GridFunction *x,
@@ -274,7 +274,7 @@ extern "C" {
          cmfem::VectorRef(B));
    }
 
-   void CMFEM_BilinearForm_FormLinearSystemOperatorCopyInterior(
+   void CMFEM_BilinearForm_FormLinearSystemOpCopyInterior(
       CMFEM_BilinearForm *bilinear_form,
       const CMFEM_ArrayInt *ess_tdof_list,
       CMFEM_GridFunction *x,

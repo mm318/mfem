@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
    CMFEM_Mesh_AddToAttributeSetFromName(mesh, 1, "Boundary", "Western Boundary");
 
    // 5. Define a finite element space on the mesh.
-   CMFEM_H1_FECollection *fec = CMFEM_H1_FECollection_NewOrderDim(order, dim);
+   CMFEM_H1FeCollection *fec = CMFEM_H1FeCollection_NewOrderDim(order, dim);
    CMFEM_FiniteElementSpace *fespace = CMFEM_FiniteElementSpace_NewMeshH1(mesh,
                                                                           fec);
    printf("Number of finite element unknowns: %d\n",
@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
    CMFEM_Mesh_GetAttributeSetMarker(mesh, 0, source_name, &source_marker);
    CMFEM_LinearForm *b = CMFEM_LinearForm_New(fespace);
    CMFEM_ConstantCoefficient *one = CMFEM_ConstantCoefficient_New(1.0);
-   CMFEM_LinearForm_AddDomainIntegrator_DomainLFIntegrator_ConstantCoefficientMarker(
+   CMFEM_LinearForm_AddDomainIntegratorDliCcMarker(
       b, one, &source_marker);
    CMFEM_LinearForm_Assemble(b);
 
@@ -148,10 +148,10 @@ int main(int argc, char *argv[])
    CMFEM_ConstantCoefficient *rose_coef = CMFEM_ConstantCoefficient_New(2.0);
 
    CMFEM_BilinearForm *a = CMFEM_BilinearForm_New(fespace);
-   CMFEM_BilinearForm_AddDomainIntegrator_DiffusionCoefficient(a, default_coef);
-   CMFEM_BilinearForm_AddDomainIntegrator_DiffusionCoefficientMarker(
+   CMFEM_BilinearForm_AddDomainIntegratorDiCc(a, default_coef);
+   CMFEM_BilinearForm_AddDomainIntegratorDiCcMarker(
       a, base_coef, &base_marker);
-   CMFEM_BilinearForm_AddDomainIntegrator_DiffusionCoefficientMarker(
+   CMFEM_BilinearForm_AddDomainIntegratorDiCcMarker(
       a, rose_coef, &rose_marker);
    CMFEM_BilinearForm_Assemble(a);
 
@@ -159,13 +159,13 @@ int main(int argc, char *argv[])
    _Alignas(max_align_t) CMFEM_SparseMatrix A = CMFEM_SparseMatrix_Construct();
    _Alignas(max_align_t) CMFEM_Vector B = CMFEM_Vector_Construct();
    _Alignas(max_align_t) CMFEM_Vector X = CMFEM_Vector_Construct();
-   CMFEM_BilinearForm_FormLinearSystemSparseMatrix(a, &ess_tdof_list, x, b, &A, &X,
-                                                   &B);
+   CMFEM_BilinearForm_FormLinearSystemSm(a, &ess_tdof_list, x, b, &A, &X,
+                                         &B);
    printf("Size of linear system: %d\n", CMFEM_SparseMatrix_Height(&A));
 
    {
-      CMFEM_GSSmoother *M = CMFEM_GSSmoother_NewSparseMatrix(&A);
-      CMFEM_PCG_SparseMatrixGSSmoother(&A, M, &B, &X, 1, 800, 1e-12, 0.0);
+      CMFEM_GSSmoother *M = CMFEM_GSSmoother_NewSm(&A);
+      CMFEM_PCGSmGs(&A, M, &B, &X, 1, 800, 1e-12, 0.0);
       CMFEM_GSSmoother_Delete(M);
    }
 
@@ -197,7 +197,7 @@ int main(int argc, char *argv[])
    CMFEM_ArrayInt_Destroy(&source_marker);
    CMFEM_ArrayInt_Destroy(&ess_tdof_list);
    CMFEM_FiniteElementSpace_Delete(fespace);
-   CMFEM_H1_FECollection_Delete(fec);
+   CMFEM_H1FeCollection_Delete(fec);
    CMFEM_Mesh_Delete(mesh);
    return 0;
 }

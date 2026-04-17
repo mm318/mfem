@@ -13,11 +13,11 @@
 
 typedef struct CMFEM_ArrayInt CMFEM_ArrayInt;
 typedef struct CMFEM_Mesh CMFEM_Mesh;
-typedef struct CMFEM_H1_FECollection CMFEM_H1_FECollection;
-typedef struct CMFEM_ND_FECollection CMFEM_ND_FECollection;
-typedef struct CMFEM_RT_FECollection CMFEM_RT_FECollection;
-typedef struct CMFEM_DG_FECollection CMFEM_DG_FECollection;
-typedef struct CMFEM_DG_Interface_FECollection CMFEM_DG_Interface_FECollection;
+typedef struct CMFEM_H1FeCollection CMFEM_H1FeCollection;
+typedef struct CMFEM_NdFeCollection CMFEM_NdFeCollection;
+typedef struct CMFEM_RtFeCollection CMFEM_RtFeCollection;
+typedef struct CMFEM_DgFeCollection CMFEM_DgFeCollection;
+typedef struct CMFEM_DgInterfaceFeCollection CMFEM_DgInterfaceFeCollection;
 typedef struct CMFEM_FiniteElementSpace CMFEM_FiniteElementSpace;
 typedef struct CMFEM_GridFunction CMFEM_GridFunction;
 typedef struct CMFEM_LinearForm CMFEM_LinearForm;
@@ -42,7 +42,7 @@ typedef struct CMFEM_LSZienkiewiczZhuEstimator CMFEM_LSZienkiewiczZhuEstimator;
 typedef struct CMFEM_KellyErrorEstimator CMFEM_KellyErrorEstimator;
 typedef struct CMFEM_ThresholdRefiner CMFEM_ThresholdRefiner;
 typedef struct CMFEM_ThresholdDerefiner CMFEM_ThresholdDerefiner;
-typedef struct CMFEM_L2_FECollection CMFEM_L2_FECollection;
+typedef struct CMFEM_L2FeCollection CMFEM_L2FeCollection;
 typedef struct CMFEM_VisItDataCollection CMFEM_VisItDataCollection;
 
 #define CMFEM_STORAGE(Name, Size) struct CMFEM_##Name { char data[Size]; }

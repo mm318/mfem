@@ -9,7 +9,7 @@ CMFEM_ASSERT_TYPE(CMFEM_ElasticityIntegrator, mfem::ElasticityIntegrator);
 
 extern "C" {
 
-   CMFEM_ElasticityIntegrator *CMFEM_ElasticityIntegrator_NewPWConstCoefficients(
+   CMFEM_ElasticityIntegrator *CMFEM_ElasticityIntegrator_NewPwcPwc(
       const CMFEM_PWConstCoefficient *lambda,
       const CMFEM_PWConstCoefficient *mu)
    {

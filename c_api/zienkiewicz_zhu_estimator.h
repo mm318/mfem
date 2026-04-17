@@ -8,12 +8,12 @@ CMFEM_STORAGE(ZienkiewiczZhuEstimator, 144);
 CMFEM_BEGIN_EXTERN_C
 
 CMFEM_ZienkiewiczZhuEstimator *
-CMFEM_ZienkiewiczZhuEstimator_NewDiffusionIntegratorGridFunctionFESpace(
+CMFEM_ZienkiewiczZhuEstimator_NewDiGfFes(
    CMFEM_DiffusionIntegrator *integrator,
    CMFEM_GridFunction *solution,
    CMFEM_FiniteElementSpace *flux_fespace);
 CMFEM_ZienkiewiczZhuEstimator *
-CMFEM_ZienkiewiczZhuEstimator_NewElasticityIntegratorGridFunctionFESpace(
+CMFEM_ZienkiewiczZhuEstimator_NewEiGfFes(
    CMFEM_ElasticityIntegrator *integrator,
    CMFEM_GridFunction *solution,
    CMFEM_FiniteElementSpace *flux_fespace);

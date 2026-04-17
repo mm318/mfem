@@ -243,7 +243,7 @@ int main(int argc, char *argv[])
    CMFEM_ArrayInt_Assign(&ess_bdr, 1);
 
    // 4. Define the finite element space and the Poisson forms.
-   CMFEM_H1_FECollection *fec = CMFEM_H1_FECollection_NewOrderDim(order, dim);
+   CMFEM_H1FeCollection *fec = CMFEM_H1FeCollection_NewOrderDim(order, dim);
    CMFEM_FiniteElementSpace *fespace = CMFEM_FiniteElementSpace_NewMeshH1(mesh,
                                                                           fec);
    CMFEM_BilinearForm *a = CMFEM_BilinearForm_New(fespace);
@@ -254,8 +254,8 @@ int main(int argc, char *argv[])
       CMFEM_FunctionCoefficient_NewTimeDependent(bdr_func, NULL);
    CMFEM_FunctionCoefficient *rhs =
       CMFEM_FunctionCoefficient_NewTimeDependent(rhs_func, NULL);
-   CMFEM_BilinearForm_AddDomainIntegrator_DiffusionCoefficient(a, one);
-   CMFEM_LinearForm_AddDomainIntegrator_DomainLFIntegrator_FunctionCoefficient(
+   CMFEM_BilinearForm_AddDomainIntegratorDiCc(a, one);
+   CMFEM_LinearForm_AddDomainIntegratorDliFc(
       b, rhs);
 
    // 5. Maintain the solution over AMR iterations.
@@ -268,41 +268,41 @@ int main(int argc, char *argv[])
    if (visit)
    {
       visit_dc = CMFEM_VisItDataCollection_New("Example15", mesh);
-      CMFEM_VisItDataCollection_RegisterFieldGridFunction(visit_dc, "solution",
-                                                          x);
+      CMFEM_VisItDataCollection_RegisterFieldGf(visit_dc, "solution",
+                                                x);
    }
 
    // 7. Set up the error estimator and refinement operators.
    CMFEM_DiffusionIntegrator *diff_integ =
-      CMFEM_DiffusionIntegrator_NewConstantCoefficient(one);
+      CMFEM_DiffusionIntegrator_NewCc(one);
    CMFEM_ZienkiewiczZhuEstimator *zz_estimator = NULL;
    CMFEM_KellyErrorEstimator *kelly_estimator = NULL;
    CMFEM_ThresholdRefiner *refiner = NULL;
    CMFEM_ThresholdDerefiner *derefiner = NULL;
-   CMFEM_L2_FECollection *l2_flux_fec = NULL;
+   CMFEM_L2FeCollection *l2_flux_fec = NULL;
 
    if (which_estimator == 1)
    {
-      l2_flux_fec = CMFEM_L2_FECollection_NewOrderDim(order, dim);
+      l2_flux_fec = CMFEM_L2FeCollection_NewOrderDim(order, dim);
       CMFEM_FiniteElementSpace *flux_fes =
-         CMFEM_FiniteElementSpace_NewMeshL2VDim(mesh, l2_flux_fec, sdim);
+         CMFEM_FiniteElementSpace_NewMeshL2Vdim(mesh, l2_flux_fec, sdim);
       kelly_estimator =
-         CMFEM_KellyErrorEstimator_NewDiffusionIntegratorGridFunctionFESpace(
+         CMFEM_KellyErrorEstimator_NewDiGfFes(
             diff_integ, x, flux_fes);
-      refiner = CMFEM_ThresholdRefiner_NewKellyErrorEstimator(kelly_estimator);
-      derefiner = CMFEM_ThresholdDerefiner_NewKellyErrorEstimator(
-         kelly_estimator);
+      refiner = CMFEM_ThresholdRefiner_NewKee(kelly_estimator);
+      derefiner = CMFEM_ThresholdDerefiner_NewKee(
+                     kelly_estimator);
    }
    else
    {
       CMFEM_FiniteElementSpace *flux_fes =
          CMFEM_FiniteElementSpace_NewMeshH1VDim(mesh, fec, sdim);
       zz_estimator =
-         CMFEM_ZienkiewiczZhuEstimator_NewDiffusionIntegratorGridFunctionFESpace(
+         CMFEM_ZienkiewiczZhuEstimator_NewDiGfFes(
             diff_integ, x, flux_fes);
-      refiner = CMFEM_ThresholdRefiner_NewZienkiewiczZhuEstimator(zz_estimator);
-      derefiner = CMFEM_ThresholdDerefiner_NewZienkiewiczZhuEstimator(
-         zz_estimator);
+      refiner = CMFEM_ThresholdRefiner_NewZze(zz_estimator);
+      derefiner = CMFEM_ThresholdDerefiner_NewZze(
+                     zz_estimator);
    }
 
    CMFEM_ThresholdRefiner_SetTotalErrorFraction(refiner, 0.0);
@@ -337,7 +337,7 @@ int main(int argc, char *argv[])
 
                CMFEM_BilinearForm_Assemble(a);
                CMFEM_LinearForm_Assemble(b);
-               CMFEM_GridFunction_ProjectBdrCoefficient_FunctionCoefficient(
+               CMFEM_GridFunction_ProjectBdrCoefficientFc(
                   x, bdr, &ess_bdr);
 
                _Alignas(max_align_t) CMFEM_ArrayInt ess_tdof_list =
@@ -349,18 +349,18 @@ int main(int argc, char *argv[])
                   CMFEM_SparseMatrix_Construct();
                _Alignas(max_align_t) CMFEM_Vector B = CMFEM_Vector_Construct();
                _Alignas(max_align_t) CMFEM_Vector X = CMFEM_Vector_Construct();
-               CMFEM_BilinearForm_FormLinearSystemSparseMatrix(a,
-                                                               &ess_tdof_list,
-                                                               x,
-                                                               b,
-                                                               &A,
-                                                               &X,
-                                                               &B);
+               CMFEM_BilinearForm_FormLinearSystemSm(a,
+                                                     &ess_tdof_list,
+                                                     x,
+                                                     b,
+                                                     &A,
+                                                     &X,
+                                                     &B);
 
                {
-                  CMFEM_GSSmoother *M = CMFEM_GSSmoother_NewSparseMatrix(&A);
-                  CMFEM_PCG_SparseMatrixGSSmoother(&A, M, &B, &X, 0, 500,
-                                                   1.0e-12, 0.0);
+                  CMFEM_GSSmoother *M = CMFEM_GSSmoother_NewSm(&A);
+                  CMFEM_PCGSmGs(&A, M, &B, &X, 0, 500,
+                                1.0e-12, 0.0);
                   CMFEM_GSSmoother_Delete(M);
                }
 
@@ -412,7 +412,7 @@ int main(int argc, char *argv[])
    CMFEM_ThresholdRefiner_Delete(refiner);
    if (zz_estimator) { CMFEM_ZienkiewiczZhuEstimator_Delete(zz_estimator); }
    if (kelly_estimator) { CMFEM_KellyErrorEstimator_Delete(kelly_estimator); }
-   if (l2_flux_fec) { CMFEM_L2_FECollection_Delete(l2_flux_fec); }
+   if (l2_flux_fec) { CMFEM_L2FeCollection_Delete(l2_flux_fec); }
    CMFEM_DiffusionIntegrator_Delete(diff_integ);
    CMFEM_GridFunction_Delete(x);
    CMFEM_FunctionCoefficient_Delete(rhs);
@@ -421,7 +421,7 @@ int main(int argc, char *argv[])
    CMFEM_LinearForm_Delete(b);
    CMFEM_BilinearForm_Delete(a);
    CMFEM_FiniteElementSpace_Delete(fespace);
-   CMFEM_H1_FECollection_Delete(fec);
+   CMFEM_H1FeCollection_Delete(fec);
    CMFEM_ArrayInt_Destroy(&ess_bdr);
    CMFEM_Mesh_Delete(mesh);
    return 0;

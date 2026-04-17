@@ -26,7 +26,7 @@ extern "C" {
                                                       (value);
    }
 
-   void CMFEM_GridFunction_ProjectBdrCoefficient_ConstantCoefficient(
+   void CMFEM_GridFunction_ProjectBdrCoefficientCc(
       CMFEM_GridFunction *grid_function,
       const CMFEM_ConstantCoefficient *coefficient,
       const CMFEM_ArrayInt *attributes)
@@ -38,7 +38,7 @@ extern "C" {
          cmfem::ArrayIntRef(attributes));
    }
 
-   void CMFEM_GridFunction_ProjectBdrCoefficient_FunctionCoefficient(
+   void CMFEM_GridFunction_ProjectBdrCoefficientFc(
       CMFEM_GridFunction *grid_function,
       const CMFEM_FunctionCoefficient *coefficient,
       const CMFEM_ArrayInt *attributes)
@@ -50,7 +50,7 @@ extern "C" {
          cmfem::ArrayIntRef(attributes));
    }
 
-   void CMFEM_GridFunction_ProjectBdrCoefficient_VectorConstantCoefficient(
+   void CMFEM_GridFunction_ProjectBdrCoefficientVcc(
       CMFEM_GridFunction *grid_function,
       const CMFEM_VectorConstantCoefficient *coefficient,
       const CMFEM_ArrayInt *attributes)
@@ -62,7 +62,7 @@ extern "C" {
          cmfem::ArrayIntRef(attributes));
    }
 
-   void CMFEM_GridFunction_ProjectVectorFunctionCoefficient(
+   void CMFEM_GridFunction_ProjectCoefficientVfc(
       CMFEM_GridFunction *grid_function,
       const CMFEM_VectorFunctionCoefficient *coefficient)
    {
@@ -71,7 +71,7 @@ extern "C" {
       cmfem::As<mfem::GridFunction>(grid_function)->ProjectCoefficient(coef);
    }
 
-   double CMFEM_GridFunction_ComputeL2ErrorFunctionCoefficient(
+   double CMFEM_GridFunction_ComputeL2ErrorFc(
       const CMFEM_GridFunction *grid_function,
       const CMFEM_FunctionCoefficient *coefficient)
    {
@@ -80,7 +80,7 @@ extern "C" {
       return cmfem::As<const mfem::GridFunction>(grid_function)->ComputeL2Error(coef);
    }
 
-   double CMFEM_GridFunction_ComputeL2ErrorVectorFunctionCoefficient(
+   double CMFEM_GridFunction_ComputeL2ErrorVfc(
       const CMFEM_GridFunction *grid_function,
       const CMFEM_VectorFunctionCoefficient *coefficient)
    {

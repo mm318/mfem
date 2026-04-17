@@ -88,9 +88,9 @@ int main(int argc, char *argv[])
       }
 
       // 5. Define a finite element space on the mesh.
-      CMFEM_H1_FECollection *fec = CMFEM_H1_FECollection_NewOrderDim(order, dim);
+      CMFEM_H1FeCollection *fec = CMFEM_H1FeCollection_NewOrderDim(order, dim);
       CMFEM_FiniteElementSpace *fespace = CMFEM_FiniteElementSpace_NewMeshH1(
-         mesh, fec);
+                                             mesh, fec);
 
       // 6. Set up the bilinear and linear forms.
       CMFEM_BilinearForm *a = CMFEM_BilinearForm_New(fespace);
@@ -103,8 +103,8 @@ int main(int argc, char *argv[])
 
       CMFEM_ConstantCoefficient *one = CMFEM_ConstantCoefficient_New(1.0);
       CMFEM_ConstantCoefficient *zero = CMFEM_ConstantCoefficient_New(0.0);
-      CMFEM_BilinearForm_AddDomainIntegrator_DiffusionCoefficient(a, one);
-      CMFEM_LinearForm_AddDomainIntegrator_DomainLFIntegrator_ConstantCoefficient(
+      CMFEM_BilinearForm_AddDomainIntegratorDiCc(a, one);
+      CMFEM_LinearForm_AddDomainIntegratorDliCc(
          b, one);
 
       // 7. Initialize the solution grid function.
@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
          CMFEM_LinearForm_Delete(b);
          CMFEM_BilinearForm_Delete(a);
          CMFEM_FiniteElementSpace_Delete(fespace);
-         CMFEM_H1_FECollection_Delete(fec);
+         CMFEM_H1FeCollection_Delete(fec);
          CMFEM_Mesh_Delete(mesh);
          CMFEM_Device_Delete(device);
          return 1;
@@ -132,7 +132,7 @@ int main(int argc, char *argv[])
 
       // 9. Set up an error estimator.
       CMFEM_DiffusionIntegrator *diff_integ =
-         CMFEM_DiffusionIntegrator_NewConstantCoefficient(one);
+         CMFEM_DiffusionIntegrator_NewCc(one);
       CMFEM_ThresholdRefiner *refiner = NULL;
       CMFEM_ZienkiewiczZhuEstimator *zz_estimator = NULL;
       CMFEM_LSZienkiewiczZhuEstimator *lszz_estimator = NULL;
@@ -140,7 +140,7 @@ int main(int argc, char *argv[])
       if (lszz)
       {
          lszz_estimator =
-            CMFEM_LSZienkiewiczZhuEstimator_NewDiffusionIntegratorGridFunction(
+            CMFEM_LSZienkiewiczZhuEstimator_NewDiGf(
                diff_integ, x);
          if (dim == 3 &&
              CMFEM_Mesh_GetElementType(mesh, 0) != CMFEM_ELEMENT_HEXAHEDRON)
@@ -148,19 +148,19 @@ int main(int argc, char *argv[])
             CMFEM_LSZienkiewiczZhuEstimator_SetTichonovRegularization(
                lszz_estimator, 1.0e-8);
          }
-         refiner = CMFEM_ThresholdRefiner_NewLSZienkiewiczZhuEstimator(
-            lszz_estimator);
+         refiner = CMFEM_ThresholdRefiner_NewLzz(
+                      lszz_estimator);
       }
       else
       {
          CMFEM_FiniteElementSpace *flux_fes =
             CMFEM_FiniteElementSpace_NewMeshH1VDim(mesh, fec, sdim);
          zz_estimator =
-            CMFEM_ZienkiewiczZhuEstimator_NewDiffusionIntegratorGridFunctionFESpace(
+            CMFEM_ZienkiewiczZhuEstimator_NewDiGfFes(
                diff_integ, x, flux_fes);
          CMFEM_ZienkiewiczZhuEstimator_SetAnisotropic(zz_estimator, 1);
-         refiner = CMFEM_ThresholdRefiner_NewZienkiewiczZhuEstimator(
-            zz_estimator);
+         refiner = CMFEM_ThresholdRefiner_NewZze(
+                      zz_estimator);
       }
       CMFEM_ThresholdRefiner_SetTotalErrorFraction(refiner, 0.7);
 
@@ -173,8 +173,8 @@ int main(int argc, char *argv[])
 
          // 11. Assemble the right-hand side and set Dirichlet values.
          CMFEM_LinearForm_Assemble(b);
-         CMFEM_GridFunction_ProjectBdrCoefficient_ConstantCoefficient(x, zero,
-                                                                      &ess_bdr);
+         CMFEM_GridFunction_ProjectBdrCoefficientCc(x, zero,
+                                                    &ess_bdr);
          _Alignas(max_align_t) CMFEM_ArrayInt ess_tdof_list = CMFEM_ArrayInt_Construct();
          CMFEM_FiniteElementSpace_GetEssentialTrueDofs(fespace, &ess_bdr,
                                                        &ess_tdof_list);
@@ -184,28 +184,28 @@ int main(int argc, char *argv[])
          _Alignas(max_align_t) CMFEM_OperatorPtr A = CMFEM_OperatorPtr_Construct();
          _Alignas(max_align_t) CMFEM_Vector B = CMFEM_Vector_Construct();
          _Alignas(max_align_t) CMFEM_Vector X = CMFEM_Vector_Construct();
-         CMFEM_BilinearForm_FormLinearSystemOperatorCopyInterior(a,
-                                                                 &ess_tdof_list,
-                                                                 x,
-                                                                 b,
-                                                                 &A,
-                                                                 &X,
-                                                                 &B,
-                                                                 1);
+         CMFEM_BilinearForm_FormLinearSystemOpCopyInterior(a,
+                                                           &ess_tdof_list,
+                                                           x,
+                                                           b,
+                                                           &A,
+                                                           &X,
+                                                           &B,
+                                                           1);
 
          // 13. Solve the linear system.
          if (!pa)
          {
-            CMFEM_GSSmoother *M = CMFEM_GSSmoother_NewOperator(&A);
-            CMFEM_PCG_OperatorGSSmoother(&A, M, &B, &X, 3, 200, 1.0e-12, 0.0);
+            CMFEM_GSSmoother *M = CMFEM_GSSmoother_NewOp(&A);
+            CMFEM_PCGOpGs(&A, M, &B, &X, 3, 200, 1.0e-12, 0.0);
             CMFEM_GSSmoother_Delete(M);
          }
          else
          {
             CMFEM_OperatorJacobiSmoother *M =
-               CMFEM_OperatorJacobiSmoother_NewBilinearForm(a, &ess_tdof_list);
-            CMFEM_PCG_OperatorJacobiSmoother(&A, M, &B, &X, 3, 2000, 1.0e-12,
-                                             0.0);
+               CMFEM_OperatorJacobiSmoother_NewBf(a, &ess_tdof_list);
+            CMFEM_PCGOpOjs(&A, M, &B, &X, 3, 2000, 1.0e-12,
+                           0.0);
             CMFEM_OperatorJacobiSmoother_Delete(M);
          }
 
@@ -260,7 +260,7 @@ int main(int argc, char *argv[])
       CMFEM_LinearForm_Delete(b);
       CMFEM_BilinearForm_Delete(a);
       CMFEM_FiniteElementSpace_Delete(fespace);
-      CMFEM_H1_FECollection_Delete(fec);
+      CMFEM_H1FeCollection_Delete(fec);
       CMFEM_Mesh_Delete(mesh);
       CMFEM_Device_Delete(device);
    }

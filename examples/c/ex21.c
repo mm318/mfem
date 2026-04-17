@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
    }
 
    // 4. Define the vector H1 space for the elasticity displacement field.
-   CMFEM_H1_FECollection *fec = CMFEM_H1_FECollection_NewOrderDim(order, dim);
+   CMFEM_H1FeCollection *fec = CMFEM_H1FeCollection_NewOrderDim(order, dim);
    CMFEM_FiniteElementSpace *fespace = CMFEM_FiniteElementSpace_NewMeshH1VDim(
                                           mesh, fec, dim);
    tdim = dim * (dim + 1) / 2;
@@ -112,8 +112,9 @@ int main(int argc, char *argv[])
       }
    }
    {
-      CMFEM_Vector *pull_force = CMFEM_Vector_NewSize(CMFEM_Mesh_BoundaryAttributesMax(
-                                                         mesh));
+      CMFEM_Vector *pull_force = CMFEM_Vector_NewSize(
+                                    CMFEM_Mesh_BoundaryAttributesMax(
+                                       mesh));
       CMFEM_Vector_Assign(pull_force, 0.0);
       CMFEM_Vector_Set(pull_force, 1, -1.0e-2);
       CMFEM_VectorArrayCoefficient_SetPWConstCoefficient(
@@ -122,7 +123,7 @@ int main(int argc, char *argv[])
    }
 
    CMFEM_LinearForm *b = CMFEM_LinearForm_New(fespace);
-   CMFEM_LinearForm_AddBoundaryIntegrator_VectorBoundaryLFIntegrator(b, force);
+   CMFEM_LinearForm_AddBoundaryIntegratorVbl(b, force);
 
    // 6. Set up the linear elasticity bilinear form and the zero displacement
    //    boundary coefficient used on the clamped side.
@@ -139,7 +140,7 @@ int main(int argc, char *argv[])
    CMFEM_Vector_Delete(mu_values);
 
    CMFEM_BilinearForm *a = CMFEM_BilinearForm_New(fespace);
-   CMFEM_BilinearForm_AddDomainIntegrator_Elasticity(a, lambda, mu);
+   CMFEM_BilinearForm_AddDomainIntegratorEi(a, lambda, mu);
    if (static_cond)
    {
       CMFEM_BilinearForm_EnableStaticCondensation(a);
@@ -164,15 +165,15 @@ int main(int argc, char *argv[])
    CMFEM_FiniteElementSpace *flux_fespace = CMFEM_FiniteElementSpace_NewMeshH1VDim(
                                                mesh, fec, tdim);
    CMFEM_ElasticityIntegrator *estimator_integ =
-      CMFEM_ElasticityIntegrator_NewPWConstCoefficients(lambda, mu);
+      CMFEM_ElasticityIntegrator_NewPwcPwc(lambda, mu);
    CMFEM_ZienkiewiczZhuEstimator *estimator =
-      CMFEM_ZienkiewiczZhuEstimator_NewElasticityIntegratorGridFunctionFESpace(
+      CMFEM_ZienkiewiczZhuEstimator_NewEiGfFes(
          estimator_integ, x, flux_fespace);
    CMFEM_ZienkiewiczZhuEstimator_SetFluxAveraging(estimator, flux_averaging);
 
    // 9. Configure the threshold refiner that drives the AMR loop.
    CMFEM_ThresholdRefiner *refiner =
-      CMFEM_ThresholdRefiner_NewZienkiewiczZhuEstimator(estimator);
+      CMFEM_ThresholdRefiner_NewZze(estimator);
    CMFEM_ThresholdRefiner_SetTotalErrorFraction(refiner, 0.7);
 
    // 10. Solve on the current mesh, visualize, and adapt until the stopping
@@ -200,18 +201,18 @@ int main(int argc, char *argv[])
 
          // 12. Enforce the zero displacement on the essential boundary and
          //     build the constrained linear system.
-         CMFEM_GridFunction_ProjectBdrCoefficient_VectorConstantCoefficient(
+         CMFEM_GridFunction_ProjectBdrCoefficientVcc(
             x, zero_vec_coeff, &ess_bdr);
          CMFEM_FiniteElementSpace_GetEssentialTrueDofs(fespace, &ess_bdr,
                                                        &ess_tdof_list);
-         CMFEM_BilinearForm_FormLinearSystemSparseMatrixCopyInterior(
+         CMFEM_BilinearForm_FormLinearSystemSmCopyInterior(
             a, &ess_tdof_list, x, b, &A, &X, &B, 1);
 
          // 13. Solve the symmetric linear system with PCG and symmetric
          //     Gauss-Seidel preconditioning.
          {
-            CMFEM_GSSmoother *M = CMFEM_GSSmoother_NewSparseMatrix(&A);
-            CMFEM_PCG_SparseMatrixGSSmoother(&A, M, &B, &X, 3, 2000, 1e-12, 0.0);
+            CMFEM_GSSmoother *M = CMFEM_GSSmoother_NewSm(&A);
+            CMFEM_PCGSmGs(&A, M, &B, &X, 3, 2000, 1e-12, 0.0);
             CMFEM_GSSmoother_Delete(M);
          }
 
@@ -277,7 +278,7 @@ int main(int argc, char *argv[])
    CMFEM_PWConstCoefficient_Delete(lambda);
    CMFEM_PWConstCoefficient_Delete(mu);
    CMFEM_FiniteElementSpace_Delete(fespace);
-   CMFEM_H1_FECollection_Delete(fec);
+   CMFEM_H1FeCollection_Delete(fec);
    CMFEM_Mesh_Delete(mesh);
    return 0;
 }

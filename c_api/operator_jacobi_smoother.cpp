@@ -10,9 +10,9 @@ CMFEM_ASSERT_TYPE(CMFEM_OperatorJacobiSmoother, mfem::OperatorJacobiSmoother);
 extern "C" {
 
    CMFEM_OperatorJacobiSmoother *
-   CMFEM_OperatorJacobiSmoother_NewBilinearForm(const CMFEM_BilinearForm
-                                                *bilinear_form,
-                                                const CMFEM_ArrayInt *ess_tdof_list)
+   CMFEM_OperatorJacobiSmoother_NewBf(const CMFEM_BilinearForm
+                                      *bilinear_form,
+                                      const CMFEM_ArrayInt *ess_tdof_list)
    {
       return reinterpret_cast<CMFEM_OperatorJacobiSmoother *>(
                 new mfem::OperatorJacobiSmoother(

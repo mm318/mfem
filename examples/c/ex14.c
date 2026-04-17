@@ -106,11 +106,11 @@ int main(int argc, char *argv[])
    }
 
    // 5. Define a discontinuous finite element space on the mesh.
-   CMFEM_DG_FECollection *fec =
-      CMFEM_DG_FECollection_NewOrderDimBasis(order, dim,
-                                             pa ? CMFEM_BASIS_GAUSS_LOBATTO :
-                                             CMFEM_BASIS_GAUSS_LEGENDRE);
-   CMFEM_FiniteElementSpace *fespace = CMFEM_FiniteElementSpace_NewMeshDG(mesh,
+   CMFEM_DgFeCollection *fec =
+      CMFEM_DgFeCollection_NewOrderDimBasis(order, dim,
+                                            pa ? CMFEM_BASIS_GAUSS_LOBATTO :
+                                            CMFEM_BASIS_GAUSS_LEGENDRE);
+   CMFEM_FiniteElementSpace *fespace = CMFEM_FiniteElementSpace_NewMeshDg(mesh,
                                                                           fec);
    printf("Number of unknowns: %d\n",
           CMFEM_FiniteElementSpace_GetTrueVSize(fespace));
@@ -120,9 +120,9 @@ int main(int argc, char *argv[])
    CMFEM_LinearForm *b = CMFEM_LinearForm_New(fespace);
    CMFEM_ConstantCoefficient *one = CMFEM_ConstantCoefficient_New(1.0);
    CMFEM_ConstantCoefficient *zero = CMFEM_ConstantCoefficient_New(0.0);
-   CMFEM_LinearForm_AddDomainIntegrator_DomainLFIntegrator_ConstantCoefficient(b,
-                                                                               one);
-   CMFEM_LinearForm_AddBdrFaceIntegrator_DGDirichletLFIntegrator(
+   CMFEM_LinearForm_AddDomainIntegratorDliCc(b,
+                                             one);
+   CMFEM_LinearForm_AddBdrFaceIntegratorDgl(
       b, zero, one, sigma, kappa);
    CMFEM_LinearForm_Assemble(b);
 
@@ -133,10 +133,10 @@ int main(int argc, char *argv[])
 
    // 8. Set up the bilinear form for the DG discretization.
    CMFEM_BilinearForm *a = CMFEM_BilinearForm_New(fespace);
-   CMFEM_BilinearForm_AddDomainIntegrator_DiffusionCoefficient(a, one);
-   CMFEM_BilinearForm_AddInteriorFaceIntegrator_DGDiffusionIntegrator(
+   CMFEM_BilinearForm_AddDomainIntegratorDiCc(a, one);
+   CMFEM_BilinearForm_AddInteriorFaceIntegratorDgd(
       a, one, sigma, kappa);
-   CMFEM_BilinearForm_AddBdrFaceIntegrator_DGDiffusionIntegrator(
+   CMFEM_BilinearForm_AddBdrFaceIntegratorDgd(
       a, one, sigma, kappa);
    if (eta > 0.0)
    {
@@ -149,14 +149,14 @@ int main(int argc, char *argv[])
          CMFEM_ConstantCoefficient_Delete(one);
          CMFEM_LinearForm_Delete(b);
          CMFEM_FiniteElementSpace_Delete(fespace);
-         CMFEM_DG_FECollection_Delete(fec);
+         CMFEM_DgFeCollection_Delete(fec);
          CMFEM_Mesh_Delete(mesh);
          CMFEM_Device_Delete(device);
          return 1;
       }
-      CMFEM_BilinearForm_AddInteriorFaceIntegrator_DGDiffusionBR2Integrator(
+      CMFEM_BilinearForm_AddInteriorFaceIntegratorDgb(
          a, fespace, eta);
-      CMFEM_BilinearForm_AddBdrFaceIntegrator_DGDiffusionBR2Integrator(
+      CMFEM_BilinearForm_AddBdrFaceIntegratorDgb(
          a, fespace, eta);
    }
    if (pa)
@@ -173,8 +173,8 @@ int main(int argc, char *argv[])
    _Alignas(max_align_t) CMFEM_OperatorPtr A = CMFEM_OperatorPtr_Construct();
    _Alignas(max_align_t) CMFEM_Vector B = CMFEM_Vector_Construct();
    _Alignas(max_align_t) CMFEM_Vector X = CMFEM_Vector_Construct();
-   CMFEM_BilinearForm_FormLinearSystemOperator(a, &empty_tdof_list, x, b, &A, &X,
-                                               &B);
+   CMFEM_BilinearForm_FormLinearSystemOp(a, &empty_tdof_list, x, b, &A, &X,
+                                         &B);
    if (pa && sigma != -1.0)
    {
       fprintf(stderr,
@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
       CMFEM_ConstantCoefficient_Delete(one);
       CMFEM_LinearForm_Delete(b);
       CMFEM_FiniteElementSpace_Delete(fespace);
-      CMFEM_DG_FECollection_Delete(fec);
+      CMFEM_DgFeCollection_Delete(fec);
       CMFEM_Mesh_Delete(mesh);
       CMFEM_Device_Delete(device);
       return 1;
@@ -197,18 +197,18 @@ int main(int argc, char *argv[])
 
    if (pa)
    {
-      CMFEM_CG_Operator(&A, &B, &X, 1, 500, 1e-12, 0.0);
+      CMFEM_CGOp(&A, &B, &X, 1, 500, 1e-12, 0.0);
    }
    else
    {
-      CMFEM_GSSmoother *M = CMFEM_GSSmoother_NewOperator(&A);
+      CMFEM_GSSmoother *M = CMFEM_GSSmoother_NewOp(&A);
       if (sigma == -1.0)
       {
-         CMFEM_PCG_OperatorGSSmoother(&A, M, &B, &X, 1, 500, 1e-12, 0.0);
+         CMFEM_PCGOpGs(&A, M, &B, &X, 1, 500, 1e-12, 0.0);
       }
       else
       {
-         CMFEM_GMRES_OperatorGSSmoother(&A, M, &B, &X, 1, 500, 10, 1e-12, 0.0);
+         CMFEM_GMRESOpGs(&A, M, &B, &X, 1, 500, 10, 1e-12, 0.0);
       }
       CMFEM_GSSmoother_Delete(M);
    }
@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
    CMFEM_ConstantCoefficient_Delete(one);
    CMFEM_LinearForm_Delete(b);
    CMFEM_FiniteElementSpace_Delete(fespace);
-   CMFEM_DG_FECollection_Delete(fec);
+   CMFEM_DgFeCollection_Delete(fec);
    CMFEM_Mesh_Delete(mesh);
    CMFEM_Device_Delete(device);
    return 0;

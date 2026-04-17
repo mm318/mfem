@@ -9,13 +9,13 @@ CMFEM_ASSERT_TYPE(CMFEM_GSSmoother, mfem::GSSmoother);
 
 extern "C" {
 
-   CMFEM_GSSmoother *CMFEM_GSSmoother_NewSparseMatrix(CMFEM_SparseMatrix *matrix)
+   CMFEM_GSSmoother *CMFEM_GSSmoother_NewSm(CMFEM_SparseMatrix *matrix)
    {
       return reinterpret_cast<CMFEM_GSSmoother *>(
                 new mfem::GSSmoother(*cmfem::As<mfem::SparseMatrix>(matrix)));
    }
 
-   CMFEM_GSSmoother *CMFEM_GSSmoother_NewOperator(CMFEM_OperatorPtr *op)
+   CMFEM_GSSmoother *CMFEM_GSSmoother_NewOp(CMFEM_OperatorPtr *op)
    {
       return reinterpret_cast<CMFEM_GSSmoother *>(
                 new mfem::GSSmoother(cmfem::SparseMatrixFromOperator(op)));

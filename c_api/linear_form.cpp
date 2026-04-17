@@ -20,7 +20,7 @@ extern "C" {
       delete cmfem::As<mfem::LinearForm>(linear_form);
    }
 
-   void CMFEM_LinearForm_AddDomainIntegrator_DomainLFIntegrator_ConstantCoefficient(
+   void CMFEM_LinearForm_AddDomainIntegratorDliCc(
       CMFEM_LinearForm *linear_form,
       const CMFEM_ConstantCoefficient *coefficient)
    {
@@ -30,7 +30,7 @@ extern "C" {
          new mfem::DomainLFIntegrator(coef));
    }
 
-   void CMFEM_LinearForm_AddDomainIntegrator_DomainLFIntegrator_FunctionCoefficient(
+   void CMFEM_LinearForm_AddDomainIntegratorDliFc(
       CMFEM_LinearForm *linear_form,
       const CMFEM_FunctionCoefficient *coefficient)
    {
@@ -41,7 +41,7 @@ extern "C" {
    }
 
    void
-   CMFEM_LinearForm_AddDomainIntegrator_DomainLFIntegrator_ConstantCoefficientMarker(
+   CMFEM_LinearForm_AddDomainIntegratorDliCcMarker(
       CMFEM_LinearForm *linear_form,
       const CMFEM_ConstantCoefficient *coefficient,
       const CMFEM_ArrayInt *marker)
@@ -53,7 +53,7 @@ extern "C" {
          const_cast<mfem::Array<int> &>(cmfem::ArrayIntRef(marker)));
    }
 
-   void CMFEM_LinearForm_AddDomainIntegrator_VectorFEDomainLFIntegrator(
+   void CMFEM_LinearForm_AddDomainIntegratorVfd(
       CMFEM_LinearForm *linear_form,
       const CMFEM_VectorFunctionCoefficient *coefficient)
    {
@@ -63,7 +63,7 @@ extern "C" {
          new mfem::VectorFEDomainLFIntegrator(coef));
    }
 
-   void CMFEM_LinearForm_AddBdrFaceIntegrator_DGDirichletLFIntegrator(
+   void CMFEM_LinearForm_AddBdrFaceIntegratorDgl(
       CMFEM_LinearForm *linear_form,
       const CMFEM_ConstantCoefficient *u_coeff,
       const CMFEM_ConstantCoefficient *q_coeff,
@@ -80,7 +80,7 @@ extern "C" {
             static_cast<mfem::real_t>(kappa)));
    }
 
-   void CMFEM_LinearForm_AddBoundaryIntegrator_VectorBoundaryLFIntegrator(
+   void CMFEM_LinearForm_AddBoundaryIntegratorVbl(
       CMFEM_LinearForm *linear_form,
       const CMFEM_VectorArrayCoefficient *coefficient)
    {

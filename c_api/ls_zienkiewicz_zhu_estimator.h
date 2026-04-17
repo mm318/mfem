@@ -8,7 +8,7 @@ CMFEM_STORAGE(LSZienkiewiczZhuEstimator, 104);
 CMFEM_BEGIN_EXTERN_C
 
 CMFEM_LSZienkiewiczZhuEstimator *
-CMFEM_LSZienkiewiczZhuEstimator_NewDiffusionIntegratorGridFunction(
+CMFEM_LSZienkiewiczZhuEstimator_NewDiGf(
    CMFEM_DiffusionIntegrator *integrator,
    CMFEM_GridFunction *solution);
 void CMFEM_LSZienkiewiczZhuEstimator_Delete(

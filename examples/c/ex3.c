@@ -148,9 +148,9 @@ int main(int argc, char *argv[])
    }
 
    // 5. Define a Nedelec finite element space on the mesh.
-   CMFEM_ND_FECollection *fec = CMFEM_ND_FECollection_NewOrderDim(order,
-                                                                  cmfem_ex3_dim);
-   CMFEM_FiniteElementSpace *fespace = CMFEM_FiniteElementSpace_NewMeshND(mesh,
+   CMFEM_NdFeCollection *fec = CMFEM_NdFeCollection_NewOrderDim(order,
+                                                                cmfem_ex3_dim);
+   CMFEM_FiniteElementSpace *fespace = CMFEM_FiniteElementSpace_NewMeshNd(mesh,
                                                                           fec);
    printf("Number of finite element unknowns: %d\n",
           CMFEM_FiniteElementSpace_GetTrueVSize(fespace));
@@ -172,7 +172,7 @@ int main(int argc, char *argv[])
    CMFEM_VectorFunctionCoefficient *f =
       CMFEM_VectorFunctionCoefficient_New(sdim, cmfem_ex3_f_exact, NULL);
    CMFEM_LinearForm *b = CMFEM_LinearForm_New(fespace);
-   CMFEM_LinearForm_AddDomainIntegrator_VectorFEDomainLFIntegrator(b, f);
+   CMFEM_LinearForm_AddDomainIntegratorVfd(b, f);
    CMFEM_LinearForm_Assemble(b);
 
    // 8. Define the solution vector x as a finite element grid function and
@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
    CMFEM_GridFunction *x = CMFEM_GridFunction_New(fespace);
    CMFEM_VectorFunctionCoefficient *E =
       CMFEM_VectorFunctionCoefficient_New(sdim, cmfem_ex3_E_exact, NULL);
-   CMFEM_GridFunction_ProjectVectorFunctionCoefficient(x, E);
+   CMFEM_GridFunction_ProjectCoefficientVfc(x, E);
 
    // 9. Set up the bilinear form corresponding to the EM diffusion operator.
    CMFEM_ConstantCoefficient *muinv = CMFEM_ConstantCoefficient_New(1.0);
@@ -190,8 +190,8 @@ int main(int argc, char *argv[])
    {
       CMFEM_BilinearForm_SetAssemblyLevelPartial(a);
    }
-   CMFEM_BilinearForm_AddDomainIntegrator_CurlCurl(a, muinv);
-   CMFEM_BilinearForm_AddDomainIntegrator_VectorFEMass(a, sigma);
+   CMFEM_BilinearForm_AddDomainIntegratorCci(a, muinv);
+   CMFEM_BilinearForm_AddDomainIntegratorVmi(a, sigma);
    if (static_cond)
    {
       CMFEM_BilinearForm_EnableStaticCondensation(a);
@@ -202,8 +202,8 @@ int main(int argc, char *argv[])
    _Alignas(max_align_t) CMFEM_OperatorPtr A = CMFEM_OperatorPtr_Construct();
    _Alignas(max_align_t) CMFEM_Vector B = CMFEM_Vector_Construct();
    _Alignas(max_align_t) CMFEM_Vector X = CMFEM_Vector_Construct();
-   CMFEM_BilinearForm_FormLinearSystemOperator(a, &ess_tdof_list, x, b, &A, &X,
-                                               &B);
+   CMFEM_BilinearForm_FormLinearSystemOp(a, &ess_tdof_list, x, b, &A, &X,
+                                         &B);
 
    printf("Size of linear system: %d\n", CMFEM_OperatorPtr_Height(&A));
 
@@ -211,14 +211,14 @@ int main(int argc, char *argv[])
    if (pa)
    {
       CMFEM_OperatorJacobiSmoother *M =
-         CMFEM_OperatorJacobiSmoother_NewBilinearForm(a, &ess_tdof_list);
-      CMFEM_PCG_OperatorJacobiSmoother(&A, M, &B, &X, 1, 1000, 1e-12, 0.0);
+         CMFEM_OperatorJacobiSmoother_NewBf(a, &ess_tdof_list);
+      CMFEM_PCGOpOjs(&A, M, &B, &X, 1, 1000, 1e-12, 0.0);
       CMFEM_OperatorJacobiSmoother_Delete(M);
    }
    else
    {
-      CMFEM_GSSmoother *M = CMFEM_GSSmoother_NewOperator(&A);
-      CMFEM_PCG_OperatorGSSmoother(&A, M, &B, &X, 1, 500, 1e-12, 0.0);
+      CMFEM_GSSmoother *M = CMFEM_GSSmoother_NewOp(&A);
+      CMFEM_PCGOpGs(&A, M, &B, &X, 1, 500, 1e-12, 0.0);
       CMFEM_GSSmoother_Delete(M);
    }
 
@@ -226,7 +226,7 @@ int main(int argc, char *argv[])
    CMFEM_BilinearForm_RecoverFEMSolution(a, &X, b, x);
    // 13. Compute and print the L^2 norm of the error.
    printf("\n|| E_h - E ||_{L^2} = %.16g\n\n",
-          CMFEM_GridFunction_ComputeL2ErrorVectorFunctionCoefficient(x, E));
+          CMFEM_GridFunction_ComputeL2ErrorVfc(x, E));
 
    // 14. Save the refined mesh and the solution.
    CMFEM_Mesh_Print(mesh, "refined.mesh", 8);
@@ -251,7 +251,7 @@ int main(int argc, char *argv[])
    CMFEM_VectorFunctionCoefficient_Delete(f);
    CMFEM_ArrayInt_Destroy(&ess_tdof_list);
    CMFEM_FiniteElementSpace_Delete(fespace);
-   CMFEM_ND_FECollection_Delete(fec);
+   CMFEM_NdFeCollection_Delete(fec);
    CMFEM_Mesh_Delete(mesh);
    CMFEM_Device_Delete(device);
    return 0;

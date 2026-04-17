@@ -28,8 +28,13 @@ miss when editing `core/`, `c_api/`, and the Zig build.
 - Use `CMFEM_STORAGE(Name, Size)` in the per-type public header to define the
   storage struct. Do not add hidden pointers, alignment members, or ownership
   flags to the public C struct.
+- Normalize wrapper class/type names to a single `CMFEM_<ClassName>` segment.
+  Do not put extra underscores inside the class/type segment. For example, use
+  `CMFEM_H1FeCollection`, `CMFEM_DgFeCollection`, and `CMFEM_ArrayInt`, not
+  names like `CMFEM_H1_FECollection`.
 - If the wrapped C++ type is a template specialization, bake the substituted
-  type into the C name, for example `CMFEM_ArrayInt`.
+  type into the C name using a compact 1-3 character PascalCase shorthand. For
+  example, `mfem::Array<int>` maps to `CMFEM_ArrayInt`.
 - In the `.cpp` implementation, `static_assert` the storage size with
   `CMFEM_ASSERT_TYPE(CMFEM_<Name>, mfem::<CppType>)`.
 - Reuse the casting helpers in `c_api/common.hpp`, especially
@@ -41,6 +46,27 @@ miss when editing `core/`, `c_api/`, and the Zig build.
   `CMFEM_<ClassName>_<MethodName>(...)`.
 - Free MFEM functions stay free C functions and are named
   `CMFEM_<FunctionName>(...)`.
+- The only underscores in public wrapper function names are the separator after
+  `CMFEM` and, for member wrappers, the separator between the class segment and
+  the method segment. Do not put extra underscores inside the method segment.
+- If a wrapper name needs to encode template substitutions or overload
+  disambiguation types, append those type shorthands directly to the class or
+  method segment with no extra underscores. Use compact 1-3 character
+  PascalCase shorthands such as:
+  `Cc` for `ConstantCoefficient`, `Fc` for `FunctionCoefficient`,
+  `Vcc` for `VectorConstantCoefficient`, `Vfc` for
+  `VectorFunctionCoefficient`, `Sm` for `SparseMatrix`, `Op` for
+  `OperatorPtr`, `Gf` for `GridFunction`, `Fes` for `FiniteElementSpace`,
+  `Di` for `DiffusionIntegrator`, `Ei` for `ElasticityIntegrator`,
+  `Zze` for `ZienkiewiczZhuEstimator`, `Lzz` for
+  `LSZienkiewiczZhuEstimator`, and `Kee` for `KellyErrorEstimator`.
+- When multiple substituted or overload types need to be encoded, append the
+  shorthands in argument-order as one PascalCase tail. Examples:
+  `CMFEM_ZienkiewiczZhuEstimator_NewDiGfFes`,
+  `CMFEM_ElasticityIntegrator_NewPwcPwc`,
+  `CMFEM_BilinearForm_FormLinearSystemSm`,
+  `CMFEM_GridFunction_ProjectBdrCoefficientFc`, and
+  `CMFEM_ThresholdRefiner_NewKee`.
 - New wrapper types should expose the standard lifetime surface whenever the
   underlying MFEM type is constructible:
   `Construct`, `New`, `Copy`, `NewCopy`, `Destroy`, and `Delete`.

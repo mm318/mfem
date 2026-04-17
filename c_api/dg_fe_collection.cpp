@@ -3,7 +3,7 @@
 namespace
 {
 
-CMFEM_ASSERT_TYPE(CMFEM_DG_FECollection, mfem::DG_FECollection);
+CMFEM_ASSERT_TYPE(CMFEM_DgFeCollection, mfem::DG_FECollection);
 
 int OrGaussLegendre(int basis_type)
 {
@@ -16,15 +16,15 @@ int OrGaussLegendre(int basis_type)
 
 extern "C" {
 
-   CMFEM_DG_FECollection *CMFEM_DG_FECollection_NewOrderDimBasis(int order,
-                                                                 int dim,
-                                                                 int basis_type)
+   CMFEM_DgFeCollection *CMFEM_DgFeCollection_NewOrderDimBasis(int order,
+                                                               int dim,
+                                                               int basis_type)
    {
-      return reinterpret_cast<CMFEM_DG_FECollection *>(
+      return reinterpret_cast<CMFEM_DgFeCollection *>(
                 new mfem::DG_FECollection(order, dim, OrGaussLegendre(basis_type)));
    }
 
-   void CMFEM_DG_FECollection_Delete(CMFEM_DG_FECollection *fec)
+   void CMFEM_DgFeCollection_Delete(CMFEM_DgFeCollection *fec)
    {
       delete cmfem::As<mfem::DG_FECollection>(fec);
    }

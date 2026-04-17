@@ -88,11 +88,11 @@ int main(int argc, char *argv[])
 
    // 5. Define a finite element space on the mesh. If order < 1, use an
    //    isoparametric space when the mesh already has nodes.
-   CMFEM_H1_FECollection *fec = NULL;
+   CMFEM_H1FeCollection *fec = NULL;
    CMFEM_FiniteElementSpace *fespace = NULL;
    if (order > 0)
    {
-      fec = CMFEM_H1_FECollection_NewOrderDim(order, dim);
+      fec = CMFEM_H1FeCollection_NewOrderDim(order, dim);
       fespace = CMFEM_FiniteElementSpace_NewMeshH1(mesh, fec);
       delete_fec = 1;
       delete_fespace = 1;
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
    else
    {
       order = 1;
-      fec = CMFEM_H1_FECollection_NewOrderDim(order, dim);
+      fec = CMFEM_H1FeCollection_NewOrderDim(order, dim);
       fespace = CMFEM_FiniteElementSpace_NewMeshH1(mesh, fec);
       delete_fec = 1;
       delete_fespace = 1;
@@ -131,8 +131,8 @@ int main(int argc, char *argv[])
    //    of the discrete system.
    CMFEM_ConstantCoefficient *one = CMFEM_ConstantCoefficient_New(1.0);
    CMFEM_LinearForm *b = CMFEM_LinearForm_New(fespace);
-   CMFEM_LinearForm_AddDomainIntegrator_DomainLFIntegrator_ConstantCoefficient(b,
-                                                                               one);
+   CMFEM_LinearForm_AddDomainIntegratorDliCc(b,
+                                             one);
    CMFEM_LinearForm_Assemble(b);
 
    // 8. Define the solution vector x as a finite element grid function and
@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
       CMFEM_BilinearForm_SetAssemblyLevelFull(a);
       CMFEM_BilinearForm_EnableSparseMatrixSorting(a, CMFEM_Device_IsEnabled());
    }
-   CMFEM_BilinearForm_AddDomainIntegrator_DiffusionCoefficient(a, one);
+   CMFEM_BilinearForm_AddDomainIntegratorDiCc(a, one);
    if (static_cond)
    {
       CMFEM_BilinearForm_EnableStaticCondensation(a);
@@ -162,27 +162,27 @@ int main(int argc, char *argv[])
    _Alignas(max_align_t) CMFEM_OperatorPtr A = CMFEM_OperatorPtr_Construct();
    _Alignas(max_align_t) CMFEM_Vector B = CMFEM_Vector_Construct();
    _Alignas(max_align_t) CMFEM_Vector X = CMFEM_Vector_Construct();
-   CMFEM_BilinearForm_FormLinearSystemOperator(a, &ess_tdof_list, x, b, &A, &X,
-                                               &B);
+   CMFEM_BilinearForm_FormLinearSystemOp(a, &ess_tdof_list, x, b, &A, &X,
+                                         &B);
    printf("Size of linear system: %d\n", CMFEM_OperatorPtr_Height(&A));
 
    // 11. Solve the linear system.
    if (!pa)
    {
-      CMFEM_GSSmoother *M = CMFEM_GSSmoother_NewOperator(&A);
-      CMFEM_PCG_OperatorGSSmoother(&A, M, &B, &X, 1, 200, 1e-12, 0.0);
+      CMFEM_GSSmoother *M = CMFEM_GSSmoother_NewOp(&A);
+      CMFEM_PCGOpGs(&A, M, &B, &X, 1, 200, 1e-12, 0.0);
       CMFEM_GSSmoother_Delete(M);
    }
    else if (CMFEM_UsesTensorBasis(fespace))
    {
       CMFEM_OperatorJacobiSmoother *M =
-         CMFEM_OperatorJacobiSmoother_NewBilinearForm(a, &ess_tdof_list);
-      CMFEM_PCG_OperatorJacobiSmoother(&A, M, &B, &X, 1, 400, 1e-12, 0.0);
+         CMFEM_OperatorJacobiSmoother_NewBf(a, &ess_tdof_list);
+      CMFEM_PCGOpOjs(&A, M, &B, &X, 1, 400, 1e-12, 0.0);
       CMFEM_OperatorJacobiSmoother_Delete(M);
    }
    else
    {
-      CMFEM_CG_Operator(&A, &B, &X, 1, 400, 1e-12, 0.0);
+      CMFEM_CGOp(&A, &B, &X, 1, 400, 1e-12, 0.0);
    }
 
    // 12. Recover the solution as a finite element grid function.
@@ -212,7 +212,7 @@ int main(int argc, char *argv[])
    }
    if (delete_fec)
    {
-      CMFEM_H1_FECollection_Delete(fec);
+      CMFEM_H1FeCollection_Delete(fec);
    }
    CMFEM_Mesh_Delete(mesh);
    CMFEM_Device_Delete(device);

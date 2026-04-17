@@ -7,7 +7,7 @@ CMFEM_STORAGE(ElasticityIntegrator, 368);
 
 CMFEM_BEGIN_EXTERN_C
 
-CMFEM_ElasticityIntegrator *CMFEM_ElasticityIntegrator_NewPWConstCoefficients(
+CMFEM_ElasticityIntegrator *CMFEM_ElasticityIntegrator_NewPwcPwc(
    const CMFEM_PWConstCoefficient *lambda,
    const CMFEM_PWConstCoefficient *mu);
 void CMFEM_ElasticityIntegrator_Delete(CMFEM_ElasticityIntegrator *integrator);

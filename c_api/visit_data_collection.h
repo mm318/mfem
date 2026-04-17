@@ -11,7 +11,7 @@ CMFEM_VisItDataCollection *CMFEM_VisItDataCollection_New(
    const char *collection_name,
    CMFEM_Mesh *mesh);
 void CMFEM_VisItDataCollection_Delete(CMFEM_VisItDataCollection *collection);
-void CMFEM_VisItDataCollection_RegisterFieldGridFunction(
+void CMFEM_VisItDataCollection_RegisterFieldGf(
    CMFEM_VisItDataCollection *collection,
    const char *field_name,
    CMFEM_GridFunction *grid_function);

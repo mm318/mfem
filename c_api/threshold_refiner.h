@@ -8,16 +8,17 @@ CMFEM_STORAGE(ThresholdRefiner, 136);
 CMFEM_BEGIN_EXTERN_C
 
 CMFEM_ThresholdRefiner *
-CMFEM_ThresholdRefiner_NewZienkiewiczZhuEstimator(
+CMFEM_ThresholdRefiner_NewZze(
    CMFEM_ZienkiewiczZhuEstimator *estimator);
 CMFEM_ThresholdRefiner *
-CMFEM_ThresholdRefiner_NewLSZienkiewiczZhuEstimator(
+CMFEM_ThresholdRefiner_NewLzz(
    CMFEM_LSZienkiewiczZhuEstimator *estimator);
 CMFEM_ThresholdRefiner *
-CMFEM_ThresholdRefiner_NewKellyErrorEstimator(
+CMFEM_ThresholdRefiner_NewKee(
    CMFEM_KellyErrorEstimator *estimator);
 void CMFEM_ThresholdRefiner_Delete(CMFEM_ThresholdRefiner *refiner);
-void CMFEM_ThresholdRefiner_SetTotalErrorFraction(CMFEM_ThresholdRefiner *refiner,
+void CMFEM_ThresholdRefiner_SetTotalErrorFraction(CMFEM_ThresholdRefiner
+                                                  *refiner,
                                                   double fraction);
 void CMFEM_ThresholdRefiner_SetLocalErrorGoal(CMFEM_ThresholdRefiner *refiner,
                                               double goal);

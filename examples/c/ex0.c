@@ -39,8 +39,8 @@ int main(int argc, char *argv[])
 
    // 3. Define a finite element space on the mesh. Here we use H1 continuous
    //    high-order Lagrange finite elements of the given order.
-   CMFEM_H1_FECollection *fec =
-      CMFEM_H1_FECollection_NewOrderDim(order, CMFEM_Mesh_Dimension(mesh));
+   CMFEM_H1FeCollection *fec =
+      CMFEM_H1FeCollection_NewOrderDim(order, CMFEM_Mesh_Dimension(mesh));
    CMFEM_FiniteElementSpace *fespace = CMFEM_FiniteElementSpace_NewMeshH1(mesh,
                                                                           fec);
    printf("Number of unknowns: %d\n",
@@ -59,13 +59,13 @@ int main(int argc, char *argv[])
    // 6. Set up the linear form b(.) corresponding to the right-hand side.
    CMFEM_ConstantCoefficient *one = CMFEM_ConstantCoefficient_New(1.0);
    CMFEM_LinearForm *b = CMFEM_LinearForm_New(fespace);
-   CMFEM_LinearForm_AddDomainIntegrator_DomainLFIntegrator_ConstantCoefficient(b,
-                                                                               one);
+   CMFEM_LinearForm_AddDomainIntegratorDliCc(b,
+                                             one);
    CMFEM_LinearForm_Assemble(b);
 
    // 7. Set up the bilinear form a(.,.) corresponding to the -Delta operator.
    CMFEM_BilinearForm *a = CMFEM_BilinearForm_New(fespace);
-   CMFEM_BilinearForm_AddDomainIntegrator_Diffusion(a);
+   CMFEM_BilinearForm_AddDomainIntegratorDi(a);
    CMFEM_BilinearForm_Assemble(a);
 
    // 8. Form the linear system A X = B. This includes eliminating boundary
@@ -73,12 +73,12 @@ int main(int argc, char *argv[])
    _Alignas(max_align_t) CMFEM_SparseMatrix A = CMFEM_SparseMatrix_Construct();
    _Alignas(max_align_t) CMFEM_Vector B = CMFEM_Vector_Construct();
    _Alignas(max_align_t) CMFEM_Vector X = CMFEM_Vector_Construct();
-   CMFEM_BilinearForm_FormLinearSystemSparseMatrix(a, &boundary_dofs, x, b, &A, &X,
-                                                   &B);
+   CMFEM_BilinearForm_FormLinearSystemSm(a, &boundary_dofs, x, b, &A, &X,
+                                         &B);
 
    // 9. Solve the system using PCG with symmetric Gauss-Seidel preconditioner.
-   CMFEM_GSSmoother *M = CMFEM_GSSmoother_NewSparseMatrix(&A);
-   CMFEM_PCG_SparseMatrixGSSmoother(&A, M, &B, &X, 1, 200, 1e-12, 0.0);
+   CMFEM_GSSmoother *M = CMFEM_GSSmoother_NewSm(&A);
+   CMFEM_PCGSmGs(&A, M, &B, &X, 1, 200, 1e-12, 0.0);
 
    // 10. Recover the solution x as a grid function and save to file.
    CMFEM_BilinearForm_RecoverFEMSolution(a, &X, b, x);
@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
    CMFEM_GridFunction_Delete(x);
    CMFEM_ArrayInt_Destroy(&boundary_dofs);
    CMFEM_FiniteElementSpace_Delete(fespace);
-   CMFEM_H1_FECollection_Delete(fec);
+   CMFEM_H1FeCollection_Delete(fec);
    CMFEM_Mesh_Delete(mesh);
    return 0;
 }

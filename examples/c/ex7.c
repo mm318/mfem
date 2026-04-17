@@ -137,8 +137,8 @@ int main(int argc, char *argv[])
       {
          const int dim = CMFEM_Mesh_Dimension(mesh);
          const int space_dim = CMFEM_Mesh_SpaceDimension(mesh);
-         CMFEM_H1_FECollection *fec =
-            CMFEM_H1_FECollection_NewOrderDim(order, dim);
+         CMFEM_H1FeCollection *fec =
+            CMFEM_H1FeCollection_NewOrderDim(order, dim);
          CMFEM_FiniteElementSpace *nodal_fes =
             CMFEM_FiniteElementSpace_NewMeshH1VDim(mesh, fec, space_dim);
          CMFEM_Mesh_SetNodalFESpace(mesh, nodal_fes);
@@ -188,7 +188,7 @@ int main(int argc, char *argv[])
             CMFEM_FunctionCoefficient_New(analytic_rhs, NULL);
          CMFEM_FunctionCoefficient *sol_coef =
             CMFEM_FunctionCoefficient_New(analytic_solution, NULL);
-         CMFEM_LinearForm_AddDomainIntegrator_DomainLFIntegrator_FunctionCoefficient(
+         CMFEM_LinearForm_AddDomainIntegratorDliFc(
             b, rhs_coef);
          CMFEM_LinearForm_Assemble(b);
 
@@ -198,8 +198,8 @@ int main(int argc, char *argv[])
 
          // 7. Set up the bilinear form a(.,.) with diffusion and mass terms.
          CMFEM_BilinearForm *a = CMFEM_BilinearForm_New(fespace);
-         CMFEM_BilinearForm_AddDomainIntegrator_DiffusionCoefficient(a, one);
-         CMFEM_BilinearForm_AddDomainIntegrator_MassCoefficient(a, one);
+         CMFEM_BilinearForm_AddDomainIntegratorDiCc(a, one);
+         CMFEM_BilinearForm_AddDomainIntegratorMiCc(a, one);
 
          // 8. Assemble the linear system, apply conforming constraints, etc.
          CMFEM_BilinearForm_Assemble(a);
@@ -208,14 +208,14 @@ int main(int argc, char *argv[])
          _Alignas(max_align_t) CMFEM_Vector X = CMFEM_Vector_Construct();
          _Alignas(max_align_t) CMFEM_ArrayInt empty_tdof_list =
             CMFEM_ArrayInt_Construct();
-         CMFEM_BilinearForm_FormLinearSystemSparseMatrix(a, &empty_tdof_list, x,
-                                                         b, &A, &X, &B);
+         CMFEM_BilinearForm_FormLinearSystemSm(a, &empty_tdof_list, x,
+                                               b, &A, &X, &B);
 
          // 9. Solve the linear system with symmetric Gauss-Seidel
          //    preconditioning and PCG.
          {
-            CMFEM_GSSmoother *M = CMFEM_GSSmoother_NewSparseMatrix(&A);
-            CMFEM_PCG_SparseMatrixGSSmoother(&A, M, &B, &X, 1, 200, 1e-12, 0.0);
+            CMFEM_GSSmoother *M = CMFEM_GSSmoother_NewSm(&A);
+            CMFEM_PCGSmGs(&A, M, &B, &X, 1, 200, 1e-12, 0.0);
             CMFEM_GSSmoother_Delete(M);
          }
 
@@ -224,8 +224,8 @@ int main(int argc, char *argv[])
 
          // 11. Compute and print the L2 norm of the error.
          printf("\nL2 norm of error: %.14g\n",
-                CMFEM_GridFunction_ComputeL2ErrorFunctionCoefficient(x,
-                                                                     sol_coef));
+                CMFEM_GridFunction_ComputeL2ErrorFc(x,
+                                                    sol_coef));
 
          // 12. Save the refined mesh and the solution.
          CMFEM_Mesh_Print(mesh, "sphere_refined.mesh", 8);
@@ -249,7 +249,7 @@ int main(int argc, char *argv[])
          CMFEM_LinearForm_Delete(b);
          CMFEM_FiniteElementSpace_Delete(fespace);
          CMFEM_FiniteElementSpace_Delete(nodal_fes);
-         CMFEM_H1_FECollection_Delete(fec);
+         CMFEM_H1FeCollection_Delete(fec);
       }
 
       // 14. Free the used memory.

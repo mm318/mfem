@@ -8,10 +8,10 @@ CMFEM_STORAGE(ThresholdDerefiner, 40);
 CMFEM_BEGIN_EXTERN_C
 
 CMFEM_ThresholdDerefiner *
-CMFEM_ThresholdDerefiner_NewZienkiewiczZhuEstimator(
+CMFEM_ThresholdDerefiner_NewZze(
    CMFEM_ZienkiewiczZhuEstimator *estimator);
 CMFEM_ThresholdDerefiner *
-CMFEM_ThresholdDerefiner_NewKellyErrorEstimator(
+CMFEM_ThresholdDerefiner_NewKee(
    CMFEM_KellyErrorEstimator *estimator);
 void CMFEM_ThresholdDerefiner_Delete(CMFEM_ThresholdDerefiner *derefiner);
 void CMFEM_ThresholdDerefiner_SetThreshold(CMFEM_ThresholdDerefiner *derefiner,

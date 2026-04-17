@@ -11,7 +11,7 @@ CMFEM_ASSERT_TYPE(CMFEM_LSZienkiewiczZhuEstimator,
 extern "C" {
 
    CMFEM_LSZienkiewiczZhuEstimator *
-   CMFEM_LSZienkiewiczZhuEstimator_NewDiffusionIntegratorGridFunction(
+   CMFEM_LSZienkiewiczZhuEstimator_NewDiGf(
       CMFEM_DiffusionIntegrator *integrator,
       CMFEM_GridFunction *solution)
    {

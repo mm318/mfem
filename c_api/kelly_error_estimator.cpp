@@ -10,7 +10,7 @@ CMFEM_ASSERT_TYPE(CMFEM_KellyErrorEstimator, mfem::KellyErrorEstimator);
 extern "C" {
 
    CMFEM_KellyErrorEstimator *
-   CMFEM_KellyErrorEstimator_NewDiffusionIntegratorGridFunctionFESpace(
+   CMFEM_KellyErrorEstimator_NewDiGfFes(
       CMFEM_DiffusionIntegrator *integrator,
       CMFEM_GridFunction *solution,
       CMFEM_FiniteElementSpace *flux_fespace)

@@ -10,7 +10,7 @@ CMFEM_ASSERT_TYPE(CMFEM_ThresholdRefiner, mfem::ThresholdRefiner);
 extern "C" {
 
    CMFEM_ThresholdRefiner *
-   CMFEM_ThresholdRefiner_NewZienkiewiczZhuEstimator(
+   CMFEM_ThresholdRefiner_NewZze(
       CMFEM_ZienkiewiczZhuEstimator *estimator)
    {
       return reinterpret_cast<CMFEM_ThresholdRefiner *>(
@@ -19,7 +19,7 @@ extern "C" {
    }
 
    CMFEM_ThresholdRefiner *
-   CMFEM_ThresholdRefiner_NewLSZienkiewiczZhuEstimator(
+   CMFEM_ThresholdRefiner_NewLzz(
       CMFEM_LSZienkiewiczZhuEstimator *estimator)
    {
       return reinterpret_cast<CMFEM_ThresholdRefiner *>(
@@ -28,7 +28,7 @@ extern "C" {
    }
 
    CMFEM_ThresholdRefiner *
-   CMFEM_ThresholdRefiner_NewKellyErrorEstimator(
+   CMFEM_ThresholdRefiner_NewKee(
       CMFEM_KellyErrorEstimator *estimator)
    {
       return reinterpret_cast<CMFEM_ThresholdRefiner *>(
@@ -41,7 +41,8 @@ extern "C" {
       delete cmfem::As<mfem::ThresholdRefiner>(refiner);
    }
 
-   void CMFEM_ThresholdRefiner_SetTotalErrorFraction(CMFEM_ThresholdRefiner *refiner,
+   void CMFEM_ThresholdRefiner_SetTotalErrorFraction(CMFEM_ThresholdRefiner
+                                                     *refiner,
                                                      double fraction)
    {
       cmfem::As<mfem::ThresholdRefiner>(refiner)->SetTotalErrorFraction(

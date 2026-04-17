@@ -149,8 +149,8 @@ int main(int argc, char *argv[])
    }
 
    // 5. Define a Raviart-Thomas finite element space on the mesh.
-   CMFEM_RT_FECollection *fec = CMFEM_RT_FECollection_NewOrderDim(order - 1, dim);
-   CMFEM_FiniteElementSpace *fespace = CMFEM_FiniteElementSpace_NewMeshRT(mesh,
+   CMFEM_RtFeCollection *fec = CMFEM_RtFeCollection_NewOrderDim(order - 1, dim);
+   CMFEM_FiniteElementSpace *fespace = CMFEM_FiniteElementSpace_NewMeshRt(mesh,
                                                                           fec);
    printf("Number of finite element unknowns: %d\n",
           CMFEM_FiniteElementSpace_GetTrueVSize(fespace));
@@ -172,7 +172,7 @@ int main(int argc, char *argv[])
    CMFEM_VectorFunctionCoefficient *f =
       CMFEM_VectorFunctionCoefficient_New(sdim, cmfem_ex4_f_exact, NULL);
    CMFEM_LinearForm *b = CMFEM_LinearForm_New(fespace);
-   CMFEM_LinearForm_AddDomainIntegrator_VectorFEDomainLFIntegrator(b, f);
+   CMFEM_LinearForm_AddDomainIntegratorVfd(b, f);
    CMFEM_LinearForm_Assemble(b);
 
    // 8. Define the solution vector x as a finite element grid function and
@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
    CMFEM_GridFunction *x = CMFEM_GridFunction_New(fespace);
    CMFEM_VectorFunctionCoefficient *F =
       CMFEM_VectorFunctionCoefficient_New(sdim, cmfem_ex4_F_exact, NULL);
-   CMFEM_GridFunction_ProjectVectorFunctionCoefficient(x, F);
+   CMFEM_GridFunction_ProjectCoefficientVfc(x, F);
 
    // 9. Set up the bilinear form corresponding to the H(div) diffusion
    //    operator.
@@ -195,13 +195,13 @@ int main(int argc, char *argv[])
    {
       CMFEM_BilinearForm_SetAssemblyLevelElement(a);
    }
-   CMFEM_BilinearForm_AddDomainIntegrator_DivDiv(a, alpha);
-   CMFEM_BilinearForm_AddDomainIntegrator_VectorFEMass(a, beta);
+   CMFEM_BilinearForm_AddDomainIntegratorDdi(a, alpha);
+   CMFEM_BilinearForm_AddDomainIntegratorVmi(a, beta);
 
    // 10. Assemble the bilinear form and the corresponding linear system,
    //     applying static condensation, hybridization, or other required
    //     transformations.
-   CMFEM_DG_Interface_FECollection *hfec = NULL;
+   CMFEM_DgInterfaceFeCollection *hfec = NULL;
    CMFEM_FiniteElementSpace *hfes = NULL;
    if (static_cond)
    {
@@ -209,8 +209,8 @@ int main(int argc, char *argv[])
    }
    else if (hybridization)
    {
-      hfec = CMFEM_DG_Interface_FECollection_NewOrderDim(order - 1, dim);
-      hfes = CMFEM_FiniteElementSpace_NewMeshDGInterface(mesh, hfec);
+      hfec = CMFEM_DgInterfaceFeCollection_NewOrderDim(order - 1, dim);
+      hfes = CMFEM_FiniteElementSpace_NewMeshDgInterface(mesh, hfec);
       CMFEM_BilinearForm_EnableHybridization(a, hfes, &ess_tdof_list);
    }
    CMFEM_BilinearForm_Assemble(a);
@@ -219,34 +219,34 @@ int main(int argc, char *argv[])
    _Alignas(max_align_t) CMFEM_OperatorPtr A = CMFEM_OperatorPtr_Construct();
    _Alignas(max_align_t) CMFEM_Vector B = CMFEM_Vector_Construct();
    _Alignas(max_align_t) CMFEM_Vector X = CMFEM_Vector_Construct();
-   CMFEM_BilinearForm_FormLinearSystemOperator(a, &ess_tdof_list, x, b, &A, &X,
-                                               &B);
+   CMFEM_BilinearForm_FormLinearSystemOp(a, &ess_tdof_list, x, b, &A, &X,
+                                         &B);
 
    printf("Size of linear system: %d\n", CMFEM_OperatorPtr_Height(&A));
 
    if (!pa && (!ea || hybridization))
    {
-      CMFEM_GSSmoother *M = CMFEM_GSSmoother_NewOperator(&A);
-      CMFEM_PCG_OperatorGSSmoother(&A, M, &B, &X, 1, 10000, 1e-20, 0.0);
+      CMFEM_GSSmoother *M = CMFEM_GSSmoother_NewOp(&A);
+      CMFEM_PCGOpGs(&A, M, &B, &X, 1, 10000, 1e-20, 0.0);
       CMFEM_GSSmoother_Delete(M);
    }
    else if (CMFEM_UsesTensorBasis(fespace))
    {
       CMFEM_OperatorJacobiSmoother *M =
-         CMFEM_OperatorJacobiSmoother_NewBilinearForm(a, &ess_tdof_list);
-      CMFEM_PCG_OperatorJacobiSmoother(&A, M, &B, &X, 1, 10000, 1e-20, 0.0);
+         CMFEM_OperatorJacobiSmoother_NewBf(a, &ess_tdof_list);
+      CMFEM_PCGOpOjs(&A, M, &B, &X, 1, 10000, 1e-20, 0.0);
       CMFEM_OperatorJacobiSmoother_Delete(M);
    }
    else
    {
-      CMFEM_CG_Operator(&A, &B, &X, 1, 10000, 1e-20, 0.0);
+      CMFEM_CGOp(&A, &B, &X, 1, 10000, 1e-20, 0.0);
    }
 
    // 12. Recover the solution as a finite element grid function.
    CMFEM_BilinearForm_RecoverFEMSolution(a, &X, b, x);
    // 13. Compute and print the L^2 norm of the error.
    printf("\n|| F_h - F ||_{L^2} = %.16g\n\n",
-          CMFEM_GridFunction_ComputeL2ErrorVectorFunctionCoefficient(x, F));
+          CMFEM_GridFunction_ComputeL2ErrorVfc(x, F));
 
    // 14. Save the refined mesh and the solution.
    CMFEM_Mesh_Print(mesh, "refined.mesh", 8);
@@ -268,7 +268,7 @@ int main(int argc, char *argv[])
    }
    if (hfec)
    {
-      CMFEM_DG_Interface_FECollection_Delete(hfec);
+      CMFEM_DgInterfaceFeCollection_Delete(hfec);
    }
    CMFEM_BilinearForm_Delete(a);
    CMFEM_ConstantCoefficient_Delete(alpha);
@@ -279,7 +279,7 @@ int main(int argc, char *argv[])
    CMFEM_VectorFunctionCoefficient_Delete(f);
    CMFEM_ArrayInt_Destroy(&ess_tdof_list);
    CMFEM_FiniteElementSpace_Delete(fespace);
-   CMFEM_RT_FECollection_Delete(fec);
+   CMFEM_RtFeCollection_Delete(fec);
    CMFEM_Mesh_Delete(mesh);
    CMFEM_Device_Delete(device);
    return 0;

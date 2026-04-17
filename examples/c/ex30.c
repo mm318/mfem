@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
    CMFEM_FunctionCoefficient *singular_coeff =
       CMFEM_FunctionCoefficient_New(singular_function, NULL);
    CMFEM_CoefficientRefiner *coeff_refiner =
-      CMFEM_CoefficientRefiner_NewFunctionCoefficient(affine_coeff, order);
+      CMFEM_CoefficientRefiner_NewFc(affine_coeff, order);
 
    // 4. Apply custom refiner settings.
    CMFEM_CoefficientRefiner_SetIntRuleOrder(coeff_refiner,
@@ -149,15 +149,15 @@ int main(int argc, char *argv[])
    printf("Osc error %.14g\n", CMFEM_CoefficientRefiner_GetOsc(coeff_refiner));
 
    // 6. Preprocess mesh to control oscillation for the jump function.
-   CMFEM_CoefficientRefiner_ResetCoefficientFunction(coeff_refiner, jump_coeff);
+   CMFEM_CoefficientRefiner_ResetCoefficientFc(coeff_refiner, jump_coeff);
    CMFEM_CoefficientRefiner_PreprocessMesh(coeff_refiner, mesh);
    printf("\nFunction 1 (discontinuous)\n");
    printf("Number of Elements %d\n", CMFEM_Mesh_GetNE(mesh));
    printf("Osc error %.14g\n", CMFEM_CoefficientRefiner_GetOsc(coeff_refiner));
 
    // 7. Preprocess mesh to control oscillation for the singular function.
-   CMFEM_CoefficientRefiner_ResetCoefficientFunction(coeff_refiner,
-                                                     singular_coeff);
+   CMFEM_CoefficientRefiner_ResetCoefficientFc(coeff_refiner,
+                                               singular_coeff);
    CMFEM_CoefficientRefiner_PreprocessMesh(coeff_refiner, mesh);
    printf("\nFunction 2 (singular)\n");
    printf("Number of Elements %d\n", CMFEM_Mesh_GetNE(mesh));

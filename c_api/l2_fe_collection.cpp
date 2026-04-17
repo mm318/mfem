@@ -3,19 +3,19 @@
 namespace
 {
 
-CMFEM_ASSERT_TYPE(CMFEM_L2_FECollection, mfem::L2_FECollection);
+CMFEM_ASSERT_TYPE(CMFEM_L2FeCollection, mfem::L2_FECollection);
 
 } // namespace
 
 extern "C" {
 
-   CMFEM_L2_FECollection *CMFEM_L2_FECollection_NewOrderDim(int order, int dim)
+   CMFEM_L2FeCollection *CMFEM_L2FeCollection_NewOrderDim(int order, int dim)
    {
-      return reinterpret_cast<CMFEM_L2_FECollection *>(
+      return reinterpret_cast<CMFEM_L2FeCollection *>(
                 new mfem::L2_FECollection(order, dim));
    }
 
-   void CMFEM_L2_FECollection_Delete(CMFEM_L2_FECollection *fec)
+   void CMFEM_L2FeCollection_Delete(CMFEM_L2FeCollection *fec)
    {
       delete cmfem::As<mfem::L2_FECollection>(fec);
    }

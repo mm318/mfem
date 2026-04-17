@@ -23,7 +23,7 @@ extern "C" {
       delete cmfem::As<mfem::VisItDataCollection>(collection);
    }
 
-   void CMFEM_VisItDataCollection_RegisterFieldGridFunction(
+   void CMFEM_VisItDataCollection_RegisterFieldGf(
       CMFEM_VisItDataCollection *collection,
       const char *field_name,
       CMFEM_GridFunction *grid_function)

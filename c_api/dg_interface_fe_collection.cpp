@@ -3,23 +3,23 @@
 namespace
 {
 
-CMFEM_ASSERT_TYPE(CMFEM_DG_Interface_FECollection,
+CMFEM_ASSERT_TYPE(CMFEM_DgInterfaceFeCollection,
                   mfem::DG_Interface_FECollection);
 
 } // namespace
 
 extern "C" {
 
-   CMFEM_DG_Interface_FECollection *CMFEM_DG_Interface_FECollection_NewOrderDim(
+   CMFEM_DgInterfaceFeCollection *CMFEM_DgInterfaceFeCollection_NewOrderDim(
       int order,
       int dim)
    {
-      return reinterpret_cast<CMFEM_DG_Interface_FECollection *>(
+      return reinterpret_cast<CMFEM_DgInterfaceFeCollection *>(
                 new mfem::DG_Interface_FECollection(order, dim));
    }
 
-   void CMFEM_DG_Interface_FECollection_Delete(CMFEM_DG_Interface_FECollection
-                                               *fec)
+   void CMFEM_DgInterfaceFeCollection_Delete(CMFEM_DgInterfaceFeCollection
+                                             *fec)
    {
       delete cmfem::As<mfem::DG_Interface_FECollection>(fec);
    }

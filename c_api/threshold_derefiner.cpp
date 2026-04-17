@@ -10,7 +10,7 @@ CMFEM_ASSERT_TYPE(CMFEM_ThresholdDerefiner, mfem::ThresholdDerefiner);
 extern "C" {
 
    CMFEM_ThresholdDerefiner *
-   CMFEM_ThresholdDerefiner_NewZienkiewiczZhuEstimator(
+   CMFEM_ThresholdDerefiner_NewZze(
       CMFEM_ZienkiewiczZhuEstimator *estimator)
    {
       return reinterpret_cast<CMFEM_ThresholdDerefiner *>(
@@ -19,7 +19,7 @@ extern "C" {
    }
 
    CMFEM_ThresholdDerefiner *
-   CMFEM_ThresholdDerefiner_NewKellyErrorEstimator(
+   CMFEM_ThresholdDerefiner_NewKee(
       CMFEM_KellyErrorEstimator *estimator)
    {
       return reinterpret_cast<CMFEM_ThresholdDerefiner *>(

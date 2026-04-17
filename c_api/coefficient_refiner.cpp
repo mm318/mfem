@@ -11,7 +11,7 @@ namespace
 CMFEM_ASSERT_TYPE(CMFEM_CoefficientRefiner, mfem::CoefficientRefiner);
 
 using IntRuleArray = std::array<const mfem::IntegrationRule *,
-                                mfem::Geometry::NumGeom>;
+      mfem::Geometry::NumGeom>;
 
 std::mutex &IntRuleMutex()
 {
@@ -20,10 +20,10 @@ std::mutex &IntRuleMutex()
 }
 
 std::unordered_map<const CMFEM_CoefficientRefiner *,
-                   std::unique_ptr<IntRuleArray>> &IntRuleCache()
+    std::unique_ptr<IntRuleArray>> &IntRuleCache()
 {
    static std::unordered_map<const CMFEM_CoefficientRefiner *,
-                             std::unique_ptr<IntRuleArray>> cache;
+          std::unique_ptr<IntRuleArray>> cache;
    return cache;
 }
 
@@ -37,7 +37,7 @@ void ClearCachedIntRules(const CMFEM_CoefficientRefiner *refiner)
 
 extern "C" {
 
-   CMFEM_CoefficientRefiner *CMFEM_CoefficientRefiner_NewFunctionCoefficient(
+   CMFEM_CoefficientRefiner *CMFEM_CoefficientRefiner_NewFc(
       const CMFEM_FunctionCoefficient *coefficient,
       int order)
    {
@@ -67,7 +67,7 @@ extern "C" {
       cmfem::As<mfem::CoefficientRefiner>(refiner)->SetMaxElements(max_elements);
    }
 
-   void CMFEM_CoefficientRefiner_ResetCoefficientFunction(
+   void CMFEM_CoefficientRefiner_ResetCoefficientFc(
       CMFEM_CoefficientRefiner *refiner,
       const CMFEM_FunctionCoefficient *coefficient)
    {
