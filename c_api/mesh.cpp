@@ -11,145 +11,151 @@ CMFEM_ASSERT_TYPE(CMFEM_Mesh, mfem::Mesh);
 
 extern "C" {
 
-CMFEM_Mesh CMFEM_Mesh_Construct(void)
-{
-   alignas(mfem::Mesh) CMFEM_Mesh mesh;
-   new (cmfem::As<mfem::Mesh>(&mesh)) mfem::Mesh();
-   return mesh;
-}
-
-CMFEM_Mesh *CMFEM_Mesh_New(void)
-{
-   return reinterpret_cast<CMFEM_Mesh *>(new mfem::Mesh());
-}
-
-CMFEM_Mesh *CMFEM_Mesh_NewFile(const char *mesh_file, int generate_edges, int refine)
-{
-   return reinterpret_cast<CMFEM_Mesh *>(
-      new mfem::Mesh(mesh_file, generate_edges, refine));
-}
-
-CMFEM_Mesh CMFEM_Mesh_Copy(const CMFEM_Mesh *mesh)
-{
-   alignas(mfem::Mesh) CMFEM_Mesh copy;
-   new (cmfem::As<mfem::Mesh>(&copy)) mfem::Mesh(*cmfem::As<const mfem::Mesh>(mesh));
-   return copy;
-}
-
-CMFEM_Mesh *CMFEM_Mesh_NewCopy(const CMFEM_Mesh *mesh)
-{
-   return reinterpret_cast<CMFEM_Mesh *>(
-      new mfem::Mesh(*cmfem::As<const mfem::Mesh>(mesh)));
-}
-
-void CMFEM_Mesh_Destroy(CMFEM_Mesh *mesh)
-{
-   cmfem::As<mfem::Mesh>(mesh)->~Mesh();
-}
-
-void CMFEM_Mesh_Delete(CMFEM_Mesh *mesh)
-{
-   delete cmfem::As<mfem::Mesh>(mesh);
-}
-
-int CMFEM_Mesh_Dimension(const CMFEM_Mesh *mesh)
-{
-   return cmfem::As<const mfem::Mesh>(mesh)->Dimension();
-}
-
-int CMFEM_Mesh_SpaceDimension(const CMFEM_Mesh *mesh)
-{
-   return cmfem::As<const mfem::Mesh>(mesh)->SpaceDimension();
-}
-
-int CMFEM_Mesh_GetNE(const CMFEM_Mesh *mesh)
-{
-   return cmfem::As<const mfem::Mesh>(mesh)->GetNE();
-}
-
-void CMFEM_Mesh_UniformRefinement(CMFEM_Mesh *mesh)
-{
-   cmfem::As<mfem::Mesh>(mesh)->UniformRefinement();
-}
-
-int CMFEM_Mesh_BoundaryAttributesSize(const CMFEM_Mesh *mesh)
-{
-   return cmfem::As<const mfem::Mesh>(mesh)->bdr_attributes.Size();
-}
-
-int CMFEM_Mesh_BoundaryAttributesMax(const CMFEM_Mesh *mesh)
-{
-   return cmfem::As<const mfem::Mesh>(mesh)->bdr_attributes.Max();
-}
-
-int CMFEM_Mesh_AttributesMax(const CMFEM_Mesh *mesh)
-{
-   return cmfem::As<const mfem::Mesh>(mesh)->attributes.Max();
-}
-
-void CMFEM_Mesh_MarkExternalBoundaries(const CMFEM_Mesh *mesh, CMFEM_ArrayInt *ess_bdr)
-{
-   cmfem::As<const mfem::Mesh>(mesh)->MarkExternalBoundaries(cmfem::ArrayIntRef(ess_bdr));
-}
-
-int CMFEM_Mesh_HasNURBSext(const CMFEM_Mesh *mesh)
-{
-   return cmfem::As<const mfem::Mesh>(mesh)->NURBSext != nullptr;
-}
-
-void CMFEM_Mesh_DegreeElevate(CMFEM_Mesh *mesh, int order, int max_degree)
-{
-   cmfem::As<mfem::Mesh>(mesh)->DegreeElevate(order, max_degree);
-}
-
-void CMFEM_Mesh_EnsureNCMesh(CMFEM_Mesh *mesh, int simplices_nonconforming)
-{
-   cmfem::As<mfem::Mesh>(mesh)->EnsureNCMesh(simplices_nonconforming != 0);
-}
-
-int CMFEM_Mesh_HasNodes(const CMFEM_Mesh *mesh)
-{
-   return cmfem::As<const mfem::Mesh>(mesh)->GetNodes() != nullptr;
-}
-
-CMFEM_FiniteElementSpace *CMFEM_Mesh_GetNodesFESpace(CMFEM_Mesh *mesh)
-{
-   mfem::GridFunction *nodes = cmfem::As<mfem::Mesh>(mesh)->GetNodes();
-   return nodes ? reinterpret_cast<CMFEM_FiniteElementSpace *>(nodes->FESpace()) : nullptr;
-}
-
-const char *CMFEM_Mesh_GetNodesOwnFECName(CMFEM_Mesh *mesh)
-{
-   mfem::GridFunction *nodes = cmfem::As<mfem::Mesh>(mesh)->GetNodes();
-   return (nodes && nodes->OwnFEC()) ? nodes->OwnFEC()->Name() : "";
-}
-
-void CMFEM_Mesh_SetNodalFESpace(CMFEM_Mesh *mesh, CMFEM_FiniteElementSpace *fespace)
-{
-   cmfem::As<mfem::Mesh>(mesh)->SetNodalFESpace(
-      cmfem::As<mfem::FiniteElementSpace>(fespace));
-}
-
-void CMFEM_Mesh_AddDisplacementToNodes(CMFEM_Mesh *mesh,
-                                       const CMFEM_GridFunction *displacement)
-{
-   mfem::GridFunction *nodes = cmfem::As<mfem::Mesh>(mesh)->GetNodes();
-   if (nodes)
+   CMFEM_Mesh CMFEM_Mesh_Construct(void)
    {
-      *nodes += *cmfem::As<const mfem::GridFunction>(displacement);
+      alignas(mfem::Mesh) CMFEM_Mesh mesh;
+      new (cmfem::As<mfem::Mesh>(&mesh)) mfem::Mesh();
+      return mesh;
    }
-}
 
-void CMFEM_Mesh_Save(const CMFEM_Mesh *mesh, const char *path, int precision)
-{
-   cmfem::As<const mfem::Mesh>(mesh)->Save(path, precision);
-}
+   CMFEM_Mesh *CMFEM_Mesh_New(void)
+   {
+      return reinterpret_cast<CMFEM_Mesh *>(new mfem::Mesh());
+   }
 
-void CMFEM_Mesh_Print(const CMFEM_Mesh *mesh, const char *path, int precision)
-{
-   std::ofstream out(path);
-   out.precision(precision);
-   cmfem::As<const mfem::Mesh>(mesh)->Print(out);
-}
+   CMFEM_Mesh *CMFEM_Mesh_NewFile(const char *mesh_file, int generate_edges,
+                                  int refine)
+   {
+      return reinterpret_cast<CMFEM_Mesh *>(
+                new mfem::Mesh(mesh_file, generate_edges, refine));
+   }
+
+   CMFEM_Mesh CMFEM_Mesh_Copy(const CMFEM_Mesh *mesh)
+   {
+      alignas(mfem::Mesh) CMFEM_Mesh copy;
+      new (cmfem::As<mfem::Mesh>(&copy)) mfem::Mesh(*cmfem::As<const mfem::Mesh>
+                                                    (mesh));
+      return copy;
+   }
+
+   CMFEM_Mesh *CMFEM_Mesh_NewCopy(const CMFEM_Mesh *mesh)
+   {
+      return reinterpret_cast<CMFEM_Mesh *>(
+                new mfem::Mesh(*cmfem::As<const mfem::Mesh>(mesh)));
+   }
+
+   void CMFEM_Mesh_Destroy(CMFEM_Mesh *mesh)
+   {
+      cmfem::As<mfem::Mesh>(mesh)->~Mesh();
+   }
+
+   void CMFEM_Mesh_Delete(CMFEM_Mesh *mesh)
+   {
+      delete cmfem::As<mfem::Mesh>(mesh);
+   }
+
+   int CMFEM_Mesh_Dimension(const CMFEM_Mesh *mesh)
+   {
+      return cmfem::As<const mfem::Mesh>(mesh)->Dimension();
+   }
+
+   int CMFEM_Mesh_SpaceDimension(const CMFEM_Mesh *mesh)
+   {
+      return cmfem::As<const mfem::Mesh>(mesh)->SpaceDimension();
+   }
+
+   int CMFEM_Mesh_GetNE(const CMFEM_Mesh *mesh)
+   {
+      return cmfem::As<const mfem::Mesh>(mesh)->GetNE();
+   }
+
+   void CMFEM_Mesh_UniformRefinement(CMFEM_Mesh *mesh)
+   {
+      cmfem::As<mfem::Mesh>(mesh)->UniformRefinement();
+   }
+
+   int CMFEM_Mesh_BoundaryAttributesSize(const CMFEM_Mesh *mesh)
+   {
+      return cmfem::As<const mfem::Mesh>(mesh)->bdr_attributes.Size();
+   }
+
+   int CMFEM_Mesh_BoundaryAttributesMax(const CMFEM_Mesh *mesh)
+   {
+      return cmfem::As<const mfem::Mesh>(mesh)->bdr_attributes.Max();
+   }
+
+   int CMFEM_Mesh_AttributesMax(const CMFEM_Mesh *mesh)
+   {
+      return cmfem::As<const mfem::Mesh>(mesh)->attributes.Max();
+   }
+
+   void CMFEM_Mesh_MarkExternalBoundaries(const CMFEM_Mesh *mesh,
+                                          CMFEM_ArrayInt *ess_bdr)
+   {
+      cmfem::As<const mfem::Mesh>(mesh)->MarkExternalBoundaries(cmfem::ArrayIntRef(
+                                                                   ess_bdr));
+   }
+
+   int CMFEM_Mesh_HasNURBSext(const CMFEM_Mesh *mesh)
+   {
+      return cmfem::As<const mfem::Mesh>(mesh)->NURBSext != nullptr;
+   }
+
+   void CMFEM_Mesh_DegreeElevate(CMFEM_Mesh *mesh, int order, int max_degree)
+   {
+      cmfem::As<mfem::Mesh>(mesh)->DegreeElevate(order, max_degree);
+   }
+
+   void CMFEM_Mesh_EnsureNCMesh(CMFEM_Mesh *mesh, int simplices_nonconforming)
+   {
+      cmfem::As<mfem::Mesh>(mesh)->EnsureNCMesh(simplices_nonconforming != 0);
+   }
+
+   int CMFEM_Mesh_HasNodes(const CMFEM_Mesh *mesh)
+   {
+      return cmfem::As<const mfem::Mesh>(mesh)->GetNodes() != nullptr;
+   }
+
+   CMFEM_FiniteElementSpace *CMFEM_Mesh_GetNodesFESpace(CMFEM_Mesh *mesh)
+   {
+      mfem::GridFunction *nodes = cmfem::As<mfem::Mesh>(mesh)->GetNodes();
+      return nodes ? reinterpret_cast<CMFEM_FiniteElementSpace *>
+             (nodes->FESpace()) : nullptr;
+   }
+
+   const char *CMFEM_Mesh_GetNodesOwnFECName(CMFEM_Mesh *mesh)
+   {
+      mfem::GridFunction *nodes = cmfem::As<mfem::Mesh>(mesh)->GetNodes();
+      return (nodes && nodes->OwnFEC()) ? nodes->OwnFEC()->Name() : "";
+   }
+
+   void CMFEM_Mesh_SetNodalFESpace(CMFEM_Mesh *mesh,
+                                   CMFEM_FiniteElementSpace *fespace)
+   {
+      cmfem::As<mfem::Mesh>(mesh)->SetNodalFESpace(
+         cmfem::As<mfem::FiniteElementSpace>(fespace));
+   }
+
+   void CMFEM_Mesh_AddDisplacementToNodes(CMFEM_Mesh *mesh,
+                                          const CMFEM_GridFunction *displacement)
+   {
+      mfem::GridFunction *nodes = cmfem::As<mfem::Mesh>(mesh)->GetNodes();
+      if (nodes)
+      {
+         *nodes += *cmfem::As<const mfem::GridFunction>(displacement);
+      }
+   }
+
+   void CMFEM_Mesh_Save(const CMFEM_Mesh *mesh, const char *path, int precision)
+   {
+      cmfem::As<const mfem::Mesh>(mesh)->Save(path, precision);
+   }
+
+   void CMFEM_Mesh_Print(const CMFEM_Mesh *mesh, const char *path, int precision)
+   {
+      std::ofstream out(path);
+      out.precision(precision);
+      cmfem::As<const mfem::Mesh>(mesh)->Print(out);
+   }
 
 } // extern "C"

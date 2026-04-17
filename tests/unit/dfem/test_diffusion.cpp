@@ -269,7 +269,8 @@ void diffusion(const char *filename, int p)
       MPI_Allreduce(&norm_local, &norm_global, 1, MPI_DOUBLE, MPI_MAX,
                     pmesh.GetComm());
       // Account for ill conditioning of the RT mesh
-      if (std::string(filename).compare(mfem::test::TestsDataPath("rt-2d-q3.mesh")) == 0)
+      if (std::string(filename).compare(mfem::test::TestsDataPath("rt-2d-q3.mesh")) ==
+          0)
       {
          REQUIRE(norm_global == MFEM_Approx(0.0, 5e-12, 5e-12));
       }

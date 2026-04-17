@@ -2,9 +2,9 @@
 
 extern "C" {
 
-const char *CMFEM_ExamplesDataPath(const char *leaf)
-{
-   return MFEM_Runtime_ExamplesDataPath(leaf);
-}
+   const char *CMFEM_ExamplesDataPath(const char *leaf)
+   {
+      return MFEM_Runtime_ExamplesDataPath(leaf);
+   }
 
 } // extern "C"

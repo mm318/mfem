@@ -685,7 +685,7 @@ pub fn build(b: *std.Build) void {
             mfem_c_api,
             artifact_name,
             &.{main_source},
-            &.{"examples/c", "c_api"},
+            &.{ "examples/c", "c_api" },
         );
         const installed = installExecutable(b, exe, "examples/c", install_name);
         c_examples_step.dependOn(&installed.step.step);

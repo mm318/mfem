@@ -4,6 +4,17 @@ This file supplements `README.md`, `INSTALL`, and `CONTRIBUTING.md`. It is for
 repo-specific conventions and subtle architecture/build facts that are easy to
 miss when editing `core/`, `c_api/`, and the Zig build.
 
+## Git Hooks
+
+- Recommended git hooks live under `config/githooks/`.
+- `config/githooks/pre-commit` runs `astyle` with the repo style settings.
+- `config/githooks/pre-push` runs the quick repository checks used by CI, and
+  `./config/githooks/pre-push --style` is the fastest way to reproduce the
+  GitHub Actions `repo-check.yml` style failure locally.
+- When code style changes are involved, prefer validating with the hook itself
+  instead of only running `astyle` manually, because the hook is what the repo
+  and workflow actually enforce.
+
 ## C API Wrapper Rules
 
 - The public C entry header is `c_api/cmfem.h`. Keep it as an aggregate header

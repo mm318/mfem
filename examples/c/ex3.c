@@ -17,7 +17,8 @@ static int cmfem_ex3_dim = 0;
 static const double cmfem_ex3_pi = 3.14159265358979323846;
 
 // Exact solution, E, and right-hand side, f.
-static void cmfem_ex3_E_exact(const CMFEM_Vector *x, CMFEM_Vector *E, void *context)
+static void cmfem_ex3_E_exact(const CMFEM_Vector *x, CMFEM_Vector *E,
+                              void *context)
 {
    (void)context;
    if (cmfem_ex3_dim == 3)
@@ -37,7 +38,8 @@ static void cmfem_ex3_E_exact(const CMFEM_Vector *x, CMFEM_Vector *E, void *cont
    }
 }
 
-static void cmfem_ex3_f_exact(const CMFEM_Vector *x, CMFEM_Vector *f, void *context)
+static void cmfem_ex3_f_exact(const CMFEM_Vector *x, CMFEM_Vector *f,
+                              void *context)
 {
    double factor = 1.0 + cmfem_ex3_kappa * cmfem_ex3_kappa;
    (void)context;
@@ -74,7 +76,8 @@ int main(int argc, char *argv[])
 
    for (i = 1; i < argc; i++)
    {
-      int parsed = cmfem_parse_string_option(argc, argv, &i, "-m", "--mesh", &mesh_file);
+      int parsed = cmfem_parse_string_option(argc, argv, &i, "-m", "--mesh",
+                                             &mesh_file);
       if (parsed == 1) { continue; }
       if (parsed == 0) { return 1; }
 
@@ -82,7 +85,8 @@ int main(int argc, char *argv[])
       if (parsed == 1) { continue; }
       if (parsed == 0) { return 1; }
 
-      parsed = cmfem_parse_double_option(argc, argv, &i, "-f", "--frequency", &cmfem_ex3_freq);
+      parsed = cmfem_parse_double_option(argc, argv, &i, "-f", "--frequency",
+                                         &cmfem_ex3_freq);
       if (parsed == 1) { continue; }
       if (parsed == 0) { return 1; }
 
@@ -104,7 +108,8 @@ int main(int argc, char *argv[])
                                        &nc);
       if (parsed == 1) { continue; }
 
-      parsed = cmfem_parse_string_option(argc, argv, &i, "-d", "--device", &device_config);
+      parsed = cmfem_parse_string_option(argc, argv, &i, "-d", "--device",
+                                         &device_config);
       if (parsed == 1) { continue; }
       if (parsed == 0) { return 1; }
 
@@ -135,15 +140,18 @@ int main(int argc, char *argv[])
    }
 
    // 4. Refine the mesh to increase the resolution.
-   ref_levels = cmfem_uniform_refinement_levels(50000.0, CMFEM_Mesh_GetNE(mesh), cmfem_ex3_dim);
+   ref_levels = cmfem_uniform_refinement_levels(50000.0, CMFEM_Mesh_GetNE(mesh),
+                                                cmfem_ex3_dim);
    for (i = 0; i < ref_levels; i++)
    {
       CMFEM_Mesh_UniformRefinement(mesh);
    }
 
    // 5. Define a Nedelec finite element space on the mesh.
-   CMFEM_ND_FECollection *fec = CMFEM_ND_FECollection_NewOrderDim(order, cmfem_ex3_dim);
-   CMFEM_FiniteElementSpace *fespace = CMFEM_FiniteElementSpace_NewMeshND(mesh, fec);
+   CMFEM_ND_FECollection *fec = CMFEM_ND_FECollection_NewOrderDim(order,
+                                                                  cmfem_ex3_dim);
+   CMFEM_FiniteElementSpace *fespace = CMFEM_FiniteElementSpace_NewMeshND(mesh,
+                                                                          fec);
    printf("Number of finite element unknowns: %d\n",
           CMFEM_FiniteElementSpace_GetTrueVSize(fespace));
 
@@ -154,7 +162,8 @@ int main(int argc, char *argv[])
       _Alignas(max_align_t) CMFEM_ArrayInt ess_bdr =
          CMFEM_ArrayInt_ConstructSize(CMFEM_Mesh_BoundaryAttributesMax(mesh));
       CMFEM_ArrayInt_Assign(&ess_bdr, 1);
-      CMFEM_FiniteElementSpace_GetEssentialTrueDofs(fespace, &ess_bdr, &ess_tdof_list);
+      CMFEM_FiniteElementSpace_GetEssentialTrueDofs(fespace, &ess_bdr,
+                                                    &ess_tdof_list);
       CMFEM_ArrayInt_Destroy(&ess_bdr);
    }
 
@@ -193,7 +202,8 @@ int main(int argc, char *argv[])
    _Alignas(max_align_t) CMFEM_OperatorPtr A = CMFEM_OperatorPtr_Construct();
    _Alignas(max_align_t) CMFEM_Vector B = CMFEM_Vector_Construct();
    _Alignas(max_align_t) CMFEM_Vector X = CMFEM_Vector_Construct();
-   CMFEM_BilinearForm_FormLinearSystemOperator(a, &ess_tdof_list, x, b, &A, &X, &B);
+   CMFEM_BilinearForm_FormLinearSystemOperator(a, &ess_tdof_list, x, b, &A, &X,
+                                               &B);
 
    printf("Size of linear system: %d\n", CMFEM_OperatorPtr_Height(&A));
 

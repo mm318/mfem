@@ -23,7 +23,8 @@ int main(int argc, char *argv[])
 
    for (i = 1; i < argc; i++)
    {
-      int parsed = cmfem_parse_string_option(argc, argv, &i, "-m", "--mesh", &mesh_file);
+      int parsed = cmfem_parse_string_option(argc, argv, &i, "-m", "--mesh",
+                                             &mesh_file);
       if (parsed == 1) { continue; }
       if (parsed == 0) { return 1; }
 
@@ -51,7 +52,8 @@ int main(int argc, char *argv[])
    CMFEM_Mesh *mesh = CMFEM_Mesh_NewFile(mesh_file, 1, 1);
    dim = CMFEM_Mesh_Dimension(mesh);
 
-   if (CMFEM_Mesh_AttributesMax(mesh) < 2 || CMFEM_Mesh_BoundaryAttributesMax(mesh) < 2)
+   if (CMFEM_Mesh_AttributesMax(mesh) < 2 ||
+       CMFEM_Mesh_BoundaryAttributesMax(mesh) < 2)
    {
       fprintf(stderr,
               "\nInput mesh should have at least two materials and two boundary attributes!\n\n");
@@ -67,7 +69,8 @@ int main(int argc, char *argv[])
    }
 
    // 4. Refine the mesh to increase the resolution.
-   ref_levels = cmfem_uniform_refinement_levels(5000.0, CMFEM_Mesh_GetNE(mesh), dim);
+   ref_levels = cmfem_uniform_refinement_levels(5000.0, CMFEM_Mesh_GetNE(mesh),
+                                                dim);
    for (i = 0; i < ref_levels; i++)
    {
       CMFEM_Mesh_UniformRefinement(mesh);
@@ -100,7 +103,8 @@ int main(int argc, char *argv[])
    CMFEM_ArrayInt_Set(&ess_tdof_list, 0, 1);
    {
       _Alignas(max_align_t) CMFEM_ArrayInt true_dofs = CMFEM_ArrayInt_Construct();
-      CMFEM_FiniteElementSpace_GetEssentialTrueDofs(fespace, &ess_tdof_list, &true_dofs);
+      CMFEM_FiniteElementSpace_GetEssentialTrueDofs(fespace, &ess_tdof_list,
+                                                    &true_dofs);
       CMFEM_ArrayInt_Destroy(&ess_tdof_list);
       ess_tdof_list = true_dofs;
    }
@@ -114,7 +118,8 @@ int main(int argc, char *argv[])
          force, i, CMFEM_ConstantCoefficient_New(0.0));
    }
    {
-      CMFEM_Vector *pull_force = CMFEM_Vector_NewSize(CMFEM_Mesh_BoundaryAttributesMax(mesh));
+      CMFEM_Vector *pull_force = CMFEM_Vector_NewSize(
+                                    CMFEM_Mesh_BoundaryAttributesMax(mesh));
       CMFEM_Vector_Assign(pull_force, 0.0);
       CMFEM_Vector_Set(pull_force, 1, -1.0e-2);
       CMFEM_VectorArrayCoefficient_SetPWConstCoefficient(
@@ -135,7 +140,8 @@ int main(int argc, char *argv[])
 
    // 9. Set up the bilinear form a(.,.) corresponding to the linear elasticity
    //    operator with piece-wise constant lambda and mu coefficients.
-   CMFEM_Vector *lambda_values = CMFEM_Vector_NewSize(CMFEM_Mesh_AttributesMax(mesh));
+   CMFEM_Vector *lambda_values = CMFEM_Vector_NewSize(CMFEM_Mesh_AttributesMax(
+                                                         mesh));
    CMFEM_Vector *mu_values = CMFEM_Vector_NewSize(CMFEM_Mesh_AttributesMax(mesh));
    CMFEM_Vector_Assign(lambda_values, 1.0);
    CMFEM_Vector_Assign(mu_values, 1.0);
@@ -160,7 +166,8 @@ int main(int argc, char *argv[])
    _Alignas(max_align_t) CMFEM_SparseMatrix A = CMFEM_SparseMatrix_Construct();
    _Alignas(max_align_t) CMFEM_Vector B = CMFEM_Vector_Construct();
    _Alignas(max_align_t) CMFEM_Vector X = CMFEM_Vector_Construct();
-   CMFEM_BilinearForm_FormLinearSystemSparseMatrix(a, &ess_tdof_list, x, b, &A, &X, &B);
+   CMFEM_BilinearForm_FormLinearSystemSparseMatrix(a, &ess_tdof_list, x, b, &A, &X,
+                                                   &B);
    printf("done.\n");
    printf("Size of linear system: %d\n", CMFEM_SparseMatrix_Height(&A));
 

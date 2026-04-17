@@ -11,8 +11,10 @@ typedef void (*CMFEM_VectorFunctionCallback)(const CMFEM_Vector *x,
 
 CMFEM_BEGIN_EXTERN_C
 
-CMFEM_VectorFunctionCoefficient *CMFEM_VectorFunctionCoefficient_New(int dim, CMFEM_VectorFunctionCallback callback, void *context);
-void CMFEM_VectorFunctionCoefficient_Delete(CMFEM_VectorFunctionCoefficient *coefficient);
+CMFEM_VectorFunctionCoefficient *CMFEM_VectorFunctionCoefficient_New(int dim,
+                                                                     CMFEM_VectorFunctionCallback callback, void *context);
+void CMFEM_VectorFunctionCoefficient_Delete(CMFEM_VectorFunctionCoefficient
+                                            *coefficient);
 
 CMFEM_END_EXTERN_C
 

@@ -158,7 +158,8 @@ int main(int argc, char *argv[])
          exact_volume = M_PI;
          exact_area   = M_PI*2;
       }
-      else if (strncmp(mesh_file, mfem::test::MiniappsDataPath("inline-quad.mesh"),100) == 0)
+      else if (strncmp(mesh_file, mfem::test::MiniappsDataPath("inline-quad.mesh"),
+                       100) == 0)
       {
          exact_volume = M_PI/4;
          exact_area   = M_PI/2;
@@ -166,7 +167,8 @@ int main(int argc, char *argv[])
    }
    else if (ls_type == 2)
    {
-      if (strncmp(mesh_file, mfem::test::MiniappsDataPath("inline-quad.mesh"),100) == 0)
+      if (strncmp(mesh_file, mfem::test::MiniappsDataPath("inline-quad.mesh"),
+                  100) == 0)
       {
          exact_volume = 0.5;
          exact_area   = 1.194452300992437;

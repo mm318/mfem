@@ -11,7 +11,8 @@ static int cmfem_parse_string_option(int argc, char *argv[], int *index,
                                      const char *long_name,
                                      const char **value)
 {
-   if (strcmp(argv[*index], short_name) == 0 || strcmp(argv[*index], long_name) == 0)
+   if (strcmp(argv[*index], short_name) == 0 ||
+       strcmp(argv[*index], long_name) == 0)
    {
       if (*index + 1 >= argc)
       {
@@ -29,7 +30,8 @@ static int cmfem_parse_int_option(int argc, char *argv[], int *index,
                                   const char *long_name,
                                   int *value)
 {
-   if (strcmp(argv[*index], short_name) == 0 || strcmp(argv[*index], long_name) == 0)
+   if (strcmp(argv[*index], short_name) == 0 ||
+       strcmp(argv[*index], long_name) == 0)
    {
       if (*index + 1 >= argc)
       {
@@ -47,7 +49,8 @@ static int cmfem_parse_double_option(int argc, char *argv[], int *index,
                                      const char *long_name,
                                      double *value)
 {
-   if (strcmp(argv[*index], short_name) == 0 || strcmp(argv[*index], long_name) == 0)
+   if (strcmp(argv[*index], short_name) == 0 ||
+       strcmp(argv[*index], long_name) == 0)
    {
       if (*index + 1 >= argc)
       {
@@ -91,7 +94,8 @@ static int cmfem_uniform_refinement_levels(double max_elements,
    {
       return 0;
    }
-   levels = floor(log(max_elements / (double)num_elements) / log(2.0) / (double)dim);
+   levels = floor(log(max_elements / (double)num_elements) / log(2.0) /
+                  (double)dim);
    return levels > 0.0 ? (int)levels : 0;
 }
 

@@ -356,9 +356,9 @@ static const char *MFEM_RuntimeCachedDir(const char *relative_path, char **slot)
 }
 
 static const char *MFEM_RuntimeCachedPath(const char *relative_dir,
-                                         const char *leaf,
-                                         char **dir_slot,
-                                         MFEM_RuntimePathCacheEntry **head)
+                                          const char *leaf,
+                                          char **dir_slot,
+                                          MFEM_RuntimePathCacheEntry **head)
 {
    MFEM_RuntimePathCacheEntry *entry = *head;
    const char *dir = MFEM_RuntimeCachedDir(relative_dir, dir_slot);

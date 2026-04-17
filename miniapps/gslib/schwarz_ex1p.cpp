@@ -258,9 +258,12 @@ int main(int argc, char *argv[])
       // For the default mesh inputs, we need to rescale inline-quad.mesh such
       // that it does not cover the entire domain [0, 1]^2 and still has a
       // non-trivial overlap with the other mesh.
-      if (strcmp(mesh_file_list[0], mfem::test::MiniappsDataPath("square-disc.mesh")) == 0 &&
-          strcmp(mesh_file_list[1], mfem::test::MiniappsDataPath("inline-quad.mesh")) == 0 &&
-          strcmp(mesh_file_list[2], mfem::test::MiniappsDataPath("inline-quad.mesh")) == 0 )
+      if (strcmp(mesh_file_list[0],
+                 mfem::test::MiniappsDataPath("square-disc.mesh")) == 0 &&
+          strcmp(mesh_file_list[1],
+                 mfem::test::MiniappsDataPath("inline-quad.mesh")) == 0 &&
+          strcmp(mesh_file_list[2],
+                 mfem::test::MiniappsDataPath("inline-quad.mesh")) == 0 )
       {
          if (nmeshes == 2)
          {

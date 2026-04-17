@@ -93,8 +93,10 @@ void mass_action(const char *filename, int p)
 
    // Test boundary
    // This ensures that we're not trying to test on fully periodic meshes
-   if (!((std::string(mfem::test::TestsDataPath("periodic-square.mesh")).compare(filename) == 0) ||
-         (std::string(mfem::test::TestsDataPath("periodic-cube.mesh")).compare(filename) == 0)))
+   if (!((std::string(mfem::test::TestsDataPath("periodic-square.mesh")).compare(
+             filename) == 0) ||
+         (std::string(mfem::test::TestsDataPath("periodic-cube.mesh")).compare(
+             filename) == 0)))
    {
       SECTION("boundary")
       {

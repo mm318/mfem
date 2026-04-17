@@ -309,7 +309,8 @@ TEST_CASE("Greville, Botella and Demko points", "[NURBS]")
 TEST_CASE("NURBS knotvector orientation", "[NURBS]")
 {
    // This will fail to load without CorrectPatchTopoOrientations
-   auto mesh_fname = mfem::test::TestsMiniappsPath("nurbs/meshes/3patch-nurbs-flipedge.mesh");
+   auto mesh_fname =
+      mfem::test::TestsMiniappsPath("nurbs/meshes/3patch-nurbs-flipedge.mesh");
    Mesh mesh(mesh_fname, 1, 1);
    REQUIRE(mesh.NURBSext->CheckPatches());
 }

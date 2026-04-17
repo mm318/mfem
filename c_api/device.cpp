@@ -9,24 +9,24 @@ CMFEM_ASSERT_TYPE(CMFEM_Device, mfem::Device);
 
 extern "C" {
 
-CMFEM_Device *CMFEM_Device_New(const char *device_config)
-{
-   return reinterpret_cast<CMFEM_Device *>(new mfem::Device(device_config));
-}
+   CMFEM_Device *CMFEM_Device_New(const char *device_config)
+   {
+      return reinterpret_cast<CMFEM_Device *>(new mfem::Device(device_config));
+   }
 
-void CMFEM_Device_Delete(CMFEM_Device *device)
-{
-   delete cmfem::As<mfem::Device>(device);
-}
+   void CMFEM_Device_Delete(CMFEM_Device *device)
+   {
+      delete cmfem::As<mfem::Device>(device);
+   }
 
-void CMFEM_Device_Print(CMFEM_Device *device)
-{
-   cmfem::As<mfem::Device>(device)->Print();
-}
+   void CMFEM_Device_Print(CMFEM_Device *device)
+   {
+      cmfem::As<mfem::Device>(device)->Print();
+   }
 
-int CMFEM_Device_IsEnabled(void)
-{
-   return mfem::Device::IsEnabled();
-}
+   int CMFEM_Device_IsEnabled(void)
+   {
+      return mfem::Device::IsEnabled();
+   }
 
 } // extern "C"

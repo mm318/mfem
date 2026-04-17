@@ -7,7 +7,8 @@ CMFEM_STORAGE(PWConstCoefficient, 56);
 
 CMFEM_BEGIN_EXTERN_C
 
-CMFEM_PWConstCoefficient *CMFEM_PWConstCoefficient_New(const CMFEM_Vector *values);
+CMFEM_PWConstCoefficient *CMFEM_PWConstCoefficient_New(const CMFEM_Vector
+                                                       *values);
 void CMFEM_PWConstCoefficient_Delete(CMFEM_PWConstCoefficient *coefficient);
 
 CMFEM_END_EXTERN_C

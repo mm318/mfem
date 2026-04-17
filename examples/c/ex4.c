@@ -16,7 +16,8 @@ static double cmfem_ex4_kappa = 0.0;
 static const double cmfem_ex4_pi = 3.14159265358979323846;
 
 // Exact solution, F, and right-hand side, f.
-static void cmfem_ex4_F_exact(const CMFEM_Vector *p, CMFEM_Vector *F, void *context)
+static void cmfem_ex4_F_exact(const CMFEM_Vector *p, CMFEM_Vector *F,
+                              void *context)
 {
    double x = CMFEM_Vector_Get(p, 0);
    double y = CMFEM_Vector_Get(p, 1);
@@ -31,7 +32,8 @@ static void cmfem_ex4_F_exact(const CMFEM_Vector *p, CMFEM_Vector *F, void *cont
    }
 }
 
-static void cmfem_ex4_f_exact(const CMFEM_Vector *p, CMFEM_Vector *f, void *context)
+static void cmfem_ex4_f_exact(const CMFEM_Vector *p, CMFEM_Vector *f,
+                              void *context)
 {
    double x = CMFEM_Vector_Get(p, 0);
    double y = CMFEM_Vector_Get(p, 1);
@@ -39,8 +41,10 @@ static void cmfem_ex4_f_exact(const CMFEM_Vector *p, CMFEM_Vector *f, void *cont
    int dim = CMFEM_Vector_Size(p);
    (void)context;
 
-   CMFEM_Vector_Set(f, 0, temp * cos(cmfem_ex4_kappa * x) * sin(cmfem_ex4_kappa * y));
-   CMFEM_Vector_Set(f, 1, temp * cos(cmfem_ex4_kappa * y) * sin(cmfem_ex4_kappa * x));
+   CMFEM_Vector_Set(f, 0, temp * cos(cmfem_ex4_kappa * x) * sin(
+                       cmfem_ex4_kappa * y));
+   CMFEM_Vector_Set(f, 1, temp * cos(cmfem_ex4_kappa * y) * sin(
+                       cmfem_ex4_kappa * x));
    if (dim == 3)
    {
       CMFEM_Vector_Set(f, 2, 0.0);
@@ -66,7 +70,8 @@ int main(int argc, char *argv[])
 
    for (i = 1; i < argc; i++)
    {
-      int parsed = cmfem_parse_string_option(argc, argv, &i, "-m", "--mesh", &mesh_file);
+      int parsed = cmfem_parse_string_option(argc, argv, &i, "-m", "--mesh",
+                                             &mesh_file);
       if (parsed == 1) { continue; }
       if (parsed == 0) { return 1; }
 
@@ -80,7 +85,8 @@ int main(int argc, char *argv[])
                                        &set_bc);
       if (parsed == 1) { continue; }
 
-      parsed = cmfem_parse_double_option(argc, argv, &i, "-f", "--frequency", &cmfem_ex4_freq);
+      parsed = cmfem_parse_double_option(argc, argv, &i, "-f", "--frequency",
+                                         &cmfem_ex4_freq);
       if (parsed == 1) { continue; }
       if (parsed == 0) { return 1; }
 
@@ -108,7 +114,8 @@ int main(int argc, char *argv[])
                                        &ea);
       if (parsed == 1) { continue; }
 
-      parsed = cmfem_parse_string_option(argc, argv, &i, "-d", "--device", &device_config);
+      parsed = cmfem_parse_string_option(argc, argv, &i, "-d", "--device",
+                                         &device_config);
       if (parsed == 1) { continue; }
       if (parsed == 0) { return 1; }
 
@@ -134,7 +141,8 @@ int main(int argc, char *argv[])
    dim = CMFEM_Mesh_Dimension(mesh);
    sdim = CMFEM_Mesh_SpaceDimension(mesh);
    // 4. Refine the mesh to increase the resolution.
-   ref_levels = cmfem_uniform_refinement_levels(25000.0, CMFEM_Mesh_GetNE(mesh), dim);
+   ref_levels = cmfem_uniform_refinement_levels(25000.0, CMFEM_Mesh_GetNE(mesh),
+                                                dim);
    for (i = 0; i < ref_levels; i++)
    {
       CMFEM_Mesh_UniformRefinement(mesh);
@@ -142,7 +150,8 @@ int main(int argc, char *argv[])
 
    // 5. Define a Raviart-Thomas finite element space on the mesh.
    CMFEM_RT_FECollection *fec = CMFEM_RT_FECollection_NewOrderDim(order - 1, dim);
-   CMFEM_FiniteElementSpace *fespace = CMFEM_FiniteElementSpace_NewMeshRT(mesh, fec);
+   CMFEM_FiniteElementSpace *fespace = CMFEM_FiniteElementSpace_NewMeshRT(mesh,
+                                                                          fec);
    printf("Number of finite element unknowns: %d\n",
           CMFEM_FiniteElementSpace_GetTrueVSize(fespace));
 
@@ -153,7 +162,8 @@ int main(int argc, char *argv[])
       _Alignas(max_align_t) CMFEM_ArrayInt ess_bdr =
          CMFEM_ArrayInt_ConstructSize(CMFEM_Mesh_BoundaryAttributesMax(mesh));
       CMFEM_ArrayInt_Assign(&ess_bdr, set_bc ? 1 : 0);
-      CMFEM_FiniteElementSpace_GetEssentialTrueDofs(fespace, &ess_bdr, &ess_tdof_list);
+      CMFEM_FiniteElementSpace_GetEssentialTrueDofs(fespace, &ess_bdr,
+                                                    &ess_tdof_list);
       CMFEM_ArrayInt_Destroy(&ess_bdr);
    }
 
@@ -209,7 +219,8 @@ int main(int argc, char *argv[])
    _Alignas(max_align_t) CMFEM_OperatorPtr A = CMFEM_OperatorPtr_Construct();
    _Alignas(max_align_t) CMFEM_Vector B = CMFEM_Vector_Construct();
    _Alignas(max_align_t) CMFEM_Vector X = CMFEM_Vector_Construct();
-   CMFEM_BilinearForm_FormLinearSystemOperator(a, &ess_tdof_list, x, b, &A, &X, &B);
+   CMFEM_BilinearForm_FormLinearSystemOperator(a, &ess_tdof_list, x, b, &A, &X,
+                                               &B);
 
    printf("Size of linear system: %d\n", CMFEM_OperatorPtr_Height(&A));
 

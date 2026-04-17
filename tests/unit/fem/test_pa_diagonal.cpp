@@ -144,8 +144,10 @@ TEST_CASE("Mass Boundary Diagonal PA", "[PartialAssembly][AssembleDiagonal]")
 {
    const bool all_tests = launch_all_non_regression_tests;
 
-   auto fname = GENERATE(mfem::test::TestsDataPath("star.mesh"), mfem::test::TestsDataPath("star-q3.mesh"),
-                         mfem::test::TestsDataPath("fichera.mesh"), mfem::test::TestsDataPath("fichera-q3.mesh"));
+   auto fname = GENERATE(mfem::test::TestsDataPath("star.mesh"),
+                         mfem::test::TestsDataPath("star-q3.mesh"),
+                         mfem::test::TestsDataPath("fichera.mesh"),
+                         mfem::test::TestsDataPath("fichera-q3.mesh"));
    auto order = !all_tests ? 2 : GENERATE(1, 2, 3);
 
    CAPTURE(fname, order);

@@ -137,7 +137,8 @@ int main(int argc, char *argv[])
    }
    if (sym_plane_attr.Size() == 0)
    {
-      if (strcmp(mesh_file, mfem::test::ExamplesDataPath("fichera-mixed.mesh")) == 0 ||
+      if (strcmp(mesh_file, mfem::test::ExamplesDataPath("fichera-mixed.mesh")) == 0
+          ||
           strcmp(mesh_file, mfem::test::ExamplesDataPath("fichera.mesh")) == 0)
       {
          sym_plane_attr.SetSize(8);
@@ -153,7 +154,8 @@ int main(int argc, char *argv[])
    }
    if (phi0_attr.Size() == 0)
    {
-      if (strcmp(mesh_file, mfem::test::ExamplesDataPath("fichera-mixed.mesh")) == 0 ||
+      if (strcmp(mesh_file, mfem::test::ExamplesDataPath("fichera-mixed.mesh")) == 0
+          ||
           strcmp(mesh_file, mfem::test::ExamplesDataPath("fichera.mesh")) == 0)
       {
          phi0_attr.Append(2);
@@ -161,7 +163,8 @@ int main(int argc, char *argv[])
    }
    if (phi1_attr.Size() == 0)
    {
-      if (strcmp(mesh_file, mfem::test::ExamplesDataPath("fichera-mixed.mesh")) == 0 ||
+      if (strcmp(mesh_file, mfem::test::ExamplesDataPath("fichera-mixed.mesh")) == 0
+          ||
           strcmp(mesh_file, mfem::test::ExamplesDataPath("fichera.mesh")) == 0)
       {
          phi1_attr.Append(23);
@@ -169,7 +172,8 @@ int main(int argc, char *argv[])
    }
    if (jn_zero_attr.Size() == 0)
    {
-      if (strcmp(mesh_file, mfem::test::ExamplesDataPath("fichera-mixed.mesh")) == 0 ||
+      if (strcmp(mesh_file, mfem::test::ExamplesDataPath("fichera-mixed.mesh")) == 0
+          ||
           strcmp(mesh_file, mfem::test::ExamplesDataPath("fichera.mesh")) == 0)
       {
          jn_zero_attr.Append(25);

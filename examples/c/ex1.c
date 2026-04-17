@@ -28,7 +28,8 @@ int main(int argc, char *argv[])
 
    for (i = 1; i < argc; i++)
    {
-      int parsed = cmfem_parse_string_option(argc, argv, &i, "-m", "--mesh", &mesh_file);
+      int parsed = cmfem_parse_string_option(argc, argv, &i, "-m", "--mesh",
+                                             &mesh_file);
       if (parsed == 1) { continue; }
       if (parsed == 0) { return 1; }
 
@@ -54,7 +55,8 @@ int main(int argc, char *argv[])
                                        &fa);
       if (parsed == 1) { continue; }
 
-      parsed = cmfem_parse_string_option(argc, argv, &i, "-d", "--device", &device_config);
+      parsed = cmfem_parse_string_option(argc, argv, &i, "-d", "--device",
+                                         &device_config);
       if (parsed == 1) { continue; }
       if (parsed == 0) { return 1; }
 
@@ -77,7 +79,8 @@ int main(int argc, char *argv[])
    CMFEM_Mesh *mesh = CMFEM_Mesh_NewFile(mesh_file, 1, 1);
    dim = CMFEM_Mesh_Dimension(mesh);
    // 4. Refine the mesh to increase the resolution.
-   ref_levels = cmfem_uniform_refinement_levels(50000.0, CMFEM_Mesh_GetNE(mesh), dim);
+   ref_levels = cmfem_uniform_refinement_levels(50000.0, CMFEM_Mesh_GetNE(mesh),
+                                                dim);
    for (i = 0; i < ref_levels; i++)
    {
       CMFEM_Mesh_UniformRefinement(mesh);
@@ -119,7 +122,8 @@ int main(int argc, char *argv[])
          CMFEM_ArrayInt_ConstructSize(CMFEM_Mesh_BoundaryAttributesMax(mesh));
       CMFEM_ArrayInt_Assign(&ess_bdr, 0);
       CMFEM_Mesh_MarkExternalBoundaries(mesh, &ess_bdr);
-      CMFEM_FiniteElementSpace_GetEssentialTrueDofs(fespace, &ess_bdr, &ess_tdof_list);
+      CMFEM_FiniteElementSpace_GetEssentialTrueDofs(fespace, &ess_bdr,
+                                                    &ess_tdof_list);
       CMFEM_ArrayInt_Destroy(&ess_bdr);
    }
 
@@ -127,7 +131,8 @@ int main(int argc, char *argv[])
    //    of the discrete system.
    CMFEM_ConstantCoefficient *one = CMFEM_ConstantCoefficient_New(1.0);
    CMFEM_LinearForm *b = CMFEM_LinearForm_New(fespace);
-   CMFEM_LinearForm_AddDomainIntegrator_DomainLFIntegrator_ConstantCoefficient(b, one);
+   CMFEM_LinearForm_AddDomainIntegrator_DomainLFIntegrator_ConstantCoefficient(b,
+                                                                               one);
    CMFEM_LinearForm_Assemble(b);
 
    // 8. Define the solution vector x as a finite element grid function and
@@ -157,7 +162,8 @@ int main(int argc, char *argv[])
    _Alignas(max_align_t) CMFEM_OperatorPtr A = CMFEM_OperatorPtr_Construct();
    _Alignas(max_align_t) CMFEM_Vector B = CMFEM_Vector_Construct();
    _Alignas(max_align_t) CMFEM_Vector X = CMFEM_Vector_Construct();
-   CMFEM_BilinearForm_FormLinearSystemOperator(a, &ess_tdof_list, x, b, &A, &X, &B);
+   CMFEM_BilinearForm_FormLinearSystemOperator(a, &ess_tdof_list, x, b, &A, &X,
+                                               &B);
    printf("Size of linear system: %d\n", CMFEM_OperatorPtr_Height(&A));
 
    // 11. Solve the linear system.

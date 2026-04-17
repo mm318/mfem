@@ -9,22 +9,43 @@ CMFEM_BEGIN_EXTERN_C
 
 CMFEM_BilinearForm *CMFEM_BilinearForm_New(CMFEM_FiniteElementSpace *fespace);
 void CMFEM_BilinearForm_Delete(CMFEM_BilinearForm *bilinear_form);
-void CMFEM_BilinearForm_SetAssemblyLevelPartial(CMFEM_BilinearForm *bilinear_form);
+void CMFEM_BilinearForm_SetAssemblyLevelPartial(CMFEM_BilinearForm
+                                                *bilinear_form);
 void CMFEM_BilinearForm_SetAssemblyLevelFull(CMFEM_BilinearForm *bilinear_form);
-void CMFEM_BilinearForm_SetAssemblyLevelElement(CMFEM_BilinearForm *bilinear_form);
-void CMFEM_BilinearForm_EnableSparseMatrixSorting(CMFEM_BilinearForm *bilinear_form, int enable);
-void CMFEM_BilinearForm_AddDomainIntegrator_Diffusion(CMFEM_BilinearForm *bilinear_form);
-void CMFEM_BilinearForm_AddDomainIntegrator_DiffusionCoefficient(CMFEM_BilinearForm *bilinear_form, const CMFEM_ConstantCoefficient *coefficient);
-void CMFEM_BilinearForm_AddDomainIntegrator_Elasticity(CMFEM_BilinearForm *bilinear_form, const CMFEM_PWConstCoefficient *lambda, const CMFEM_PWConstCoefficient *mu);
-void CMFEM_BilinearForm_AddDomainIntegrator_CurlCurl(CMFEM_BilinearForm *bilinear_form, const CMFEM_ConstantCoefficient *coefficient);
-void CMFEM_BilinearForm_AddDomainIntegrator_VectorFEMass(CMFEM_BilinearForm *bilinear_form, const CMFEM_ConstantCoefficient *coefficient);
-void CMFEM_BilinearForm_AddDomainIntegrator_DivDiv(CMFEM_BilinearForm *bilinear_form, const CMFEM_ConstantCoefficient *coefficient);
-void CMFEM_BilinearForm_EnableStaticCondensation(CMFEM_BilinearForm *bilinear_form);
-void CMFEM_BilinearForm_EnableHybridization(CMFEM_BilinearForm *bilinear_form, CMFEM_FiniteElementSpace *constraint_space, const CMFEM_ArrayInt *ess_tdof_list);
+void CMFEM_BilinearForm_SetAssemblyLevelElement(CMFEM_BilinearForm
+                                                *bilinear_form);
+void CMFEM_BilinearForm_EnableSparseMatrixSorting(CMFEM_BilinearForm
+                                                  *bilinear_form, int enable);
+void CMFEM_BilinearForm_AddDomainIntegrator_Diffusion(CMFEM_BilinearForm
+                                                      *bilinear_form);
+void CMFEM_BilinearForm_AddDomainIntegrator_DiffusionCoefficient(
+   CMFEM_BilinearForm *bilinear_form,
+   const CMFEM_ConstantCoefficient *coefficient);
+void CMFEM_BilinearForm_AddDomainIntegrator_Elasticity(CMFEM_BilinearForm
+                                                       *bilinear_form, const CMFEM_PWConstCoefficient *lambda,
+                                                       const CMFEM_PWConstCoefficient *mu);
+void CMFEM_BilinearForm_AddDomainIntegrator_CurlCurl(CMFEM_BilinearForm
+                                                     *bilinear_form, const CMFEM_ConstantCoefficient *coefficient);
+void CMFEM_BilinearForm_AddDomainIntegrator_VectorFEMass(
+   CMFEM_BilinearForm *bilinear_form,
+   const CMFEM_ConstantCoefficient *coefficient);
+void CMFEM_BilinearForm_AddDomainIntegrator_DivDiv(CMFEM_BilinearForm
+                                                   *bilinear_form, const CMFEM_ConstantCoefficient *coefficient);
+void CMFEM_BilinearForm_EnableStaticCondensation(CMFEM_BilinearForm
+                                                 *bilinear_form);
+void CMFEM_BilinearForm_EnableHybridization(CMFEM_BilinearForm *bilinear_form,
+                                            CMFEM_FiniteElementSpace *constraint_space,
+                                            const CMFEM_ArrayInt *ess_tdof_list);
 void CMFEM_BilinearForm_Assemble(CMFEM_BilinearForm *bilinear_form);
-void CMFEM_BilinearForm_FormLinearSystemSparseMatrix(CMFEM_BilinearForm *bilinear_form, const CMFEM_ArrayInt *ess_tdof_list, CMFEM_GridFunction *x, CMFEM_LinearForm *b, CMFEM_SparseMatrix *A, CMFEM_Vector *X, CMFEM_Vector *B);
-void CMFEM_BilinearForm_FormLinearSystemOperator(CMFEM_BilinearForm *bilinear_form, const CMFEM_ArrayInt *ess_tdof_list, CMFEM_GridFunction *x, CMFEM_LinearForm *b, CMFEM_OperatorPtr *A, CMFEM_Vector *X, CMFEM_Vector *B);
-void CMFEM_BilinearForm_RecoverFEMSolution(const CMFEM_BilinearForm *bilinear_form, const CMFEM_Vector *X, const CMFEM_LinearForm *b, CMFEM_GridFunction *x);
+void CMFEM_BilinearForm_FormLinearSystemSparseMatrix(CMFEM_BilinearForm
+                                                     *bilinear_form, const CMFEM_ArrayInt *ess_tdof_list, CMFEM_GridFunction *x,
+                                                     CMFEM_LinearForm *b, CMFEM_SparseMatrix *A, CMFEM_Vector *X, CMFEM_Vector *B);
+void CMFEM_BilinearForm_FormLinearSystemOperator(CMFEM_BilinearForm
+                                                 *bilinear_form, const CMFEM_ArrayInt *ess_tdof_list, CMFEM_GridFunction *x,
+                                                 CMFEM_LinearForm *b, CMFEM_OperatorPtr *A, CMFEM_Vector *X, CMFEM_Vector *B);
+void CMFEM_BilinearForm_RecoverFEMSolution(const CMFEM_BilinearForm
+                                           *bilinear_form, const CMFEM_Vector *X, const CMFEM_LinearForm *b,
+                                           CMFEM_GridFunction *x);
 
 CMFEM_END_EXTERN_C
 

@@ -206,9 +206,12 @@ TEST_CASE("Linear Form Extension", "[LinearFormExtension], [GPU]")
    const bool all = launch_all_non_regression_tests;
 
    const auto mesh_file =
-      all ? GENERATE(mfem::test::TestsDataPath("star.mesh"), mfem::test::TestsDataPath("star-q3.mesh"),
-                     mfem::test::TestsDataPath("fichera.mesh"), mfem::test::TestsDataPath("fichera-q3.mesh")) :
-      GENERATE(mfem::test::TestsDataPath("star-q3.mesh"), mfem::test::TestsDataPath("fichera-q3.mesh"));
+      all ? GENERATE(mfem::test::TestsDataPath("star.mesh"),
+                     mfem::test::TestsDataPath("star-q3.mesh"),
+                     mfem::test::TestsDataPath("fichera.mesh"),
+                     mfem::test::TestsDataPath("fichera-q3.mesh")) :
+      GENERATE(mfem::test::TestsDataPath("star-q3.mesh"),
+               mfem::test::TestsDataPath("fichera-q3.mesh"));
    const auto p = all ? GENERATE(1,2,3,4,5,6) : GENERATE(1,3);
 
    SECTION("Scalar")
@@ -333,9 +336,12 @@ TEST_CASE("H(div) Linear Form Extension", "[LinearFormExtension], [GPU]")
    const bool all = launch_all_non_regression_tests;
 
    const auto mesh_file =
-      all ? GENERATE(mfem::test::TestsDataPath("star.mesh"), mfem::test::TestsDataPath("star-q3.mesh"),
-                     mfem::test::TestsDataPath("fichera.mesh"), mfem::test::TestsDataPath("fichera-q3.mesh")) :
-      GENERATE(mfem::test::TestsDataPath("star-q3.mesh"), mfem::test::TestsDataPath("fichera-q3.mesh"));
+      all ? GENERATE(mfem::test::TestsDataPath("star.mesh"),
+                     mfem::test::TestsDataPath("star-q3.mesh"),
+                     mfem::test::TestsDataPath("fichera.mesh"),
+                     mfem::test::TestsDataPath("fichera-q3.mesh")) :
+      GENERATE(mfem::test::TestsDataPath("star-q3.mesh"),
+               mfem::test::TestsDataPath("fichera-q3.mesh"));
    const auto p = all ? GENERATE(1,2,3,4,5,6) : GENERATE(1,3);
 
    Mesh mesh(mesh_file);

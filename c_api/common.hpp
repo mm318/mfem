@@ -61,7 +61,8 @@ inline mfem::SparseMatrix &SparseMatrixFromOperator(CMFEM_OperatorPtr *op)
    return dynamic_cast<mfem::SparseMatrix &>(*OperatorPtrRef(op));
 }
 
-inline const mfem::SparseMatrix &SparseMatrixFromOperator(const CMFEM_OperatorPtr *op)
+inline const mfem::SparseMatrix &SparseMatrixFromOperator(
+   const CMFEM_OperatorPtr *op)
 {
    return dynamic_cast<const mfem::SparseMatrix &>(*OperatorPtrRef(op));
 }

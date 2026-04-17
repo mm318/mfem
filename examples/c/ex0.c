@@ -20,7 +20,8 @@ int main(int argc, char *argv[])
 
    for (i = 1; i < argc; i++)
    {
-      int parsed = cmfem_parse_string_option(argc, argv, &i, "-m", "--mesh", &mesh_file);
+      int parsed = cmfem_parse_string_option(argc, argv, &i, "-m", "--mesh",
+                                             &mesh_file);
       if (parsed == 1) { continue; }
       if (parsed == 0) { return 1; }
 
@@ -40,8 +41,10 @@ int main(int argc, char *argv[])
    //    high-order Lagrange finite elements of the given order.
    CMFEM_H1_FECollection *fec =
       CMFEM_H1_FECollection_NewOrderDim(order, CMFEM_Mesh_Dimension(mesh));
-   CMFEM_FiniteElementSpace *fespace = CMFEM_FiniteElementSpace_NewMeshH1(mesh, fec);
-   printf("Number of unknowns: %d\n", CMFEM_FiniteElementSpace_GetTrueVSize(fespace));
+   CMFEM_FiniteElementSpace *fespace = CMFEM_FiniteElementSpace_NewMeshH1(mesh,
+                                                                          fec);
+   printf("Number of unknowns: %d\n",
+          CMFEM_FiniteElementSpace_GetTrueVSize(fespace));
 
    // 4. Extract the list of all the boundary DOFs. These will be marked as
    //    Dirichlet in order to enforce zero boundary conditions.
@@ -56,7 +59,8 @@ int main(int argc, char *argv[])
    // 6. Set up the linear form b(.) corresponding to the right-hand side.
    CMFEM_ConstantCoefficient *one = CMFEM_ConstantCoefficient_New(1.0);
    CMFEM_LinearForm *b = CMFEM_LinearForm_New(fespace);
-   CMFEM_LinearForm_AddDomainIntegrator_DomainLFIntegrator_ConstantCoefficient(b, one);
+   CMFEM_LinearForm_AddDomainIntegrator_DomainLFIntegrator_ConstantCoefficient(b,
+                                                                               one);
    CMFEM_LinearForm_Assemble(b);
 
    // 7. Set up the bilinear form a(.,.) corresponding to the -Delta operator.
@@ -69,7 +73,8 @@ int main(int argc, char *argv[])
    _Alignas(max_align_t) CMFEM_SparseMatrix A = CMFEM_SparseMatrix_Construct();
    _Alignas(max_align_t) CMFEM_Vector B = CMFEM_Vector_Construct();
    _Alignas(max_align_t) CMFEM_Vector X = CMFEM_Vector_Construct();
-   CMFEM_BilinearForm_FormLinearSystemSparseMatrix(a, &boundary_dofs, x, b, &A, &X, &B);
+   CMFEM_BilinearForm_FormLinearSystemSparseMatrix(a, &boundary_dofs, x, b, &A, &X,
+                                                   &B);
 
    // 9. Solve the system using PCG with symmetric Gauss-Seidel preconditioner.
    CMFEM_GSSmoother *M = CMFEM_GSSmoother_NewSparseMatrix(&A);
