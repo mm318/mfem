@@ -76,4 +76,18 @@ extern "C" {
       return cmfem::VectorRef(vector).Size();
    }
 
+   void CMFEM_Vector_Neg(CMFEM_Vector *vector)
+   {
+      cmfem::VectorRef(vector).Neg();
+   }
+
+   void CMFEM_Vector_SetSubVectorAi(CMFEM_Vector *vector,
+                                    const CMFEM_ArrayInt *indices,
+                                    double value)
+   {
+      cmfem::VectorRef(vector).SetSubVector(
+         cmfem::ArrayIntRef(indices),
+         static_cast<mfem::real_t>(value));
+   }
+
 } // extern "C"

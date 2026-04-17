@@ -50,4 +50,20 @@ extern "C" {
       return cmfem::As<const mfem::SparseMatrix>(matrix)->Height();
    }
 
+   CMFEM_SparseMatrix *CMFEM_AddSmSm(double a,
+                                     const CMFEM_SparseMatrix *A,
+                                     double b,
+                                     const CMFEM_SparseMatrix *B)
+   {
+      return reinterpret_cast<CMFEM_SparseMatrix *>(mfem::Add(
+                                                       static_cast<mfem::real_t>(
+                                                          a),
+                                                       *cmfem::As<const mfem::SparseMatrix>(
+                                                          A),
+                                                       static_cast<mfem::real_t>(
+                                                          b),
+                                                       *cmfem::As<const mfem::SparseMatrix>(
+                                                          B)));
+   }
+
 } // extern "C"

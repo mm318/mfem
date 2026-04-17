@@ -218,6 +218,16 @@ extern "C" {
       cmfem::As<mfem::BilinearForm>(bilinear_form)->Finalize();
    }
 
+   void CMFEM_BilinearForm_FormSystemMatrixSm(
+      CMFEM_BilinearForm *bilinear_form,
+      const CMFEM_ArrayInt *ess_tdof_list,
+      CMFEM_SparseMatrix *matrix)
+   {
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->FormSystemMatrix(
+         cmfem::ArrayIntRef(ess_tdof_list),
+         *cmfem::As<mfem::SparseMatrix>(matrix));
+   }
+
    void CMFEM_BilinearForm_FormLinearSystemSm(
       CMFEM_BilinearForm *bilinear_form,
       const CMFEM_ArrayInt *ess_tdof_list,
@@ -305,6 +315,16 @@ extern "C" {
             cmfem::VectorRef(X),
             *cmfem::As<const mfem::LinearForm>(b),
             *cmfem::As<mfem::GridFunction>(x));
+   }
+
+   void CMFEM_BilinearForm_FullMult(const CMFEM_BilinearForm *bilinear_form,
+                                    const CMFEM_Vector *x,
+                                    CMFEM_Vector *y)
+   {
+      const_cast<mfem::BilinearForm *>(
+         cmfem::As<const mfem::BilinearForm>(bilinear_form))->FullMult(
+            cmfem::VectorRef(x),
+            cmfem::VectorRef(y));
    }
 
    void CMFEM_BilinearForm_Update(CMFEM_BilinearForm *bilinear_form)

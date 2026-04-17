@@ -25,7 +25,12 @@ typedef struct CMFEM_BilinearForm CMFEM_BilinearForm;
 typedef struct CMFEM_SparseMatrix CMFEM_SparseMatrix;
 typedef struct CMFEM_Vector CMFEM_Vector;
 typedef struct CMFEM_GSSmoother CMFEM_GSSmoother;
+typedef struct CMFEM_DSmoother CMFEM_DSmoother;
 typedef struct CMFEM_Device CMFEM_Device;
+typedef struct CMFEM_SIAVSolver CMFEM_SIAVSolver;
+typedef struct CMFEM_SecondOrderTimeDependentOperator
+   CMFEM_SecondOrderTimeDependentOperator;
+typedef struct CMFEM_SecondOrderODESolver CMFEM_SecondOrderODESolver;
 typedef struct CMFEM_OperatorPtr CMFEM_OperatorPtr;
 typedef struct CMFEM_OperatorJacobiSmoother CMFEM_OperatorJacobiSmoother;
 typedef struct CMFEM_ConstantCoefficient CMFEM_ConstantCoefficient;

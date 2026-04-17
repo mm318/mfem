@@ -26,6 +26,23 @@ extern "C" {
                                                       (value);
    }
 
+   void CMFEM_GridFunction_Set(CMFEM_GridFunction *grid_function,
+                               int index,
+                               double value)
+   {
+      (*cmfem::As<mfem::GridFunction>(grid_function))(index) =
+         static_cast<mfem::real_t>(value);
+   }
+
+   void CMFEM_GridFunction_ProjectCoefficientFc(
+      CMFEM_GridFunction *grid_function,
+      const CMFEM_FunctionCoefficient *coefficient)
+   {
+      auto &coef = const_cast<mfem::FunctionCoefficient &>(
+                      *cmfem::As<const mfem::FunctionCoefficient>(coefficient));
+      cmfem::As<mfem::GridFunction>(grid_function)->ProjectCoefficient(coef);
+   }
+
    void CMFEM_GridFunction_ProjectBdrCoefficientCc(
       CMFEM_GridFunction *grid_function,
       const CMFEM_ConstantCoefficient *coefficient,
@@ -100,6 +117,20 @@ extern "C" {
    {
       *cmfem::As<mfem::GridFunction>(grid_function) *= static_cast<mfem::real_t>
                                                        (scale);
+   }
+
+   void CMFEM_GridFunction_GetTrueDofs(const CMFEM_GridFunction *grid_function,
+                                       CMFEM_Vector *true_dofs)
+   {
+      cmfem::As<const mfem::GridFunction>(grid_function)->GetTrueDofs(
+         cmfem::VectorRef(true_dofs));
+   }
+
+   void CMFEM_GridFunction_SetFromTrueDofs(CMFEM_GridFunction *grid_function,
+                                           const CMFEM_Vector *true_dofs)
+   {
+      cmfem::As<mfem::GridFunction>(grid_function)->SetFromTrueDofs(
+         cmfem::VectorRef(true_dofs));
    }
 
    void CMFEM_GridFunction_Update(CMFEM_GridFunction *grid_function)

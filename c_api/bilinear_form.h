@@ -64,6 +64,10 @@ void CMFEM_BilinearForm_AddBdrFaceIntegratorDgb(
    double eta);
 void CMFEM_BilinearForm_Assemble(CMFEM_BilinearForm *bilinear_form);
 void CMFEM_BilinearForm_Finalize(CMFEM_BilinearForm *bilinear_form);
+void CMFEM_BilinearForm_FormSystemMatrixSm(
+   CMFEM_BilinearForm *bilinear_form,
+   const CMFEM_ArrayInt *ess_tdof_list,
+   CMFEM_SparseMatrix *matrix);
 void CMFEM_BilinearForm_FormLinearSystemSm(CMFEM_BilinearForm
                                            *bilinear_form, const CMFEM_ArrayInt *ess_tdof_list, CMFEM_GridFunction *x,
                                            CMFEM_LinearForm *b, CMFEM_SparseMatrix *A, CMFEM_Vector *X, CMFEM_Vector *B);
@@ -91,6 +95,9 @@ void CMFEM_BilinearForm_FormLinearSystemOpCopyInterior(
 void CMFEM_BilinearForm_RecoverFEMSolution(const CMFEM_BilinearForm
                                            *bilinear_form, const CMFEM_Vector *X, const CMFEM_LinearForm *b,
                                            CMFEM_GridFunction *x);
+void CMFEM_BilinearForm_FullMult(const CMFEM_BilinearForm *bilinear_form,
+                                 const CMFEM_Vector *x,
+                                 CMFEM_Vector *y);
 void CMFEM_BilinearForm_Update(CMFEM_BilinearForm *bilinear_form);
 
 CMFEM_END_EXTERN_C
