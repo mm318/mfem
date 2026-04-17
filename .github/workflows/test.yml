@@ -36,15 +36,19 @@ jobs:
           - name: debug-static
             optimize: Debug
             extra_args: ""
+            build_targets: true
           - name: release-static
             optimize: ReleaseSafe
             extra_args: ""
+            build_targets: true
           - name: release-shared
             optimize: ReleaseSafe
             extra_args: "-Dshared=true"
-          - name: release-single
+            build_targets: false
+          - name: release-single-precision
             optimize: ReleaseSafe
             extra_args: "-Dprecision=single"
+            build_targets: false
 
     name: ${{ matrix.name }}
 
@@ -60,3 +64,15 @@ jobs:
 
       - name: Build
         run: zig build -Doptimize=${{ matrix.optimize }} ${{ matrix.extra_args }} --summary all
+
+      - name: Build Examples
+        if: ${{ matrix.build_targets }}
+        run: zig build examples -Doptimize=${{ matrix.optimize }} ${{ matrix.extra_args }} --summary all
+
+      - name: Build Miniapps
+        if: ${{ matrix.build_targets }}
+        run: zig build miniapps -Doptimize=${{ matrix.optimize }} ${{ matrix.extra_args }} --summary all
+
+      - name: Build And Run Tests
+        if: ${{ matrix.build_targets }}
+        run: zig build test -Doptimize=${{ matrix.optimize }} ${{ matrix.extra_args }} --summary all

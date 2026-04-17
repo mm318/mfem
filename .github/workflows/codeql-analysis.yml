@@ -11,9 +11,6 @@
 #
 name: "Static Analysis"
 
-env:
-  ZIG_VERSION: 0.16.0
-
 on:
   push:
     branches: ["master", "next"]
@@ -38,6 +35,7 @@ jobs:
       fail-fast: false
       matrix:
         language: [ 'cpp' ]
+        build-mode: [ 'none' ]
         # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
         # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
 
@@ -45,25 +43,40 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Install Zig
-        uses: mlugg/setup-zig@v2
-        with:
-          version: ${{ env.ZIG_VERSION }}
+      - name: Prepare MFEM config header for CodeQL
+        run: |
+          cat > config/_config.hpp <<'EOF'
+          #ifndef MFEM_CONFIG_HEADER
+          #define MFEM_CONFIG_HEADER
+          
+          #define MFEM_VERSION 40901
+          #define MFEM_VERSION_STRING "4.9.1"
+          #define MFEM_VERSION_MAJOR ((MFEM_VERSION) / 10000)
+          #define MFEM_VERSION_MINOR (((MFEM_VERSION) / 100) % 100)
+          #define MFEM_VERSION_PATCH ((MFEM_VERSION) % 100)
+          #define MFEM_SOURCE_DIR "."
+          #define MFEM_INSTALL_DIR "zig-out"
+          #define MFEM_GIT_STRING "(unknown)"
+          #define MFEM_USE_DOUBLE
+          #define MFEM_DEBUG
+          #define MFEM_USE_MEMALLOC
+          #define MFEM_TIMER_TYPE 2
+          
+          #endif // MFEM_CONFIG_HEADER
+          EOF
 
       # Initializes the CodeQL tools for scanning.
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
           # If you wish to specify custom queries, you can do so here or in a config file.
           # By default, queries listed here will override any specified in a config file.
           # Prefix the list here with "+" to use these queries and those in the config file.
 
           # Details on CodeQL's query packs refer to : https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
           # queries: security-extended,security-and-quality
-
-      - name: Build with Zig
-        run: zig build -Doptimize=Debug
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
