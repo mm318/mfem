@@ -725,7 +725,7 @@ public:
 
    private:
       const char *name = nullptr;
-      const char *mesh = "../../data/star.mesh";
+      const char *mesh = mfem::test::TestsDataPath("star.mesh");
       int newton_iter = 100;
       real_t newton_rtol = 1e-6;
       real_t linsol_rtol = 1e-8;
@@ -927,7 +927,7 @@ static void tmop_tests(int id = 0, bool all = false)
    const real_t jitter = 1. / (M_PI * M_PI);
 
    Launch(Launch::Args("2D Periodic + adapted discrete size")
-          .MESH("../../data/periodic-square.mesh")
+          .MESH(mfem::test::TestsDataPath("periodic-square.mesh"))
           .PERIODIC()
           .REFINE(1)
           .NORMALIZATION()
@@ -944,7 +944,7 @@ static void tmop_tests(int id = 0, bool all = false)
    .Run(id, all);
 
    Launch(Launch::Args("3D Periodic + adapted discrete size")
-          .MESH("../../data/periodic-cube.mesh")
+          .MESH(mfem::test::TestsDataPath("periodic-cube.mesh"))
           .PERIODIC()
           .MID({ 338 })
           .TID({ 5 })
@@ -960,7 +960,7 @@ static void tmop_tests(int id = 0, bool all = false)
    .Run(id, all);
 
    Launch(Launch::Args("2D + Combo + Balance")
-          .MESH("../../miniapps/meshing/square01.mesh")
+          .MESH(mfem::test::TestsMiniappsPath("meshing/square01.mesh"))
           .REFINE(1)
           .JI(jitter)
           .NORMALIZATION()
@@ -976,7 +976,7 @@ static void tmop_tests(int id = 0, bool all = false)
    .Run(id, all);
 
    Launch(Launch::Args("3D + Combo + Balance")
-          .MESH("../../miniapps/meshing/cube.mesh")
+          .MESH(mfem::test::TestsMiniappsPath("meshing/cube.mesh"))
           .REFINE(1)
           .JI(jitter)
           .NORMALIZATION()
@@ -990,7 +990,7 @@ static void tmop_tests(int id = 0, bool all = false)
    .Run(id, all);
 
    Launch(Launch::Args("TC_IDEAL_SHAPE_UNIT_SIZE_2D_KERNEL")
-          .MESH("../../data/star.mesh")
+          .MESH(mfem::test::TestsDataPath("star.mesh"))
           .REFINE(1)
           .JI(jitter)
           .POR({ 1, 2 })
@@ -1000,7 +1000,7 @@ static void tmop_tests(int id = 0, bool all = false)
    .Run(id, all);
 
    Launch(Launch::Args("TC_IDEAL_SHAPE_GIVEN_SIZE_2D_KERNEL")
-          .MESH("../../data/star.mesh")
+          .MESH(mfem::test::TestsDataPath("star.mesh"))
           .REFINE(1)
           .JI(jitter)
           .POR({ 1, 2 })
@@ -1010,7 +1010,7 @@ static void tmop_tests(int id = 0, bool all = false)
    .Run(id, all);
 
    Launch(Launch::Args("TC_GIVEN_SHAPE_AND_SIZE_2D_KERNEL")
-          .MESH("../../data/star.mesh")
+          .MESH(mfem::test::TestsDataPath("star.mesh"))
           .REFINE(1)
           .JI(jitter)
           .NORMALIZATION()
@@ -1022,7 +1022,7 @@ static void tmop_tests(int id = 0, bool all = false)
    .Run(id, all);
 
    Launch(Launch::Args("TC_GIVEN_SHAPE_AND_SIZE_3D_KERNEL")
-          .MESH("../../data/toroid-hex.mesh")
+          .MESH(mfem::test::TestsDataPath("toroid-hex.mesh"))
           .LIMITING(M_PI)
           .LIMIT_TYPE(1)
           .REFINE(1)
@@ -1036,7 +1036,7 @@ static void tmop_tests(int id = 0, bool all = false)
    .Run(id, all);
 
    Launch(Launch::Args("TC_IDEAL_SHAPE_UNIT_SIZE_3D_KERNEL")
-          .MESH("../../miniapps/meshing/cube.mesh")
+          .MESH(mfem::test::TestsMiniappsPath("meshing/cube.mesh"))
           .REFINE(1)
           .JI(jitter)
           .POR({ 1, 2 })
@@ -1046,7 +1046,7 @@ static void tmop_tests(int id = 0, bool all = false)
    .Run(id, all);
 
    Launch(Launch::Args("TC_IDEAL_SHAPE_GIVEN_SIZE_3D_KERNEL")
-          .MESH("../../miniapps/meshing/cube.mesh")
+          .MESH(mfem::test::TestsMiniappsPath("meshing/cube.mesh"))
           .REFINE(1)
           .JI(jitter)
           .POR({ 1, 2 })
@@ -1056,7 +1056,7 @@ static void tmop_tests(int id = 0, bool all = false)
    .Run(id, all);
 
    Launch(Launch::Args("Star")
-          .MESH("../../data/star.mesh")
+          .MESH(mfem::test::TestsDataPath("star.mesh"))
           .POR({ 1, 2, 3, 4 })
           .QOR({ 2, 4, 8 })
           .TID({ 1, 2, 3 })
@@ -1064,7 +1064,7 @@ static void tmop_tests(int id = 0, bool all = false)
    .Run(id, all);
 
    Launch(Launch::Args("Square01 + Adapted analytic Hessian")
-          .MESH("../../miniapps/meshing/square01.mesh")
+          .MESH(mfem::test::TestsMiniappsPath("meshing/square01.mesh"))
           .REFINE(1)
           .POR({ 1, 2 })
           .QOR({ 2, 4 })
@@ -1073,7 +1073,7 @@ static void tmop_tests(int id = 0, bool all = false)
    .Run(id, all);
 
    Launch(Launch::Args("Square01 + Adapted discrete size")
-          .MESH("../../miniapps/meshing/square01.mesh")
+          .MESH(mfem::test::TestsMiniappsPath("meshing/square01.mesh"))
           .REFINE(1)
           .NORMALIZATION()
           .POR({ 1 })
@@ -1086,7 +1086,7 @@ static void tmop_tests(int id = 0, bool all = false)
    .Run(id, all);
 
    Launch(Launch::Args("Blade")
-          .MESH("../../miniapps/meshing/blade.mesh")
+          .MESH(mfem::test::TestsMiniappsPath("meshing/blade.mesh"))
           .POR({ 1, 2 })
           .QOR({ 2, 4 })
           .NEWTON_RTOLERANCE(1e-13)
@@ -1096,7 +1096,7 @@ static void tmop_tests(int id = 0, bool all = false)
    .Run(id, all);
 
    Launch(Launch::Args("Blade + normalization")
-          .MESH("../../miniapps/meshing/blade.mesh")
+          .MESH(mfem::test::TestsMiniappsPath("meshing/blade.mesh"))
           .NORMALIZATION()
           .POR({ 1, 2 })
           .QOR({ 2, 4 })
@@ -1108,7 +1108,7 @@ static void tmop_tests(int id = 0, bool all = false)
    .Run(id, all);
 
    Launch(Launch::Args("Blade + limiting + normalization")
-          .MESH("../../miniapps/meshing/blade.mesh")
+          .MESH(mfem::test::TestsMiniappsPath("meshing/blade.mesh"))
           .NORMALIZATION()
           .LIMITING(M_PI)
           .POR({ 1, 2 })
@@ -1120,7 +1120,7 @@ static void tmop_tests(int id = 0, bool all = false)
    .Run(id, all);
 
    Launch(Launch::Args("Blade + limiting_expo + normalization")
-          .MESH("../../miniapps/meshing/blade.mesh")
+          .MESH(mfem::test::TestsMiniappsPath("meshing/blade.mesh"))
           .NORMALIZATION()
           .LIMITING(M_PI)
           .LIMIT_TYPE(1)
@@ -1133,7 +1133,7 @@ static void tmop_tests(int id = 0, bool all = false)
    .Run(id, all);
 
    Launch(Launch::Args("Cube")
-          .MESH("../../miniapps/meshing/cube.mesh")
+          .MESH(mfem::test::TestsMiniappsPath("meshing/cube.mesh"))
           .REFINE(1)
           .JI(jitter)
           .POR({ 1, 2 })
@@ -1144,7 +1144,7 @@ static void tmop_tests(int id = 0, bool all = false)
 
    Launch(
       Launch::Args("Cube + Discrete size & aspect + normalization + limiting")
-      .MESH("../../miniapps/meshing/cube.mesh")
+      .MESH(mfem::test::TestsMiniappsPath("meshing/cube.mesh"))
       .NORMALIZATION()
       .LIMITING(M_PI)
       .POR({ 1, 2 })
@@ -1154,7 +1154,7 @@ static void tmop_tests(int id = 0, bool all = false)
    .Run(id, all);
 
    Launch(Launch::Args("Cube + Discrete size + normalization")
-          .MESH("../../miniapps/meshing/cube.mesh")
+          .MESH(mfem::test::TestsMiniappsPath("meshing/cube.mesh"))
           .NORMALIZATION()
           .POR({ 1 })
           .QOR({ 4, 2 })
@@ -1168,7 +1168,7 @@ static void tmop_tests(int id = 0, bool all = false)
    // Note: In parallel, orders > 1 fail with: Initial mesh was valid,
    //       but intermediate mesh is invalid. Contact TMOP Developers.
    Launch(Launch::Args("Toroid-Hex")
-          .MESH("../../data/toroid-hex.mesh")
+          .MESH(mfem::test::TestsDataPath("toroid-hex.mesh"))
           .POR({ 1, 2 })
           .QOR({ 2, 4, 8 })
           .TID({ 1, 2, 3 })
@@ -1176,7 +1176,7 @@ static void tmop_tests(int id = 0, bool all = false)
    .Run(id, all);
 
    Launch(Launch::Args("Toroid-Hex + limiting")
-          .MESH("../../data/toroid-hex.mesh")
+          .MESH(mfem::test::TestsDataPath("toroid-hex.mesh"))
           .LIMITING(M_PI)
           .POR({ 1, 2 })
           .QOR({ 2, 4 })
@@ -1186,7 +1186,7 @@ static void tmop_tests(int id = 0, bool all = false)
    .Run(id, all);
 
    Launch(Launch::Args("Toroid-Hex + limiting + norm.")
-          .MESH("../../data/toroid-hex.mesh")
+          .MESH(mfem::test::TestsDataPath("toroid-hex.mesh"))
           .LIMITING(M_PI)
           .NORMALIZATION()
           .POR({ 1, 2 })
@@ -1196,7 +1196,7 @@ static void tmop_tests(int id = 0, bool all = false)
    .Run(id, all);
 
    Launch(Launch::Args("Toroid-Hex + limiting_expo + norm.")
-          .MESH("../../data/toroid-hex.mesh")
+          .MESH(mfem::test::TestsDataPath("toroid-hex.mesh"))
           .LIMITING(M_PI)
           .LIMIT_TYPE(1)
           .NORMALIZATION()
@@ -1208,7 +1208,7 @@ static void tmop_tests(int id = 0, bool all = false)
 
    // -m cube.mesh -rs 1 -tid 5 -mid 321 -ni 5 -ls 3 -li 100 -lc 1.0 -nor
    Launch(Launch::Args("Cube + Blast options")
-          .MESH("../../miniapps/meshing/cube.mesh")
+          .MESH(mfem::test::TestsMiniappsPath("meshing/cube.mesh"))
           .REFINE(1)
           .TID({ 5 })
           .MID({ 321 })
@@ -1225,7 +1225,7 @@ static void tmop_tests(int id = 0, bool all = false)
 
    // Combo 2D
    Launch(Launch::Args("Square01 + Combo")
-          .MESH("../../miniapps/meshing/square01.mesh")
+          .MESH(mfem::test::TestsMiniappsPath("meshing/square01.mesh"))
           .REFINE(1)
           .JI(jitter)
           .NORMALIZATION()
@@ -1240,7 +1240,7 @@ static void tmop_tests(int id = 0, bool all = false)
 
    // Combo 3D
    Launch(Launch::Args("Cube + Combo")
-          .MESH("../../miniapps/meshing/cube.mesh")
+          .MESH(mfem::test::TestsMiniappsPath("meshing/cube.mesh"))
           .REFINE(1)
           .JI(jitter)
           .NORMALIZATION()
@@ -1254,7 +1254,7 @@ static void tmop_tests(int id = 0, bool all = false)
 
    // NURBS
    Launch(Launch::Args("2D Nurbs")
-          .MESH("../../data/square-disc-nurbs.mesh")
+          .MESH(mfem::test::TestsDataPath("square-disc-nurbs.mesh"))
           .REFINE(1)
           .JI(jitter)
           .POR({ 1, 2 })
@@ -1264,7 +1264,7 @@ static void tmop_tests(int id = 0, bool all = false)
    .Run(id, all);
 
    Launch(Launch::Args("3D Nurbs")
-          .MESH("../../data/beam-hex-nurbs.mesh")
+          .MESH(mfem::test::TestsDataPath("beam-hex-nurbs.mesh"))
           .REFINE(1)
           .JI(jitter)
           .POR({ 1, 2 })
@@ -1279,7 +1279,7 @@ static void tmop_tests(int id = 0, bool all = false)
    if (!all) { return; }
 
    Launch(Launch::Args("Blade + Discrete size + normalization")
-          .MESH("../../miniapps/meshing/blade.mesh")
+          .MESH(mfem::test::TestsMiniappsPath("meshing/blade.mesh"))
           .LINSOL_ITERATIONS(1000)
           .NORMALIZATION()
           .NEWTON_RTOLERANCE(1e-14)
@@ -1293,7 +1293,7 @@ static void tmop_tests(int id = 0, bool all = false)
    .Run(id, true);
 
    Launch(Launch::Args("Blade + Discrete size + normalization")
-          .MESH("../../miniapps/meshing/blade.mesh")
+          .MESH(mfem::test::TestsMiniappsPath("meshing/blade.mesh"))
           .LINSOL_ITERATIONS(500)
           .NORMALIZATION()
           .NEWTON_RTOLERANCE(1e-12)

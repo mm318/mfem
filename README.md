@@ -64,7 +64,7 @@ solvers from the hypre library. Comprehensive support for other external
 packages, e.g. PETSc, SUNDIALS and libCEED is also included, giving access to
 additional linear and nonlinear solvers, preconditioners, time integrators, etc.
 
-For examples of using MFEM, see the [examples/](examples) and [miniapps/](miniapps)
+For examples of using MFEM, see the [examples/cpp/](examples/cpp) and [miniapps/](miniapps)
 directories, as well as the OpenGL visualization tool GLVis which is available
 at https://glvis.org.
 

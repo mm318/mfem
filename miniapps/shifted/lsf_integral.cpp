@@ -52,7 +52,7 @@ real_t sinusoidal_ls(const Vector &x)
 int main(int argc, char *argv[])
 {
    // Parse command-line options
-   const char *mesh_file = "../../data/star-q3.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("star-q3.mesh");
    int ser_ref_levels = 1;
    int order = 2;
    int iorder = 2; // MFEM integration points
@@ -153,12 +153,12 @@ int main(int argc, char *argv[])
    real_t exact_volume = -10, exact_area = -10;
    if (ls_type == 1)
    {
-      if (strncmp(mesh_file,"../../data/star-q3.mesh",100) == 0)
+      if (strncmp(mesh_file,mfem::test::MiniappsDataPath("star-q3.mesh"),100) == 0)
       {
          exact_volume = M_PI;
          exact_area   = M_PI*2;
       }
-      else if (strncmp(mesh_file, "../../data/inline-quad.mesh",100) == 0)
+      else if (strncmp(mesh_file, mfem::test::MiniappsDataPath("inline-quad.mesh"),100) == 0)
       {
          exact_volume = M_PI/4;
          exact_area   = M_PI/2;
@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
    }
    else if (ls_type == 2)
    {
-      if (strncmp(mesh_file, "../../data/inline-quad.mesh",100) == 0)
+      if (strncmp(mesh_file, mfem::test::MiniappsDataPath("inline-quad.mesh"),100) == 0)
       {
          exact_volume = 0.5;
          exact_area   = 1.194452300992437;

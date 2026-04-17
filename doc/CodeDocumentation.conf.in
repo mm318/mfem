@@ -961,15 +961,15 @@ INPUT                  = @MFEM_SOURCE_DIR@/doc/CodeDocumentation.dox \
                          @MFEM_SOURCE_DIR@/core/fem/qinterp \
                          @MFEM_SOURCE_DIR@/core/fem/tmop \
                          @MFEM_SOURCE_DIR@/examples \
-                         @MFEM_SOURCE_DIR@/examples/amgx \
-                         @MFEM_SOURCE_DIR@/examples/caliper \
-                         @MFEM_SOURCE_DIR@/examples/ginkgo \
-                         @MFEM_SOURCE_DIR@/examples/hiop \
-                         @MFEM_SOURCE_DIR@/examples/moonolith \
-                         @MFEM_SOURCE_DIR@/examples/petsc \
-                         @MFEM_SOURCE_DIR@/examples/pumi \
-                         @MFEM_SOURCE_DIR@/examples/sundials \
-                         @MFEM_SOURCE_DIR@/examples/superlu \
+                         @MFEM_SOURCE_DIR@/examples/cpp/amgx \
+                         @MFEM_SOURCE_DIR@/examples/cpp/caliper \
+                         @MFEM_SOURCE_DIR@/examples/cpp/ginkgo \
+                         @MFEM_SOURCE_DIR@/examples/cpp/hiop \
+                         @MFEM_SOURCE_DIR@/examples/cpp/moonolith \
+                         @MFEM_SOURCE_DIR@/examples/cpp/petsc \
+                         @MFEM_SOURCE_DIR@/examples/cpp/pumi \
+                         @MFEM_SOURCE_DIR@/examples/cpp/sundials \
+                         @MFEM_SOURCE_DIR@/examples/cpp/superlu \
                          @MFEM_SOURCE_DIR@/miniapps/adjoint \
                          @MFEM_SOURCE_DIR@/miniapps/autodiff \
                          @MFEM_SOURCE_DIR@/miniapps/common \

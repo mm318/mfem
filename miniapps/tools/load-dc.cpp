@@ -20,10 +20,10 @@
 // Compile with: make load-dc
 //
 // Serial sample runs:
-//   > load-dc -r ../../examples/Example5
+//   > load-dc -r ../../examples/cpp/Example5
 //
 // Parallel sample runs:
-//   > mpirun -np 4 load-dc -r ../../examples/Example5-Parallel
+//   > mpirun -np 4 load-dc -r ../../examples/cpp/Example5-Parallel
 
 #include "mfem.hpp"
 

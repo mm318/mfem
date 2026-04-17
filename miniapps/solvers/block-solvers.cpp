@@ -253,7 +253,7 @@ int main(int argc, char *argv[])
    StopWatch chrono;
 
    // Parse command-line options.
-   const char *mesh_file = "../../data/beam-hex.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("beam-hex.mesh");
    const char *coef_file = "";
    const char *ess_bdr_attr_file = "";
    int order = 0;

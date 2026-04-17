@@ -78,7 +78,7 @@ using namespace mfem;
 
 int main(int argc, char *argv[])
 {
-   const char *mesh_file = "../../data/star.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("star.mesh");
    int ref_levels = 1;
    int order = 3;
    const char *fe = "h";

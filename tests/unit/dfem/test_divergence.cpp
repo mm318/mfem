@@ -129,22 +129,22 @@ TEST_CASE("dFEM VectorDivergence", "[Parallel][dFEM]")
    SECTION("2D p=" + std::to_string(p))
    {
       const auto filename =
-         GENERATE("../../data/star.mesh",
-                  "../../data/star-q3.mesh",
-                  "../../data/rt-2d-q3.mesh",
-                  "../../data/inline-quad.mesh",
-                  "../../data/periodic-square.mesh");
+         GENERATE(mfem::test::TestsDataPath("star.mesh"),
+                  mfem::test::TestsDataPath("star-q3.mesh"),
+                  mfem::test::TestsDataPath("rt-2d-q3.mesh"),
+                  mfem::test::TestsDataPath("inline-quad.mesh"),
+                  mfem::test::TestsDataPath("periodic-square.mesh"));
       vectordivergence<2>(filename, p);
    }
 
    SECTION("3D p=" + std::to_string(p))
    {
       const auto filename =
-         GENERATE("../../data/fichera.mesh",
-                  "../../data/fichera-q3.mesh",
-                  "../../data/inline-hex.mesh",
-                  "../../data/toroid-hex.mesh",
-                  "../../data/periodic-cube.mesh");
+         GENERATE(mfem::test::TestsDataPath("fichera.mesh"),
+                  mfem::test::TestsDataPath("fichera-q3.mesh"),
+                  mfem::test::TestsDataPath("inline-hex.mesh"),
+                  mfem::test::TestsDataPath("toroid-hex.mesh"),
+                  mfem::test::TestsDataPath("periodic-cube.mesh"));
       vectordivergence<3>(filename, p);
    }
 }

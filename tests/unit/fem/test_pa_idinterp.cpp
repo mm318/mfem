@@ -23,11 +23,11 @@ real_t compare_pa_id_assembly(int dim, int num_elements, int order,
    {
       if (dim == 2)
       {
-         mesh = Mesh::LoadFromFile("../../data/star.mesh", order);
+         mesh = Mesh::LoadFromFile(mfem::test::TestsDataPath("star.mesh"), order);
       }
       else
       {
-         mesh = Mesh::LoadFromFile("../../data/beam-hex.mesh", order);
+         mesh = Mesh::LoadFromFile(mfem::test::TestsDataPath("beam-hex.mesh"), order);
 
          // Transform mesh vertices to test without alignment with coordinate axes.
          for (int i=0; i<mesh.GetNV(); ++i)

@@ -313,7 +313,7 @@ TEST_CASE("Laplacian",
    bool NURBS = GENERATE(false,true);
    if (NURBS) { mfem::out<<"Using NURBS"<<std::endl; }
 
-   Mesh mesh("../../data/" + meshName, 1, 1);
+   Mesh mesh(mfem::test::TestsDataPath(meshName), 1, 1);
    const int dim = mesh.Dimension();
 
    // Rotate mesh

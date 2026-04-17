@@ -54,7 +54,7 @@ using namespace mfem;
 int main(int argc, char *argv[])
 {
    // Parse command-line options.
-   const char *mesh_file = "../../data/beam-tet.vtk";
+   const char *mesh_file = mfem::test::MiniappsDataPath("beam-tet.vtk");
    Array<int> attr;
    Array<int> bdr_attr;
    int visport = 19916;

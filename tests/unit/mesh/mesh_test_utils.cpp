@@ -188,8 +188,8 @@ Mesh TetStarMesh()
 
 Mesh DividingPlaneMesh(bool tet_mesh, bool split, bool three_dim)
 {
-   auto mesh = three_dim ? Mesh("../../data/ref-cube.mesh") :
-               Mesh("../../data/ref-square.mesh");
+   auto mesh = three_dim ? Mesh(mfem::test::TestsDataPath("ref-cube.mesh")) :
+               Mesh(mfem::test::TestsDataPath("ref-square.mesh"));
    {
       Array<Refinement> refs;
       refs.Append(Refinement(0, Refinement::X));

@@ -43,11 +43,11 @@ TEST_CASE("GetDerivative", "[Parallel]")
       }
       else if (dimension == 2)
       {
-         mesh = Mesh::LoadFromFile("../../data/star-mixed-p2.mesh");
+         mesh = Mesh::LoadFromFile(mfem::test::TestsDataPath("star-mixed-p2.mesh"));
       }
       else
       {
-         mesh = Mesh::LoadFromFile("../../data/fichera-mixed-p2.mesh");
+         mesh = Mesh::LoadFromFile(mfem::test::TestsDataPath("fichera-mixed-p2.mesh"));
       }
       for (int i = 0; i < 2; i++) { mesh.UniformRefinement(); }
       ParMesh pmesh(MPI_COMM_WORLD, mesh);

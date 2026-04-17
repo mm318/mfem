@@ -70,7 +70,7 @@ int prob=0;
 int main(int argc, char *argv[])
 {
    // 1. Parse command-line options.
-   const char *mesh_file = "../../data/inline-quad.mesh";
+   const char *mesh_file = mfem::test::TestsDataPath("inline-quad.mesh");
    int order = 1;
    bool visualization = 1;
    int sr = 1;

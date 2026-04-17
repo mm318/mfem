@@ -17,7 +17,7 @@ using namespace mfem;
 TEST_CASE("FA Determinism", "[PartialAssembly][GPU]")
 {
    const int order = 3;
-   const char *mesh_filename = "../../data/star-q3.mesh";
+   const char *mesh_filename = mfem::test::TestsDataPath("star-q3.mesh");
 
    Mesh mesh = Mesh::LoadFromFile(mesh_filename);
 

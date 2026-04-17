@@ -428,8 +428,8 @@ TEST_CASE("Variable Order True Transfer", "[Transfer][VariableOrder]")
 TEST_CASE("Restriction Transpose Operator")
 {
    int order = GENERATE(1, 2);
-   auto mesh_fname = GENERATE("../../data/amr-quad.mesh",
-                              "../../data/fichera-amr.mesh");
+   auto mesh_fname = GENERATE(mfem::test::TestsDataPath("amr-quad.mesh"),
+                              mfem::test::TestsDataPath("fichera-amr.mesh"));
 
    Mesh mesh = Mesh::LoadFromFile(mesh_fname);
    H1_FECollection fec(order, mesh.Dimension());

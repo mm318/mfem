@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
    Hypre::Init();
 
    // Parse command-line options.
-   const char *mesh_file = "../../data/inline-quad.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("inline-quad.mesh");
    int order = 2;
    bool visualization = true;
    int ser_ref_levels = 0;

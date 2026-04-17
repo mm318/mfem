@@ -53,7 +53,7 @@ The solvers for the above block system include:
 
 2. MINRES preconditioned by a block diagonal preconditioner.
 
-   This solver is the one used in examples/ex5p.cpp.
+   This solver is the one used in examples/cpp/ex5p.cpp.
 
    First, define the approximate Schur complement S = B diag(M)^{-1} B^T. Then,
    BoomerAMG is used as a preconditioner for S, denoted by AMG(S). Lastly, the

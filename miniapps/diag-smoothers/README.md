@@ -12,10 +12,10 @@ This directory contains some drivers reimplementing basic examples in MFEM,
 making use of the Abs-Value-L(1)-Jacobi family of preconditioners/smoothers.
 
 Make sure you are familiar with the following examples:
-- `ex1p` [Laplace Problem](https://github.com/mfem/mfem/blob/master/examples/ex1p.cpp)
-- `ex2p` [Linear Elasticity](https://github.com/mfem/mfem/blob/master/examples/ex2p.cpp)
-- `ex3p` [Definite Maxwell Problem](https://github.com/mfem/mfem/blob/master/examples/ex3p.cpp)
-- `ex26p` [Multigrid Preconditioner](https://github.com/mfem/mfem/blob/master/examples/ex26p.cpp)
+- `ex1p` [Laplace Problem](https://github.com/mfem/mfem/blob/master/examples/cpp/ex1p.cpp)
+- `ex2p` [Linear Elasticity](https://github.com/mfem/mfem/blob/master/examples/cpp/ex2p.cpp)
+- `ex3p` [Definite Maxwell Problem](https://github.com/mfem/mfem/blob/master/examples/cpp/ex3p.cpp)
+- `ex26p` [Multigrid Preconditioner](https://github.com/mfem/mfem/blob/master/examples/cpp/ex26p.cpp)
 
 The code has *two* drivers: `abs-l1-jacobi` and `mg-abs-l1-jacobi`. All these
 drivers have the capability to solve the following problems:
@@ -44,5 +44,5 @@ application. Similar run-time options are available.
 
 The driver `mg-abs-l1-jacobi` is basically the multigrid counterparts of the
 previously mentioned driver. The wrapper (akin to
-[`ex26p`](https://github.com/mfem/mfem/blob/master/examples/ex26p.cpp))
+[`ex26p`](https://github.com/mfem/mfem/blob/master/examples/cpp/ex26p.cpp))
 allows the user to do geometric refinement or order refinement.

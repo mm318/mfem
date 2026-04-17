@@ -158,10 +158,10 @@ TEST_CASE("Quadrature Function Coefficients",
 TEST_CASE("Quadrature Function Integration", "[QuadratureFunction][GPU]")
 {
    auto fname = GENERATE(
-                   "../../data/star.mesh",
-                   "../../data/star-q3.mesh",
-                   "../../data/fichera.mesh",
-                   "../../data/fichera-q3.mesh"
+                   mfem::test::TestsDataPath("star.mesh"),
+                   mfem::test::TestsDataPath("star-q3.mesh"),
+                   mfem::test::TestsDataPath("fichera.mesh"),
+                   mfem::test::TestsDataPath("fichera-q3.mesh")
                 );
    const int order = GENERATE(1, 2, 3);
 
@@ -306,14 +306,14 @@ TEST_CASE("QuadratureFunction::ProjectGridFunction",
 {
    const int order = GENERATE(1, 2);
    const auto mesh_fname = GENERATE(
-                              "../../data/star.mesh",
-                              "../../data/star-mixed.mesh",
-                              "../../data/fichera.mesh",
-                              "../../data/fichera-mixed.mesh",
-                              "../../data/inline-tri.mesh",
-                              "../../data/inline-tet.mesh",
-                              "../../data/inline-wedge.mesh",
-                              "../../data/inline-pyramid.mesh"
+                              mfem::test::TestsDataPath("star.mesh"),
+                              mfem::test::TestsDataPath("star-mixed.mesh"),
+                              mfem::test::TestsDataPath("fichera.mesh"),
+                              mfem::test::TestsDataPath("fichera-mixed.mesh"),
+                              mfem::test::TestsDataPath("inline-tri.mesh"),
+                              mfem::test::TestsDataPath("inline-tet.mesh"),
+                              mfem::test::TestsDataPath("inline-wedge.mesh"),
+                              mfem::test::TestsDataPath("inline-pyramid.mesh")
                            );
    CAPTURE(order, mesh_fname);
 

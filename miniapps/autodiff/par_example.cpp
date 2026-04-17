@@ -297,7 +297,7 @@ int main(int argc, char *argv[])
    MFEM_PERF_FUNCTION;
 
    // 2. Parse command-line options
-   const char *mesh_file = "../../data/beam-tet.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("beam-tet.mesh");
    int ser_ref_levels = 3;
    int par_ref_levels = 1;
    int order = 1;

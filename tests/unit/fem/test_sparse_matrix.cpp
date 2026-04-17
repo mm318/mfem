@@ -192,10 +192,10 @@ TEST_CASE("Sparse Matrix", "[Parallel]")
    auto coeff_type = GENERATE(Coeff::Const,Coeff::Grid,Coeff::Quad);
    auto pb = GENERATE(Problem::Mass,Problem::Convection,Problem::Diffusion);
    auto order = GENERATE(1,2,3);
-   auto mesh = GENERATE("../../data/inline-quad.mesh",
-                        "../../data/inline-hex.mesh",
-                        "../../data/star-q2.mesh",
-                        "../../data/fichera-q2.mesh");
+   auto mesh = GENERATE(mfem::test::TestsDataPath("inline-quad.mesh"),
+                        mfem::test::TestsDataPath("inline-hex.mesh"),
+                        mfem::test::TestsDataPath("star-q2.mesh"),
+                        mfem::test::TestsDataPath("fichera-q2.mesh"));
    test_sparse_matrix(mesh, order, coeff_type, pb, keep_nbr_block, basis);
 } // test case
 

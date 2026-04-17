@@ -57,7 +57,7 @@ int main (int argc, char *argv[])
 {
    // Set the method's default parameters.
    const char *src_mesh_file = "../meshing/square01.mesh";
-   const char *tar_mesh_file = "../../data/inline-tri.mesh";
+   const char *tar_mesh_file = mfem::test::MiniappsDataPath("inline-tri.mesh");
    const char *src_sltn_file = "must_be_provided_by_the_user.gf";
    int src_fieldtype   = 0;
    int src_ncomp       = 1;

@@ -592,13 +592,13 @@ TEST_CASE("PA Convection", "[PartialAssembly], [GPU]")
 
    SECTION("2D")
    {
-      test_pa_convection("../../data/periodic-square.mesh", order, prob,
+      test_pa_convection(mfem::test::TestsDataPath("periodic-square.mesh"), order, prob,
                          refinement);
    }
 
    SECTION("3D")
    {
-      test_pa_convection("../../data/periodic-cube.mesh", order, prob,
+      test_pa_convection(mfem::test::TestsDataPath("periodic-cube.mesh"), order, prob,
                          refinement);
    }
 } // test case
@@ -620,9 +620,9 @@ TEST_CASE("PA Convection advanced", "[PartialAssembly], [MFEMData], [GPU]")
 
       SECTION("2D")
       {
-         test_pa_convection("../../data/periodic-hexagon.mesh", order, prob,
+         test_pa_convection(mfem::test::TestsDataPath("periodic-hexagon.mesh"), order, prob,
                             refinement);
-         test_pa_convection("../../data/star-q3.mesh", order, prob,
+         test_pa_convection(mfem::test::TestsDataPath("star-q3.mesh"), order, prob,
                             refinement);
          test_pa_convection(mfem_data_dir+"/gmsh/v22/unstructured_quad.v22.msh",
                             order, prob, refinement);
@@ -630,7 +630,7 @@ TEST_CASE("PA Convection advanced", "[PartialAssembly], [MFEMData], [GPU]")
 
       SECTION("3D")
       {
-         test_pa_convection("../../data/fichera-q3.mesh", order, prob,
+         test_pa_convection(mfem::test::TestsDataPath("fichera-q3.mesh"), order, prob,
                             refinement);
          test_pa_convection(mfem_data_dir+"/gmsh/v22/unstructured_hex.v22.msh",
                             order, prob, refinement);
@@ -643,8 +643,8 @@ static void test_pa_integrator()
 {
    const bool all_tests = launch_all_non_regression_tests;
 
-   auto fname = GENERATE("../../data/star.mesh", "../../data/star-q3.mesh",
-                         "../../data/fichera.mesh", "../../data/fichera-q3.mesh");
+   auto fname = GENERATE(mfem::test::TestsDataPath("star.mesh"), mfem::test::TestsDataPath("star-q3.mesh"),
+                         mfem::test::TestsDataPath("fichera.mesh"), mfem::test::TestsDataPath("fichera-q3.mesh"));
    auto map_type = GENERATE(FiniteElement::VALUE, FiniteElement::INTEGRAL);
 
    auto order = !all_tests ? 2 : GENERATE(1, 2, 3);
@@ -696,8 +696,8 @@ TEST_CASE("PA Diffusion", "[PartialAssembly], [GPU]")
 TEST_CASE("PA Markers", "[PartialAssembly], [GPU]")
 {
    const bool all_tests = launch_all_non_regression_tests;
-   auto fname = GENERATE("../../data/star.mesh", "../../data/star-q3.mesh",
-                         "../../data/fichera.mesh", "../../data/fichera-q3.mesh");
+   auto fname = GENERATE(mfem::test::TestsDataPath("star.mesh"), mfem::test::TestsDataPath("star-q3.mesh"),
+                         mfem::test::TestsDataPath("fichera.mesh"), mfem::test::TestsDataPath("fichera-q3.mesh"));
    auto order = !all_tests ? 2 : GENERATE(1, 2, 3);
    auto dg = GENERATE(false, true);
    CAPTURE(fname, order, dg);
@@ -753,8 +753,8 @@ TEST_CASE("PA Boundary Mass", "[PartialAssembly], [GPU]")
 {
    const bool all_tests = launch_all_non_regression_tests;
 
-   auto fname = GENERATE("../../data/star.mesh", "../../data/star-q3.mesh",
-                         "../../data/fichera.mesh", "../../data/fichera-q3.mesh");
+   auto fname = GENERATE(mfem::test::TestsDataPath("star.mesh"), mfem::test::TestsDataPath("star-q3.mesh"),
+                         mfem::test::TestsDataPath("fichera.mesh"), mfem::test::TestsDataPath("fichera-q3.mesh"));
    auto order = !all_tests ? 2 : GENERATE(1, 2, 3);
 
    Mesh mesh(fname);
@@ -893,10 +893,10 @@ std::vector<std::string> get_dg_test_meshes()
 {
    std::vector<std::string> mesh_filenames =
    {
-      "../../data/star.mesh",
-      "../../data/star-q3.mesh",
-      "../../data/fichera.mesh",
-      "../../data/fichera-q3.mesh",
+      mfem::test::TestsDataPath("star.mesh"),
+      mfem::test::TestsDataPath("star-q3.mesh"),
+      mfem::test::TestsDataPath("fichera.mesh"),
+      mfem::test::TestsDataPath("fichera-q3.mesh"),
    };
    const bool have_data_dir = mfem_data_dir != "";
    if (have_data_dir)

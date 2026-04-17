@@ -514,15 +514,15 @@ TEST_CASE("CEED mass & diffusion", "[CEED]")
    auto pb = GENERATE(Problem::Mass,Problem::Diffusion,Problem::MassDiffusion,
                       Problem::VectorMass,Problem::VectorDiffusion);
    auto order = GENERATE(1);
-   auto mesh = GENERATE("../../data/inline-quad.mesh",
-                        "../../data/inline-hex.mesh",
-                        "../../data/periodic-square.mesh",
-                        "../../data/star-q2.mesh",
-                        "../../data/fichera-q2.mesh",
-                        "../../data/amr-quad.mesh",
-                        "../../data/fichera-amr.mesh",
-                        "../../data/square-mixed.mesh",
-                        "../../data/fichera-mixed.mesh");
+   auto mesh = GENERATE(mfem::test::TestsDataPath("inline-quad.mesh"),
+                        mfem::test::TestsDataPath("inline-hex.mesh"),
+                        mfem::test::TestsDataPath("periodic-square.mesh"),
+                        mfem::test::TestsDataPath("star-q2.mesh"),
+                        mfem::test::TestsDataPath("fichera-q2.mesh"),
+                        mfem::test::TestsDataPath("amr-quad.mesh"),
+                        mfem::test::TestsDataPath("fichera-amr.mesh"),
+                        mfem::test::TestsDataPath("square-mixed.mesh"),
+                        mfem::test::TestsDataPath("fichera-mixed.mesh"));
    test_ceed_operator(mesh, order, coeff_type, pb, assembly);
 } // test case
 
@@ -534,11 +534,11 @@ TEST_CASE("CEED p-adaptivity", "[CEED]")
    auto pb = GENERATE(Problem::Mass,Problem::Diffusion,Problem::MassDiffusion,
                       Problem::VectorMass,Problem::VectorDiffusion);
    auto order = GENERATE(1);
-   auto mesh = GENERATE("../../data/inline-quad.mesh",
-                        "../../data/periodic-square.mesh",
-                        "../../data/star-q2.mesh",
-                        "../../data/amr-quad.mesh",
-                        "../../data/square-mixed.mesh");
+   auto mesh = GENERATE(mfem::test::TestsDataPath("inline-quad.mesh"),
+                        mfem::test::TestsDataPath("periodic-square.mesh"),
+                        mfem::test::TestsDataPath("star-q2.mesh"),
+                        mfem::test::TestsDataPath("amr-quad.mesh"),
+                        mfem::test::TestsDataPath("square-mixed.mesh"));
    test_mixed_p_ceed_operator(mesh, order, coeff_type, pb, assembly);
 } // test case
 
@@ -547,14 +547,14 @@ TEST_CASE("CEED convection low", "[CEED],[Convection]")
    auto assembly = GENERATE(AssemblyLevel::PARTIAL,AssemblyLevel::NONE);
    auto coeff_type = GENERATE(CeedCoeffType::VecConst,CeedCoeffType::VecGrid,
                               CeedCoeffType::VecQuad);
-   auto mesh = GENERATE("../../data/inline-quad.mesh",
-                        "../../data/inline-hex.mesh",
-                        "../../data/star-q2.mesh",
-                        "../../data/fichera-q2.mesh",
-                        "../../data/amr-quad.mesh",
-                        "../../data/fichera-amr.mesh",
-                        "../../data/square-mixed.mesh",
-                        "../../data/fichera-mixed.mesh");
+   auto mesh = GENERATE(mfem::test::TestsDataPath("inline-quad.mesh"),
+                        mfem::test::TestsDataPath("inline-hex.mesh"),
+                        mfem::test::TestsDataPath("star-q2.mesh"),
+                        mfem::test::TestsDataPath("fichera-q2.mesh"),
+                        mfem::test::TestsDataPath("amr-quad.mesh"),
+                        mfem::test::TestsDataPath("fichera-amr.mesh"),
+                        mfem::test::TestsDataPath("square-mixed.mesh"),
+                        mfem::test::TestsDataPath("fichera-mixed.mesh"));
    Problem pb = Problem::Convection;
 
    // Test that the CEED and MFEM integrators give the same answer
@@ -565,12 +565,12 @@ TEST_CASE("CEED convection low", "[CEED],[Convection]")
 TEST_CASE("CEED convection high", "[CEED],[Convection]")
 {
    auto assembly = GENERATE(AssemblyLevel::PARTIAL,AssemblyLevel::NONE);
-   auto mesh = GENERATE("../../data/inline-quad.mesh",
-                        "../../data/inline-hex.mesh",
-                        "../../data/star-q2.mesh",
-                        "../../data/fichera-q2.mesh",
-                        "../../data/amr-quad.mesh",
-                        "../../data/fichera-amr.mesh");
+   auto mesh = GENERATE(mfem::test::TestsDataPath("inline-quad.mesh"),
+                        mfem::test::TestsDataPath("inline-hex.mesh"),
+                        mfem::test::TestsDataPath("star-q2.mesh"),
+                        mfem::test::TestsDataPath("fichera-q2.mesh"),
+                        mfem::test::TestsDataPath("amr-quad.mesh"),
+                        mfem::test::TestsDataPath("fichera-amr.mesh"));
 
    // Apply the CEED convection integrator applied to a vector quantity, check
    // that we get the exact answer (with sufficiently high polynomial degree)
@@ -585,13 +585,13 @@ TEST_CASE("CEED non-linear convection", "[CEED],[NLConvection]")
                               CeedCoeffType::Quad);
    auto pb = GENERATE(NLProblem::Convection);
    auto order = GENERATE(1);
-   auto mesh = GENERATE("../../data/inline-quad.mesh",
-                        "../../data/inline-hex.mesh",
-                        "../../data/periodic-square.mesh",
-                        "../../data/star-q2.mesh",
-                        "../../data/fichera.mesh",
-                        "../../data/square-mixed.mesh",
-                        "../../data/fichera-mixed.mesh");
+   auto mesh = GENERATE(mfem::test::TestsDataPath("inline-quad.mesh"),
+                        mfem::test::TestsDataPath("inline-hex.mesh"),
+                        mfem::test::TestsDataPath("periodic-square.mesh"),
+                        mfem::test::TestsDataPath("star-q2.mesh"),
+                        mfem::test::TestsDataPath("fichera.mesh"),
+                        mfem::test::TestsDataPath("square-mixed.mesh"),
+                        mfem::test::TestsDataPath("fichera-mixed.mesh"));
    test_ceed_nloperator(mesh, order, coeff_type, pb, assembly);
 } // test case
 

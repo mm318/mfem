@@ -17,10 +17,10 @@ using namespace mfem;
 TEST_CASE("DG Mass Inverse", "[GPU]")
 {
    auto mesh_filename = GENERATE(
-                           "../../data/inline-segment.mesh",
-                           "../../data/star.mesh",
-                           "../../data/star-q3.mesh",
-                           "../../data/fichera.mesh"
+                           mfem::test::TestsDataPath("inline-segment.mesh"),
+                           mfem::test::TestsDataPath("star.mesh"),
+                           mfem::test::TestsDataPath("star-q3.mesh"),
+                           mfem::test::TestsDataPath("fichera.mesh")
                         );
    auto order = GENERATE(2, 3, 4, 5);
    auto btype1 = GENERATE(BasisType::GaussLobatto, BasisType::GaussLegendre,

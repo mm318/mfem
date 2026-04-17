@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
    Hypre::Init();
 
    // 2. Parse command-line options.
-   const char *mesh_file = "../../data/beam-tri.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("beam-tri.mesh");
    int order = 1;
    bool pa = false;
    bool visualization = false;

@@ -31,12 +31,12 @@
 // Compile with: make extrapolate
 //
 // Sample runs:
-//     mpirun -np 4 extrapolate -m "../../data/inline-segment.mesh" -rs 6 -ed 2
+//     mpirun -np 4 extrapolate -m mfem::test::MiniappsDataPath("inline-segment.mesh") -rs 6 -ed 2
 //     mpirun -np 4 extrapolate -rs 5 -p 0 -ed 2
 //     mpirun -np 4 extrapolate -rs 5 -p 1 -ed 2
 //     mpirun -np 4 extrapolate -rs 5 -p 1 -et 1 -ed 1 -dg 1
-//     mpirun -np 4 extrapolate -m "../../data/inline-hex.mesh" -ed 1 -rs 1
-//     mpirun -np 4 extrapolate -m "../../data/inline-hex.mesh" -p 1 -ed 1 -rs 1
+//     mpirun -np 4 extrapolate -m mfem::test::MiniappsDataPath("inline-hex.mesh") -ed 1 -rs 1
+//     mpirun -np 4 extrapolate -m mfem::test::MiniappsDataPath("inline-hex.mesh") -p 1 -ed 1 -rs 1
 
 #include "extrapolator.hpp"
 
@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
    Hypre::Init();
 
    // Parse command-line options.
-   const char *mesh_file = "../../data/inline-quad.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("inline-quad.mesh");
    int rs_levels = 2;
    Extrapolator::XtrapType ex_type   = Extrapolator::ASLAM;
    AdvectionOper::AdvectionMode dg_mode = AdvectionOper::HO;

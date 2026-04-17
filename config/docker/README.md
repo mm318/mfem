@@ -49,8 +49,6 @@ Using this container, if you want to develop a tool that _uses_ mfem, you can fi
 ```bash
 $ ls include/ | grep mfem
 mfem
-mfem-performance.hpp
-mfem.hpp
 ```
 
 And yes, this is the working directory when you shell into the container!

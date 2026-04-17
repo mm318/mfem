@@ -16,7 +16,7 @@ using namespace mfem;
 
 TEST_CASE("NURBS knot insertion and removal", "[NURBS]")
 {
-   auto mesh_fname = "../../data/pipe-nurbs.mesh";
+   auto mesh_fname = mfem::test::TestsDataPath("pipe-nurbs.mesh");
    Mesh mesh1(mesh_fname, 1, 1);
    Mesh mesh2(mesh_fname, 1, 1);
 
@@ -51,8 +51,8 @@ TEST_CASE("NURBS knot insertion and removal", "[NURBS]")
 
 TEST_CASE("NURBS refinement and coarsening by spacing formulas", "[NURBS]")
 {
-   auto mesh_fname = GENERATE("../../data/beam-quad-nurbs-sf.mesh",
-                              "../../data/square-nurbs-pw.mesh");
+   auto mesh_fname = GENERATE(mfem::test::TestsDataPath("beam-quad-nurbs-sf.mesh"),
+                              mfem::test::TestsDataPath("square-nurbs-pw.mesh"));
 
    Mesh mesh1(mesh_fname, 1, 1);
    Mesh mesh2(mesh_fname, 1, 1);
@@ -88,16 +88,16 @@ TEST_CASE("NURBS refinement and coarsening by spacing formulas", "[NURBS]")
 TEST_CASE("NURBS mesh reconstruction", "[NURBS]")
 {
    auto mesh_fname =
-      GENERATE("../../data/segment-nurbs.mesh",
-               "../../data/square-nurbs.mesh",
-               "../../data/beam-quad-nurbs.mesh",
-               "../../data/pipe-nurbs.mesh",
-               "../../miniapps/nurbs/meshes/two-squares-nurbs.mesh",
-               "../../miniapps/nurbs/meshes/two-squares-nurbs-rot.mesh",
-               "../../miniapps/nurbs/meshes/two-squares-nurbs-autoedge.mesh",
-               "../../miniapps/nurbs/meshes/plus-nurbs.mesh",
-               "../../miniapps/nurbs/meshes/plus-nurbs-permuted.mesh",
-               "../../miniapps/nurbs/meshes/ijk-hex-nurbs.mesh");
+      GENERATE(mfem::test::TestsDataPath("segment-nurbs.mesh"),
+               mfem::test::TestsDataPath("square-nurbs.mesh"),
+               mfem::test::TestsDataPath("beam-quad-nurbs.mesh"),
+               mfem::test::TestsDataPath("pipe-nurbs.mesh"),
+               mfem::test::TestsMiniappsPath("nurbs/meshes/two-squares-nurbs.mesh"),
+               mfem::test::TestsMiniappsPath("nurbs/meshes/two-squares-nurbs-rot.mesh"),
+               mfem::test::TestsMiniappsPath("nurbs/meshes/two-squares-nurbs-autoedge.mesh"),
+               mfem::test::TestsMiniappsPath("nurbs/meshes/plus-nurbs.mesh"),
+               mfem::test::TestsMiniappsPath("nurbs/meshes/plus-nurbs-permuted.mesh"),
+               mfem::test::TestsMiniappsPath("nurbs/meshes/ijk-hex-nurbs.mesh"));
 
    Mesh mesh1(mesh_fname, 1, 1);
 
@@ -309,15 +309,15 @@ TEST_CASE("Greville, Botella and Demko points", "[NURBS]")
 TEST_CASE("NURBS knotvector orientation", "[NURBS]")
 {
    // This will fail to load without CorrectPatchTopoOrientations
-   auto mesh_fname = "../../miniapps/nurbs/meshes/3patch-nurbs-flipedge.mesh";
+   auto mesh_fname = mfem::test::TestsMiniappsPath("nurbs/meshes/3patch-nurbs-flipedge.mesh");
    Mesh mesh(mesh_fname, 1, 1);
    REQUIRE(mesh.NURBSext->CheckPatches());
 }
 
 TEST_CASE("NURBS NC-patch mesh loading", "[NURBS]")
 {
-   auto mesh_fname = GENERATE("../../data/nc3-nurbs.mesh",
-                              "../../data/nc-nurbs3d.mesh");
+   auto mesh_fname = GENERATE(mfem::test::TestsDataPath("nc3-nurbs.mesh"),
+                              mfem::test::TestsDataPath("nc-nurbs3d.mesh"));
 
    Mesh mesh(mesh_fname, 1, 1);
    const int dim = mesh.Dimension();
@@ -330,11 +330,11 @@ TEST_CASE("NURBS NC-patch mesh loading", "[NURBS]")
 
 TEST_CASE("NURBS 1D variable-order mesh load", "[NURBS]")
 {
-   auto mesh_fname = GENERATE("../../data/nurbs-segments2d.mesh",
-                              "../../data/nurbs-segments3d.mesh",
-                              "../../data/nurbs-segments2d-patches.mesh",
-                              "../../data/nurbs-segments3d-patches.mesh",
-                              "../../data/nurbs-segments2d-patches-multispan.mesh");
+   auto mesh_fname = GENERATE(mfem::test::TestsDataPath("nurbs-segments2d.mesh"),
+                              mfem::test::TestsDataPath("nurbs-segments3d.mesh"),
+                              mfem::test::TestsDataPath("nurbs-segments2d-patches.mesh"),
+                              mfem::test::TestsDataPath("nurbs-segments3d-patches.mesh"),
+                              mfem::test::TestsDataPath("nurbs-segments2d-patches-multispan.mesh"));
 
    // Set up hard-coded expected values based on the input meshes.
    // This should be easy to update as needed.

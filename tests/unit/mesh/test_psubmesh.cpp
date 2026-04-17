@@ -283,7 +283,7 @@ void multidomain_test_3d(FECType fec_type)
    // Circle: sideset 1
    // Domain boundary: sideset 2
    Mesh *serial_parent_mesh = new
-   Mesh("../../miniapps/multidomain/multidomain-hex.mesh");
+   Mesh(mfem::test::TestsMiniappsPath("multidomain/multidomain-hex.mesh"));
    ParMesh parent_mesh(MPI_COMM_WORLD, *serial_parent_mesh);
    delete serial_parent_mesh;
 
@@ -954,7 +954,7 @@ TEST_CASE("ExteriorSurfaceParNCSubMesh", "[Parallel],[SubMesh]")
 {
    SECTION("Hex")
    {
-      auto mesh = Mesh("../../data/ref-cube.mesh", 1, 1);
+      auto mesh = Mesh(mfem::test::TestsDataPath("ref-cube.mesh"), 1, 1);
       mesh.EnsureNCMesh(true);
       SECTION("UniformRefinement2")
       {
@@ -1044,7 +1044,7 @@ TEST_CASE("ExteriorSurfaceParNCSubMesh", "[Parallel],[SubMesh]")
 
    SECTION("Tet")
    {
-      auto mesh = Mesh("../../data/ref-tetrahedron.mesh");
+      auto mesh = Mesh(mfem::test::TestsDataPath("ref-tetrahedron.mesh"));
       mesh.EnsureNCMesh(true);
       SECTION("UniformRefinement2")
       {

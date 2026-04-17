@@ -33,7 +33,7 @@ void AssembleAndSolve(LinearForm & b, BilinearFormIntegrator * bfi,
 int main(int argc, char *argv[])
 {
    // 1. Parse command-line options.
-   const char *mesh_file = "../../data/beam-hex-nurbs.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("beam-hex-nurbs.mesh");
    int order = -1;
    bool pa = false;
    const char *device_config = "cpu";

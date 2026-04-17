@@ -19,7 +19,7 @@ using namespace mfem;
 int main(int argc, char *argv[])
 {
    // Read parameters from command line
-   const char *mesh_file = "../../data/square-nurbs.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("square-nurbs.mesh");
    const char *ref_file  = "";
    int ref_levels = -1;
    int order = 1;

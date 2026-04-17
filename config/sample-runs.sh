@@ -36,7 +36,7 @@ groups_serial=(
 #   "ex1.cpp"'
 '"sundials"
    "SUNDIALS examples:"
-   "examples/sundials"
+   "examples/cpp/sundials"
    "ex{9,10,16}.cpp"'
 '"performance"
    "Performance miniapps:"
@@ -44,27 +44,27 @@ groups_serial=(
    "ex1.cpp"'
 '"amgx"
    "AmgX examples:"
-   "examples/amgx"
+   "examples/cpp/amgx"
    "ex1.cpp"'
 '"caliper"
    "Caliper examples:"
-   "examples/caliper"
+   "examples/cpp/caliper"
    "ex1.cpp"'
 '"ginkgo"
    "Ginkgo examples:"
-   "examples/ginkgo"
+   "examples/cpp/ginkgo"
    "ex1.cpp"'
 '"hiop"
    "HiOp examples:"
-   "examples/hiop"
+   "examples/cpp/hiop"
    "ex9.cpp"'
 '"moonolith"
    "Moonolith examples:"
-   "examples/moonolith"
+   "examples/cpp/moonolith"
    "ex1.cpp"'
 '"pumi"
    "PUMI examples:"
-   "examples/pumi"
+   "examples/cpp/pumi"
    "ex1.cpp ex2.cpp"'
 #   ""'
 '"meshing"
@@ -125,11 +125,11 @@ groups_parallel=(
 #   "ex1p.cpp"'
 '"sundials"
    "SUNDIALS examples:"
-   "examples/sundials"
+   "examples/cpp/sundials"
    "ex{9,10,16}p.cpp"'
 '"petsc"
    "PETSc examples:"
-   "examples/petsc"
+   "examples/cpp/petsc"
    "ex{,1}[0-9]p.cpp"'
 '"performance"
    "Performance miniapps:"
@@ -137,27 +137,27 @@ groups_parallel=(
    "ex1p.cpp"'
 '"amgx"
    "AmgX examples:"
-   "examples/amgx"
+   "examples/cpp/amgx"
    "ex1p.cpp"'
 '"caliper"
    "Caliper examples:"
-   "examples/caliper"
+   "examples/cpp/caliper"
    "ex1p.cpp"'
 '"hiop"
    "HiOp examples:"
-   "examples/hiop"
+   "examples/cpp/hiop"
    "ex9p.cpp"'
 '"moonolith"
    "Moonolith examples:"
-   "examples/moonolith"
+   "examples/cpp/moonolith"
    "ex{1,2}p.cpp"'
 '"pumi"
    "PUMI examples:"
-   "examples/pumi"
+   "examples/cpp/pumi"
    "ex1p.cpp ex6p.cpp"'
 '"superlu"
    "Superlu examples:"
-   "examples/superlu"
+   "examples/cpp/superlu"
    "ex1p.cpp"'
 #   ""'
 '"meshing"
@@ -239,11 +239,11 @@ groups_all=(
    "ex\"{,[1-9]}[0-9]\"{,p}.cpp"'
 '"sundials"
    "SUNDIALS examples:"
-   "examples/sundials"
+   "examples/cpp/sundials"
    "ex\"{9,10,16}\"{,p}.cpp"'
 '"petsc"
    "PETSc examples:"
-   "examples/petsc"
+   "examples/cpp/petsc"
    "ex{,1}[0-9]p.cpp"'
 '"performance"
    "Performance miniapps:"
@@ -251,31 +251,31 @@ groups_all=(
    "ex1{,p}.cpp"'
 '"amgx"
    "AmgX examples:"
-   "examples/amgx"
+   "examples/cpp/amgx"
    "ex1.cpp ex1p.cpp"'
 '"caliper"
    "Caliper examples:"
-   "examples/caliper"
+   "examples/cpp/caliper"
    "ex1.cpp ex1p.cpp"'
 '"ginkgo"
    "Ginkgo examples:"
-   "examples/ginkgo"
+   "examples/cpp/ginkgo"
    "ex1.cpp"'
 '"hiop"
    "HiOp examples:"
-   "examples/hiop"
+   "examples/cpp/hiop"
    "ex9.cpp ex9p.cpp"'
 '"moonolith"
    "Moonolith examples:"
-   "examples/moonolith"
+   "examples/cpp/moonolith"
    "ex1.cpp ex{1,2}p.cpp"'
 '"pumi"
    "PUMI examples:"
-   "examples/pumi"
+   "examples/cpp/pumi"
    "ex1.cpp ex2.cpp ex1p.cpp ex6p.cpp"'
 '"superlu"
    "Superlu examples:"
-   "examples/superlu"
+   "examples/cpp/superlu"
    "ex1p.cpp"'
 '"meshing"
    "Meshing miniapps:"

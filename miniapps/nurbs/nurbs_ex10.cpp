@@ -152,7 +152,7 @@ void visualize(ostream &os, Mesh *mesh, GridFunction *deformed_nodes,
 int main(int argc, char *argv[])
 {
    // 1. Parse command-line options.
-   const char *mesh_file = "../../data/beam-quad-nurbs.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("beam-quad-nurbs.mesh");
    int ref_levels = 1;
    int order = 2;
    int ode_solver_type = 23;

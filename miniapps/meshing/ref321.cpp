@@ -99,7 +99,7 @@ void TestAnisoRefRandom(int iter, int dim, Mesh & mesh)
 int main(int argc, char *argv[])
 {
    // 1. Parse command-line options.
-   const char *mesh_file = "../../data/star.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("star.mesh");
    int order = 1;
    bool visualization = true;
    bool makeMesh = false;

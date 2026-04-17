@@ -48,7 +48,7 @@ void trans3D(const Vector&, Vector&);
 
 int main(int argc, char *argv[])
 {
-   const char *mesh_file = "../../data/inline-quad.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("inline-quad.mesh");
    int order = -1;
    int ny = -1, nz = -1; // < 0: autoselect based on the initial mesh dimension
    real_t wy = 1.0, hz = 1.0;

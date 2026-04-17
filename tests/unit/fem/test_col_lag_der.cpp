@@ -50,16 +50,16 @@ TEST_CASE("Collocated Derivative Kernels", "[QuadratureInterpolator]")
    <1, QVectorLayout::byNODES, true, 1, 2>::Add();
 
    const auto mesh_fname = GENERATE(
-                              "../../data/inline-segment.mesh",
-                              "../../data/inline-quad.mesh",
-                              "../../data/inline-hex.mesh",
-                              "../../data/star.mesh",
-                              "../../data/star-q3.mesh",
-                              "../../data/fichera.mesh",
-                              "../../data/fichera-q3.mesh",
-                              "../../data/diag-segment-2d.mesh", // 1D mesh in 2D
-                              "../../data/diag-segment-3d.mesh", // 1D mesh in 3D
-                              "../../data/star-surf.mesh" // surface mesh
+                              mfem::test::TestsDataPath("inline-segment.mesh"),
+                              mfem::test::TestsDataPath("inline-quad.mesh"),
+                              mfem::test::TestsDataPath("inline-hex.mesh"),
+                              mfem::test::TestsDataPath("star.mesh"),
+                              mfem::test::TestsDataPath("star-q3.mesh"),
+                              mfem::test::TestsDataPath("fichera.mesh"),
+                              mfem::test::TestsDataPath("fichera-q3.mesh"),
+                              mfem::test::TestsDataPath("diag-segment-2d.mesh"), // 1D mesh in 2D
+                              mfem::test::TestsDataPath("diag-segment-3d.mesh"), // 1D mesh in 3D
+                              mfem::test::TestsDataPath("star-surf.mesh") // surface mesh
                            );
    int p = GENERATE(range(1,7)); // element order, 1 <= p < 7
    int vdim = GENERATE(1,2,3); // vector dimension for grid-function

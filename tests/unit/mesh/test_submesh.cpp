@@ -779,7 +779,7 @@ TEST_CASE("ExteriorSurfaceNCSubMesh", "[SubMesh]")
 {
    SECTION("Hex")
    {
-      auto mesh = Mesh("../../data/ref-cube.mesh", 1, 1);
+      auto mesh = Mesh(mfem::test::TestsDataPath("ref-cube.mesh"), 1, 1);
       mesh.EnsureNCMesh(true);
       SECTION("UniformRefinement2")
       {
@@ -846,7 +846,7 @@ TEST_CASE("ExteriorSurfaceNCSubMesh", "[SubMesh]")
 
    SECTION("Tet")
    {
-      auto mesh = Mesh("../../data/ref-tetrahedron.mesh");
+      auto mesh = Mesh(mfem::test::TestsDataPath("ref-tetrahedron.mesh"));
       mesh.EnsureNCMesh(true);
       SECTION("UniformRefinement2")
       {

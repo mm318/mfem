@@ -94,9 +94,9 @@ int main(int argc, char *argv[])
 
    // 2. Parse command-line options.
 #ifdef MFEM_HPC_EX1_2D
-   const char *mesh_file = "../../data/star.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("star.mesh");
 #else
-   const char *mesh_file = "../../data/fichera.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("fichera.mesh");
 #endif
    int ser_ref_levels = -1;
    int par_ref_levels = 1;

@@ -50,8 +50,8 @@ void GetInterdomainBoundaryPoints(FindPointsGSLIB &finder1,
 int main(int argc, char *argv[])
 {
    // Parse command-line options.
-   const char *mesh_file_1   = "../../data/square-disc.mesh";
-   const char *mesh_file_2   = "../../data/inline-quad.mesh";
+   const char *mesh_file_1   = mfem::test::MiniappsDataPath("square-disc.mesh");
+   const char *mesh_file_2   = mfem::test::MiniappsDataPath("inline-quad.mesh");
    int order                 = 2;
    bool visualization        = true;
    int r1_levels             = 0;
@@ -173,8 +173,8 @@ int main(int argc, char *argv[])
    // For the default mesh inputs, we need to rescale inline-quad.mesh
    // such that it does not cover the entire domain [0, 1]^2 and still has a
    // non-trivial overlap with the other mesh.
-   if (strcmp(mesh_file_1, "../../data/square-disc.mesh") == 0 &&
-       strcmp(mesh_file_2, "../../data/inline-quad.mesh") == 0 )
+   if (strcmp(mesh_file_1, mfem::test::MiniappsDataPath("square-disc.mesh")) == 0 &&
+       strcmp(mesh_file_2, mfem::test::MiniappsDataPath("inline-quad.mesh")) == 0 )
    {
       for (int i = 0; i < mesh_nodes_2.Size(); i++)
       {

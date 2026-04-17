@@ -91,7 +91,7 @@ TEST_CASE("OperatorJacobiSmoother Fichera", "[OperatorJacobiSmoother]")
       for (int order = 1; order < 5; ++order)
       {
          CAPTURE(refine, order);
-         Mesh mesh("../../data/fichera.mesh", 1, refine, true);
+         Mesh mesh(mfem::test::TestsDataPath("fichera.mesh"), 1, refine, true);
          FiniteElementCollection *h1_fec = new H1_FECollection(order, dimension);
          FiniteElementSpace h1_fespace(&mesh, h1_fec);
          Array<int> ess_tdof_list;

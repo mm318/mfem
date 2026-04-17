@@ -127,7 +127,7 @@ real_t epsilon = 1.0;
 
 int main(int argc, char *argv[])
 {
-   const char *mesh_file = "../../data/inline-quad.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("inline-quad.mesh");
    int order = 1;
    int delta_order = 1;
    bool visualization = true;

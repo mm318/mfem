@@ -253,16 +253,16 @@ TEST_CASE("QuadratureInterpolator", "[QuadratureInterpolator][GPU]")
    SECTION("H1 elements: values and physical derivatives")
    {
       const auto mesh_fname = GENERATE(
-                                 "../../data/inline-segment.mesh",
-                                 "../../data/star.mesh",
-                                 "../../data/star-q3.mesh",
-                                 "../../data/square-disc-p2.mesh",
-                                 "../../data/fichera.mesh",
-                                 "../../data/fichera-q3.mesh",
-                                 "../../data/escher-p2.mesh",
-                                 "../../data/diag-segment-2d.mesh", // 1D mesh in 2D
-                                 "../../data/diag-segment-3d.mesh", // 1D mesh in 3D
-                                 "../../data/star-surf.mesh" // surface mesh
+                                 mfem::test::TestsDataPath("inline-segment.mesh"),
+                                 mfem::test::TestsDataPath("star.mesh"),
+                                 mfem::test::TestsDataPath("star-q3.mesh"),
+                                 mfem::test::TestsDataPath("square-disc-p2.mesh"),
+                                 mfem::test::TestsDataPath("fichera.mesh"),
+                                 mfem::test::TestsDataPath("fichera-q3.mesh"),
+                                 mfem::test::TestsDataPath("escher-p2.mesh"),
+                                 mfem::test::TestsDataPath("diag-segment-2d.mesh"), // 1D mesh in 2D
+                                 mfem::test::TestsDataPath("diag-segment-3d.mesh"), // 1D mesh in 3D
+                                 mfem::test::TestsDataPath("star-surf.mesh") // surface mesh
                               );
       const int order = GENERATE(1, 2, 3);
       CAPTURE(mesh_fname, order);
@@ -358,8 +358,8 @@ TEST_CASE("QuadratureInterpolator", "[QuadratureInterpolator][GPU]")
    {
       // Only quad and hex elements are supported, for now:
       const auto mesh_fname = GENERATE(
-                                 "../../data/star-q2.mesh",
-                                 "../../data/fichera-q2.mesh"
+                                 mfem::test::TestsDataPath("star-q2.mesh"),
+                                 mfem::test::TestsDataPath("fichera-q2.mesh")
                               );
       const int order = GENERATE(0, 1, 2);
       CAPTURE(mesh_fname, order);
@@ -468,9 +468,9 @@ TEST_CASE("QuadratureInterpolator", "[QuadratureInterpolator][GPU]")
    SECTION("Surface Determinants: 1D surface in 2D/3D and 2D surface in 3D")
    {
       const auto mesh_fname = GENERATE(
-                                 "../../data/diag-segment-2d.mesh", // 1D in 2D
-                                 "../../data/diag-segment-3d.mesh", // 1D in 3D
-                                 "../../data/star-surf.mesh"        // 2D in 3D
+                                 mfem::test::TestsDataPath("diag-segment-2d.mesh"), // 1D in 2D
+                                 mfem::test::TestsDataPath("diag-segment-3d.mesh"), // 1D in 3D
+                                 mfem::test::TestsDataPath("star-surf.mesh")        // 2D in 3D
                               );
 
       // Using order > 1 to ensure curvature is used if supported by mesh

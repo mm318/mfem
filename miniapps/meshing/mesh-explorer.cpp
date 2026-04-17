@@ -264,7 +264,7 @@ void recover_bdr_partitioning(const Mesh* mesh, const Array<int>& partitioning,
 int main (int argc, char *argv[])
 {
    int np = 0;
-   const char *mesh_file = "../../data/beam-hex.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("beam-hex.mesh");
    int visport = 19916;
    bool refine = true;
 

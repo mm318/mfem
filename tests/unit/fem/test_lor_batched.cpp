@@ -12,8 +12,8 @@
 #include "mfem.hpp"
 #include "unit_tests.hpp"
 #include "../linalg/test_same_matrices.hpp"
-#include "../../fem/lor/lor_ads.hpp"
-#include "../../fem/lor/lor_ams.hpp"
+#include "../../core/fem/lor/lor_ads.hpp"
+#include "../../core/fem/lor/lor_ams.hpp"
 #include <memory>
 #include <unordered_map>
 
@@ -51,9 +51,9 @@ void TestBatchedLOR()
 {
    const int order = 5;
    const auto mesh_fname = GENERATE(
-                              "../../data/star-surf.mesh",
-                              "../../data/star-q3.mesh",
-                              "../../data/fichera-q3.mesh"
+                              mfem::test::TestsDataPath("star-surf.mesh"),
+                              mfem::test::TestsDataPath("star-q3.mesh"),
+                              mfem::test::TestsDataPath("fichera-q3.mesh")
                            );
 
    Mesh mesh = Mesh::LoadFromFile(mesh_fname);
@@ -123,9 +123,9 @@ void ParTestBatchedLOR()
    const bool all_tests = launch_all_non_regression_tests;
    const int order = !all_tests ? 5 : GENERATE(1,3,5);
    const auto mesh_fname = GENERATE(
-                              "../../data/star-surf.mesh",
-                              "../../data/star-q3.mesh",
-                              "../../data/fichera-q3.mesh"
+                              mfem::test::TestsDataPath("star-surf.mesh"),
+                              mfem::test::TestsDataPath("star-q3.mesh"),
+                              mfem::test::TestsDataPath("fichera-q3.mesh")
                            );
 
    CAPTURE(order, mesh_fname);
@@ -184,9 +184,9 @@ TEST_CASE("LOR AMS", "[LOR][BatchedLOR][AMS][Parallel][GPU]")
    enum SpaceType { ND, RT };
    auto space_type = GENERATE(ND, RT);
    auto mesh_fname = GENERATE(
-                        "../../data/star-surf.mesh",
-                        "../../data/star-q3.mesh",
-                        "../../data/fichera-q3.mesh"
+                        mfem::test::TestsDataPath("star-surf.mesh"),
+                        mfem::test::TestsDataPath("star-q3.mesh"),
+                        mfem::test::TestsDataPath("fichera-q3.mesh")
                      );
    const int order = 5;
 
@@ -254,7 +254,7 @@ TEST_CASE("LOR AMS", "[LOR][BatchedLOR][AMS][Parallel][GPU]")
 TEST_CASE("LOR ADS", "[LOR][BatchedLOR][ADS][Parallel][GPU]")
 {
    // Only need to test ADS in 3D
-   auto mesh_fname = GENERATE("../../data/fichera-q3.mesh");
+   auto mesh_fname = GENERATE(mfem::test::TestsDataPath("fichera-q3.mesh"));
    const int order = 5;
 
    Mesh serial_mesh = Mesh::LoadFromFile(mesh_fname);

@@ -52,7 +52,7 @@ real_t freq = 1.0, kappa;
 int main(int argc, char *argv[])
 {
    // 1. Parse command-line options.
-   const char *mesh_file = "../../data/cube-nurbs.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("cube-nurbs.mesh");
    int ref_levels = -1;
    int order = 1;
    bool NURBS = true;

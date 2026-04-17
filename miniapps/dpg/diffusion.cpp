@@ -92,7 +92,7 @@ real_t f_exact(const Vector & X);
 int main(int argc, char *argv[])
 {
    // 1. Parse command-line options.
-   const char *mesh_file = "../../data/inline-quad.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("inline-quad.mesh");
    int order = 1;
    int delta_order = 1;
    int ref = 0;

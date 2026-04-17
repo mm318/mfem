@@ -88,7 +88,7 @@ struct ex1_t
 int main(int argc, char *argv[])
 {
    // 1. Parse command-line options.
-   const char *mesh_file = "../../data/fichera.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("fichera.mesh");
    int ref_levels = -1;
    int order = sol_p;
    const char *basis_type = "G"; // Gauss-Lobatto

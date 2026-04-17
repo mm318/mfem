@@ -54,7 +54,7 @@ namespace mfem
    CPU. This work is based on the AmgXWrapper of Chuang and Barba. Routines were
    adopted and modified for setting up MPI communicators.
 
-   Examples 1/1p in the examples/amgx directory demonstrate configuring the
+   Examples 1/1p in the examples/cpp/amgx directory demonstrate configuring the
    wrapper as a solver and preconditioner, as well as configuring and running
    with exclusive GPU or MPI teams modes.
 

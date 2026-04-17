@@ -269,7 +269,7 @@ void diffusion(const char *filename, int p)
       MPI_Allreduce(&norm_local, &norm_global, 1, MPI_DOUBLE, MPI_MAX,
                     pmesh.GetComm());
       // Account for ill conditioning of the RT mesh
-      if (std::string(filename).compare("../../data/rt-2d-q3.mesh") == 0)
+      if (std::string(filename).compare(mfem::test::TestsDataPath("rt-2d-q3.mesh")) == 0)
       {
          REQUIRE(norm_global == MFEM_Approx(0.0, 5e-12, 5e-12));
       }
@@ -310,11 +310,11 @@ TEST_CASE("dFEM Diffusion", "[Parallel][dFEM][GPU]")
    {
       const auto filename2d =
          GENERATE(
-            "../../data/star.mesh",
-            "../../data/star-q3.mesh",
-            "../../data/rt-2d-q3.mesh",
-            "../../data/inline-quad.mesh",
-            "../../data/periodic-square.mesh"
+            mfem::test::TestsDataPath("star.mesh"),
+            mfem::test::TestsDataPath("star-q3.mesh"),
+            mfem::test::TestsDataPath("rt-2d-q3.mesh"),
+            mfem::test::TestsDataPath("inline-quad.mesh"),
+            mfem::test::TestsDataPath("periodic-square.mesh")
          );
       diffusion<2>(filename2d, p);
    }
@@ -323,11 +323,11 @@ TEST_CASE("dFEM Diffusion", "[Parallel][dFEM][GPU]")
    {
       const auto filename3d =
          GENERATE(
-            "../../data/fichera.mesh",
-            "../../data/fichera-q3.mesh",
-            "../../data/inline-hex.mesh",
-            "../../data/toroid-hex.mesh",
-            "../../data/periodic-cube.mesh"
+            mfem::test::TestsDataPath("fichera.mesh"),
+            mfem::test::TestsDataPath("fichera-q3.mesh"),
+            mfem::test::TestsDataPath("inline-hex.mesh"),
+            mfem::test::TestsDataPath("toroid-hex.mesh"),
+            mfem::test::TestsDataPath("periodic-cube.mesh")
          );
       diffusion<3>(filename3d, p);
    }

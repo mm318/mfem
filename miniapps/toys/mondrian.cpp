@@ -73,7 +73,7 @@ int material(const ParsePGM &pgm, int NC,
 
 int main(int argc, char *argv[])
 {
-   const char *mesh_file = "../../data/inline-quad.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("inline-quad.mesh");
    const char *img_file = "australia.pgm";
    int sd = 2;
    int nclimit = 1;

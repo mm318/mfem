@@ -212,22 +212,22 @@ TEST_CASE("H1 Assembly Levels", "[AssemblyLevel], [PartialAssembly], [GPU]")
       SECTION("2D")
       {
          auto order = !all_tests ? GENERATE(2, 3) : GENERATE(1, 2, 3);
-         test_assembly_level("../../data/periodic-square.mesh",
+         test_assembly_level(mfem::test::TestsDataPath("periodic-square.mesh"),
                              order, q_order_inc, dg, pb, assembly);
-         test_assembly_level("../../data/periodic-hexagon.mesh",
+         test_assembly_level(mfem::test::TestsDataPath("periodic-hexagon.mesh"),
                              order, q_order_inc, dg, pb, assembly);
-         test_assembly_level("../../data/star-q3.mesh",
+         test_assembly_level(mfem::test::TestsDataPath("star-q3.mesh"),
                              order, q_order_inc, dg, pb, assembly);
       }
 
       SECTION("3D")
       {
          auto order = !all_tests ? GENERATE(2) : GENERATE(1, 2, 3);
-         test_assembly_level("../../data/periodic-cube.mesh",
+         test_assembly_level(mfem::test::TestsDataPath("periodic-cube.mesh"),
                              order, q_order_inc, dg, pb, assembly);
          if ( !Device::Allows(~Backend::CPU_MASK) )
          {
-            test_assembly_level("../../data/fichera-q3.mesh",
+            test_assembly_level(mfem::test::TestsDataPath("fichera-q3.mesh"),
                                 order, q_order_inc, dg, pb, assembly);
          }
       }
@@ -239,13 +239,13 @@ TEST_CASE("H1 Assembly Levels", "[AssemblyLevel], [PartialAssembly], [GPU]")
       SECTION("AMR 2D")
       {
          auto order = !all_tests ? GENERATE(2, 3) : GENERATE(1, 2, 3);
-         test_assembly_level("../../data/amr-quad.mesh",
+         test_assembly_level(mfem::test::TestsDataPath("amr-quad.mesh"),
                              order, q_order_inc, dg, pb, assembly);
       }
       SECTION("AMR 3D")
       {
          auto order = !all_tests ? 2 : GENERATE(1, 2, 3);
-         test_assembly_level("../../data/fichera-amr.mesh",
+         test_assembly_level(mfem::test::TestsDataPath("fichera-amr.mesh"),
                              order, q_order_inc, dg, pb, assembly);
       }
    }
@@ -254,10 +254,10 @@ TEST_CASE("H1 Assembly Levels", "[AssemblyLevel], [PartialAssembly], [GPU]")
 TEST_CASE("H(div) Element Assembly", "[AssemblyLevel][GPU]")
 {
    const auto fname = GENERATE(
-                         "../../data/inline-quad.mesh",
-                         "../../data/star-q3.mesh",
-                         "../../data/inline-hex.mesh",
-                         "../../data/fichera-q2.mesh"
+                         mfem::test::TestsDataPath("inline-quad.mesh"),
+                         mfem::test::TestsDataPath("star-q3.mesh"),
+                         mfem::test::TestsDataPath("inline-hex.mesh"),
+                         mfem::test::TestsDataPath("fichera-q2.mesh")
                       );
    const auto order = GENERATE(1, 2);
    const auto problem = GENERATE(Problem::Mass, Problem::Diffusion);
@@ -319,14 +319,14 @@ TEST_CASE("H(div) Element Assembly", "[AssemblyLevel][GPU]")
 TEST_CASE("NormalTraceJumpIntegrator Element Assembly", "[AssemblyLevel][GPU]")
 {
    const auto fname = GENERATE(
-                         "../../data/inline-quad.mesh",
-                         "../../data/amr-quad.mesh",
-                         "../../data/beam-quad-amr.mesh",
-                         "../../data/star-q3.mesh",
-                         "../../data/inline-hex.mesh",
-                         "../../data/amr-hex.mesh",
-                         "../../data/fichera-amr.mesh",
-                         "../../data/fichera-q3.mesh"
+                         mfem::test::TestsDataPath("inline-quad.mesh"),
+                         mfem::test::TestsDataPath("amr-quad.mesh"),
+                         mfem::test::TestsDataPath("beam-quad-amr.mesh"),
+                         mfem::test::TestsDataPath("star-q3.mesh"),
+                         mfem::test::TestsDataPath("inline-hex.mesh"),
+                         mfem::test::TestsDataPath("amr-hex.mesh"),
+                         mfem::test::TestsDataPath("fichera-amr.mesh"),
+                         mfem::test::TestsDataPath("fichera-q3.mesh")
                       );
    const int order = GENERATE(1, 2, 3);
 
@@ -408,22 +408,22 @@ TEST_CASE("L2 Assembly Levels", "[AssemblyLevel], [PartialAssembly], [GPU]")
       SECTION("2D")
       {
          auto order = !all_tests ? GENERATE(2, 3) : GENERATE(1, 2, 3);
-         test_assembly_level("../../data/periodic-square.mesh",
+         test_assembly_level(mfem::test::TestsDataPath("periodic-square.mesh"),
                              order, q_order_inc, dg, pb, assembly);
-         test_assembly_level("../../data/periodic-hexagon.mesh",
+         test_assembly_level(mfem::test::TestsDataPath("periodic-hexagon.mesh"),
                              order, q_order_inc, dg, pb, assembly);
-         test_assembly_level("../../data/star-q3.mesh",
+         test_assembly_level(mfem::test::TestsDataPath("star-q3.mesh"),
                              order, q_order_inc, dg, pb, assembly);
       }
 
       SECTION("3D")
       {
          auto order = !all_tests ? 2 : GENERATE(1, 2, 3);
-         test_assembly_level("../../data/periodic-cube.mesh",
+         test_assembly_level(mfem::test::TestsDataPath("periodic-cube.mesh"),
                              order, q_order_inc, dg, pb, assembly);
          if ( !Device::Allows(~Backend::CPU_MASK) )
          {
-            test_assembly_level("../../data/fichera-q3.mesh",
+            test_assembly_level(mfem::test::TestsDataPath("fichera-q3.mesh"),
                                 order, q_order_inc, dg, pb, assembly);
          }
       }
@@ -438,13 +438,13 @@ TEST_CASE("L2 Assembly Levels", "[AssemblyLevel], [PartialAssembly], [GPU]")
       SECTION("AMR 2D")
       {
          auto order = !all_tests ? GENERATE(2, 3) : GENERATE(1, 2, 3);
-         test_assembly_level("../../data/amr-quad.mesh",
+         test_assembly_level(mfem::test::TestsDataPath("amr-quad.mesh"),
                              order, q_order_inc, dg, pb, assembly);
       }
       SECTION("AMR 3D")
       {
          auto order = !all_tests ? 2 : GENERATE(1, 2, 3);
-         test_assembly_level("../../data/fichera-amr.mesh",
+         test_assembly_level(mfem::test::TestsDataPath("fichera-amr.mesh"),
                              order, q_order_inc, dg, pb, assembly);
       }
    }
@@ -584,8 +584,8 @@ TEST_CASE("Serial H1 Full Assembly", "[AssemblyLevel], [GPU]")
 {
    auto order = GENERATE(1, 2, 3);
    auto mesh_fname = GENERATE(
-                        "../../data/star.mesh",
-                        "../../data/fichera.mesh"
+                        mfem::test::TestsDataPath("star.mesh"),
+                        mfem::test::TestsDataPath("fichera.mesh")
                      );
    Mesh mesh(mesh_fname);
    TestH1FullAssembly(mesh, order);
@@ -663,8 +663,8 @@ TEST_CASE("Parallel H1 Full Assembly", "[AssemblyLevel], [Parallel], [GPU]")
 {
    auto order = GENERATE(1, 2, 3);
    auto mesh_fname = GENERATE(
-                        "../../data/star.mesh",
-                        "../../data/fichera.mesh"
+                        mfem::test::TestsDataPath("star.mesh"),
+                        mfem::test::TestsDataPath("fichera.mesh")
                      );
 
    // CAPTURE(order, mesh_fname);

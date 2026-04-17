@@ -42,7 +42,7 @@ mfem_dir=$1
 if [ "$mfem_dir" = "" ]; then
     mfem_dir="../.."
 fi
-if [ ! -d $mfem_dir ] || [ ! -f $mfem_dir/mfem.hpp ]; then
+if [ ! -d $mfem_dir ] || [ ! -f $mfem_dir/core/mfem.hpp ]; then
    printf "Invalid mfem directory: '$mfem_dir'\n" 1>&2
    exit 1
 fi

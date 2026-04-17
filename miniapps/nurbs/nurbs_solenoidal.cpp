@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
    StopWatch chrono;
 
    // 1. Parse command-line options.
-   const char *mesh_file = "../../data/square-nurbs.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("square-nurbs.mesh");
    int ref_levels = -1;
    int order = 1;
    const char *device_config = "cpu";

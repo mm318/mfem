@@ -53,7 +53,7 @@ int main (int argc, char *argv[])
    Hypre::Init();
 
    // Set the method's default parameters.
-   const char *mesh_file = "../../data/klein-bottle.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("klein-bottle.mesh");
    int mesh_poly_deg     = 2;
    bool visualization    = true;
    bool visit            = false;

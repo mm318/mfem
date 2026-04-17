@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
    Hypre::Init();
 
    // 1. Parse command-line options.
-   const char *mesh_file = "../../data/inline-quad.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("inline-quad.mesh");
    int order = 1;
    int delta_order = 1;
    int ref = 1;
@@ -168,7 +168,7 @@ int main(int argc, char *argv[])
    if (prob == prob_type::EJ || prob == prob_type::curved_streamlines ||
        prob == prob_type::bdr_layer)
    {
-      mesh_file = "../../data/inline-quad.mesh";
+      mesh_file = mfem::test::MiniappsDataPath("inline-quad.mesh");
    }
 
    Mesh mesh(mesh_file, 1, 1);

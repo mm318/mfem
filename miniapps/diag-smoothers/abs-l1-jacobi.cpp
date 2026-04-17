@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
    Hypre::Init();
 
    // 2. Parse command line options.
-   string mesh_file = "../../data/ref-cube.mesh";
+   string mesh_file = mfem::test::MiniappsDataPath("ref-cube.mesh");
    // System properties
    int order = 1;
    SolverType solver_type = cg;

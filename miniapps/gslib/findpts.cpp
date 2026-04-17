@@ -90,7 +90,7 @@ void F_exact(const Vector &p, Vector &F)
 int main (int argc, char *argv[])
 {
    // Set the method's default parameters.
-   const char *mesh_file = "../../data/rt-2d-q3.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("rt-2d-q3.mesh");
    int order             = 3;
    int mesh_poly_deg     = 3;
    int rs_levels         = 0;

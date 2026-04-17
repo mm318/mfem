@@ -13,7 +13,7 @@
 #define ADMFEM_HPP
 
 #include "mfem.hpp"
-#include "../../linalg/dual.hpp"
+#include "../../core/linalg/dual.hpp"
 #include "tadvector.hpp"
 #include "taddensemat.hpp"
 

@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
    if ( Mpi::Root() ) { display_banner(cout); }
 
    // Parse command-line options.
-   const char *mesh_file = "../../data/ball-nurbs.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("ball-nurbs.mesh");
    int order = 1;
    int maxit = 100;
    int serial_ref_levels = 0;

@@ -67,7 +67,7 @@ fi
 # math in doxygen check
 math=true
 if [[ "${option}" == "--math" || "${option}" == "" ]]; then
-  if grep '\\f' -R doc/CodeDocumentation.dox mfem.hpp mfem-performance.hpp config core examples miniapps | grep -v '\\frac' | grep -v core/fem/picojson.h | grep -v config/githooks/pre-push > matches.txt
+  if grep '\\f' -R doc/CodeDocumentation.dox core/mfem.hpp miniapps/performance/mfem-performance.hpp config core examples miniapps | grep -v '\\frac' | grep -v core/fem/picojson.h | grep -v config/githooks/pre-push > matches.txt
   then
     echo "Please use $..$ and \$\$..\$\$ for LaTeX formulas in the following"
     echo "comments instead of the Doxygen style \f$..\f$, \f[..\f], etc."

@@ -73,7 +73,7 @@ int material(Vector &p, Vector &pmin, Vector &pmax)
 
 int main(int argc, char *argv[])
 {
-   const char *mesh_file = "../../data/inline-quad.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("inline-quad.mesh");
    int sd = 2;
    int nclimit = 1;
    bool aniso = false;

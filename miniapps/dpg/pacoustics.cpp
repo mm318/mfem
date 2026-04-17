@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
    int myid = Mpi::WorldRank();
    Hypre::Init();
 
-   const char *mesh_file = "../../data/inline-quad.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("inline-quad.mesh");
    int order = 1;
    int delta_order = 1;
    bool visualization = true;

@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
    Mpi::Init(argc, argv);
    Hypre::Init();
 
-   const char *mesh_file = "../../data/star.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("star.mesh");
    const char *device_config = "cpu";
    int ser_ref = 1;
    int par_ref = 1;

@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
    Hypre::Init();
 
    // 2. Parse command-line options.
-   const char *mesh_file = "../../data/beam-quad-nurbs.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("beam-quad-nurbs.mesh");
    int ser_ref_levels = 2;
    int par_ref_levels = 0;
    int order = 2;

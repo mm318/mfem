@@ -40,7 +40,7 @@ TEST_CASE("DFEM L-Vector interface", "[Parallel][dFEM][GPU]")
    constexpr int r = 1;
    constexpr int q = 2 * p + r;
 
-   const auto filename = GENERATE("../../data/fichera.mesh");
+   const auto filename = GENERATE(mfem::test::TestsDataPath("fichera.mesh"));
    Mesh smesh(filename);
    ParMesh pmesh(MPI_COMM_WORLD, smesh);
    MFEM_VERIFY(pmesh.Dimension() == DIM, "Mesh dimension mismatch");

@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 {
    int sd = 2;
    int nclimit = 1;
-   const char *mesh_file = "../../data/inline-quad.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("inline-quad.mesh");
    bool aniso = false;
    int visport = 19916;
 

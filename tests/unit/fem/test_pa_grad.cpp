@@ -45,11 +45,11 @@ real_t compare_pa_assembly(int dim, int num_elements, int order, bool transpose)
    {
       if (dim == 2)
       {
-         mesh = Mesh::LoadFromFile("../../data/star.mesh", order);
+         mesh = Mesh::LoadFromFile(mfem::test::TestsDataPath("star.mesh"), order);
       }
       else
       {
-         mesh = Mesh::LoadFromFile("../../data/beam-hex.mesh", order);
+         mesh = Mesh::LoadFromFile(mfem::test::TestsDataPath("beam-hex.mesh"), order);
       }
    }
    else

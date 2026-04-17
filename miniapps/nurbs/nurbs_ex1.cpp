@@ -160,7 +160,7 @@ real_t sol(const Vector & x)
 int main(int argc, char *argv[])
 {
    // 1. Parse command-line options.
-   const char *mesh_file = "../../data/square-nurbs.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("square-nurbs.mesh");
    const char *per_file  = "none";
    const char *ref_file  = "";
    int ref_levels = -1;

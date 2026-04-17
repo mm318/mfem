@@ -33,7 +33,7 @@ TEST_CASE("ParMeshGlobalIndices",  "[Parallel], [ParMesh]")
          {
             if (amr)
             {
-               const char *mesh_file = "../../data/amr-quad.mesh";
+               const char *mesh_file = mfem::test::TestsDataPath("amr-quad.mesh");
                mesh = Mesh::LoadFromFile(mesh_file, 1, 1);
             }
             else
@@ -45,7 +45,7 @@ TEST_CASE("ParMeshGlobalIndices",  "[Parallel], [ParMesh]")
          {
             if (amr)
             {
-               const char *mesh_file = "../../data/amr-hex.mesh";
+               const char *mesh_file = mfem::test::TestsDataPath("amr-hex.mesh");
                mesh = Mesh::LoadFromFile(mesh_file, 1, 1);
             }
             else
@@ -123,7 +123,7 @@ TEST_CASE("ParMeshGlobalIndices",  "[Parallel], [ParMesh]")
 
 TEST_CASE("ParMeshSharedFaces", "[Parallel], [ParMesh]")
 {
-   const char *mesh_file = "../../data/fichera-amr.mesh";
+   const char *mesh_file = mfem::test::TestsDataPath("fichera-amr.mesh");
 
    Mesh mesh(mesh_file);
    ParMesh pmesh(MPI_COMM_WORLD, mesh);

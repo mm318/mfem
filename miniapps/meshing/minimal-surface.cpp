@@ -108,7 +108,7 @@ struct Opt
    real_t amr_threshold = 0.6;
    const char *keys = "gAm";
    const char *device_config = "cpu";
-   const char *mesh_file = "../../data/mobius-strip.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("mobius-strip.mesh");
    void (*Tptr)(const Vector&, Vector&) = nullptr;
 };
 

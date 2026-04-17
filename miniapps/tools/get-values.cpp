@@ -20,7 +20,7 @@
 // Compile with: make get-values
 //
 // Serial sample runs:
-//   > get-values -r ../../examples/Example5 -p "0 0 0.1 0" -fn pressure
+//   > get-values -r ../../examples/cpp/Example5 -p "0 0 0.1 0" -fn pressure
 //
 // Parallel sample runs:
 //   > mpirun -np 4 get-values -r ../electromagnetics/Volta-AMR-Parallel

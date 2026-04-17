@@ -47,7 +47,7 @@ int main (int argc, char *argv[])
    int rank = Mpi::WorldRank();
    Hypre::Init();
 
-   const char *mesh_file = "../../data/rt-2d-q3.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("rt-2d-q3.mesh");
    int npt = 1000;
    bool visualization = true;
    int visport = 19916;

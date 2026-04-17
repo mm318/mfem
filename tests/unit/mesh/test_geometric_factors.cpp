@@ -18,13 +18,13 @@ using namespace mfem;
 TEST_CASE("Geometric factor Jacobians", "[Mesh]")
 {
    const auto mesh_fname = GENERATE(
-                              "../../data/inline-segment.mesh",
-                              "../../data/star.mesh",
-                              "../../data/star-q3.mesh",
-                              "../../data/fichera.mesh",
-                              "../../data/fichera-q3.mesh",
-                              "../../data/star-surf.mesh", // surface mesh
-                              "../../data/square-disc-surf.mesh" // surface tri mesh
+                              mfem::test::TestsDataPath("inline-segment.mesh"),
+                              mfem::test::TestsDataPath("star.mesh"),
+                              mfem::test::TestsDataPath("star-q3.mesh"),
+                              mfem::test::TestsDataPath("fichera.mesh"),
+                              mfem::test::TestsDataPath("fichera-q3.mesh"),
+                              mfem::test::TestsDataPath("star-surf.mesh"), // surface mesh
+                              mfem::test::TestsDataPath("square-disc-surf.mesh") // surface tri mesh
                            );
    CAPTURE(mesh_fname);
 
@@ -48,10 +48,10 @@ TEST_CASE("Geometric factor Jacobians", "[Mesh]")
 
 TEST_CASE("Face geometric factor Jacobians", "[Mesh]")
 {
-   const auto mesh_fname = GENERATE("../../data/star.mesh",
-                                    "../../data/star-q3.mesh",
-                                    "../../data/fichera.mesh",
-                                    "../../data/fichera-q3.mesh");
+   const auto mesh_fname = GENERATE(mfem::test::TestsDataPath("star.mesh"),
+                                    mfem::test::TestsDataPath("star-q3.mesh"),
+                                    mfem::test::TestsDataPath("fichera.mesh"),
+                                    mfem::test::TestsDataPath("fichera-q3.mesh"));
 
    Mesh mesh = Mesh::LoadFromFile(mesh_fname);
    const int dim = mesh.Dimension();

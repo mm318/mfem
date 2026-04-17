@@ -291,7 +291,7 @@ private:
 int main(int argc, char *argv[])
 {
    // 1. Parse command-line options
-   const char *mesh_file = "../../data/beam-tet.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("beam-tet.mesh");
    int ser_ref_levels = 3;
    int order = 1;
    bool visualization = true;

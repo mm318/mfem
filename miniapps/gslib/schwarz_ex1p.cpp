@@ -84,9 +84,9 @@ int main(int argc, char *argv[])
    Array <const char *> mesh_file_list(lim_meshes);
    Array <int> np_list(lim_meshes), rs_levels(lim_meshes),
          rp_levels(lim_meshes);
-   mesh_file_list[0]         = "../../data/square-disc.mesh";
-   mesh_file_list[1]         = "../../data/inline-quad.mesh";
-   mesh_file_list[2]         = "../../data/inline-quad.mesh";
+   mesh_file_list[0]         = mfem::test::MiniappsDataPath("square-disc.mesh");
+   mesh_file_list[1]         = mfem::test::MiniappsDataPath("inline-quad.mesh");
+   mesh_file_list[2]         = mfem::test::MiniappsDataPath("inline-quad.mesh");
    int order                 = 2;
    bool visualization        = true;
    rs_levels                 = 0;
@@ -258,9 +258,9 @@ int main(int argc, char *argv[])
       // For the default mesh inputs, we need to rescale inline-quad.mesh such
       // that it does not cover the entire domain [0, 1]^2 and still has a
       // non-trivial overlap with the other mesh.
-      if (strcmp(mesh_file_list[0], "../../data/square-disc.mesh") == 0 &&
-          strcmp(mesh_file_list[1], "../../data/inline-quad.mesh") == 0 &&
-          strcmp(mesh_file_list[2], "../../data/inline-quad.mesh") == 0 )
+      if (strcmp(mesh_file_list[0], mfem::test::MiniappsDataPath("square-disc.mesh")) == 0 &&
+          strcmp(mesh_file_list[1], mfem::test::MiniappsDataPath("inline-quad.mesh")) == 0 &&
+          strcmp(mesh_file_list[2], mfem::test::MiniappsDataPath("inline-quad.mesh")) == 0 )
       {
          if (nmeshes == 2)
          {

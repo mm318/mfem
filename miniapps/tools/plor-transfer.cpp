@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
    Hypre::Init();
 
    // Parse command-line options.
-   const char *mesh_file = "../../data/star.mesh";
+   const char *mesh_file = mfem::test::MiniappsDataPath("star.mesh");
    int order = 2;
    int lref = order+1;
    int lorder = 0;

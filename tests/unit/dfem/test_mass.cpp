@@ -93,8 +93,8 @@ void mass_action(const char *filename, int p)
 
    // Test boundary
    // This ensures that we're not trying to test on fully periodic meshes
-   if (!((std::string("../../data/periodic-square.mesh").compare(filename) == 0) ||
-         (std::string("../../data/periodic-cube.mesh").compare(filename) == 0)))
+   if (!((std::string(mfem::test::TestsDataPath("periodic-square.mesh")).compare(filename) == 0) ||
+         (std::string(mfem::test::TestsDataPath("periodic-cube.mesh")).compare(filename) == 0)))
    {
       SECTION("boundary")
       {
@@ -247,11 +247,11 @@ TEST_CASE("dFEM Mass", "[Parallel][dFEM]")
    {
       const auto filename2d =
          GENERATE(
-            "../../data/star.mesh",
-            "../../data/star-q3.mesh",
-            "../../data/rt-2d-q3.mesh",
-            "../../data/inline-quad.mesh",
-            "../../data/periodic-square.mesh"
+            mfem::test::TestsDataPath("star.mesh"),
+            mfem::test::TestsDataPath("star-q3.mesh"),
+            mfem::test::TestsDataPath("rt-2d-q3.mesh"),
+            mfem::test::TestsDataPath("inline-quad.mesh"),
+            mfem::test::TestsDataPath("periodic-square.mesh")
          );
       mass_action<2>(filename2d, p);
       mass_mat_mixed<2>(filename2d, p);
@@ -261,11 +261,11 @@ TEST_CASE("dFEM Mass", "[Parallel][dFEM]")
    {
       const auto filename3d =
          GENERATE(
-            "../../data/fichera.mesh",
-            "../../data/fichera-q3.mesh",
-            "../../data/inline-hex.mesh",
-            "../../data/toroid-hex.mesh",
-            "../../data/periodic-cube.mesh"
+            mfem::test::TestsDataPath("fichera.mesh"),
+            mfem::test::TestsDataPath("fichera-q3.mesh"),
+            mfem::test::TestsDataPath("inline-hex.mesh"),
+            mfem::test::TestsDataPath("toroid-hex.mesh"),
+            mfem::test::TestsDataPath("periodic-cube.mesh")
          );
       mass_action<3>(filename3d, p);
       mass_mat_mixed<3>(filename3d, p);

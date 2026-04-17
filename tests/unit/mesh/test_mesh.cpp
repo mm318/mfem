@@ -148,14 +148,14 @@ TEST_CASE("Gecko integration in MFEM", "[Mesh]")
 
 TEST_CASE("MakeSimplicial", "[Mesh]")
 {
-   auto mesh_fname = GENERATE("../../data/star.mesh",
-                              "../../data/star-surf.mesh",
-                              "../../data/inline-tri.mesh",
-                              "../../data/inline-quad.mesh",
-                              "../../data/inline-hex.mesh",
-                              "../../data/inline-tet.mesh",
-                              "../../data/inline-wedge.mesh",
-                              "../../data/beam-wedge.mesh");
+   auto mesh_fname = GENERATE(mfem::test::TestsDataPath("star.mesh"),
+                              mfem::test::TestsDataPath("star-surf.mesh"),
+                              mfem::test::TestsDataPath("inline-tri.mesh"),
+                              mfem::test::TestsDataPath("inline-quad.mesh"),
+                              mfem::test::TestsDataPath("inline-hex.mesh"),
+                              mfem::test::TestsDataPath("inline-tet.mesh"),
+                              mfem::test::TestsDataPath("inline-wedge.mesh"),
+                              mfem::test::TestsDataPath("beam-wedge.mesh"));
 
    Mesh orig_mesh(mesh_fname, 1, 1);
    Mesh simplex_mesh = Mesh::MakeSimplicial(orig_mesh);
@@ -207,7 +207,7 @@ TEST_CASE("MakeSimplicial", "[Mesh]")
 
 TEST_CASE("MakeMixedSimplicial", "[Mesh]")
 {
-   auto mesh_fname = "../../data/fichera-mixed-p2.mesh";
+   auto mesh_fname = mfem::test::TestsDataPath("fichera-mixed-p2.mesh");
 
    Mesh orig_mesh(mesh_fname, 1, 1);
    Mesh simplex_mesh = Mesh::MakeSimplicial(orig_mesh);
@@ -255,7 +255,7 @@ TEST_CASE("MakeMixedSimplicial", "[Mesh]")
 
 TEST_CASE("MakeSimplicial Surface Mesh", "[Mesh]")
 {
-   Mesh orig_mesh("../../data/star-surf.mesh");
+   Mesh orig_mesh(mfem::test::TestsDataPath("star-surf.mesh"));
    Mesh simplex_mesh = Mesh::MakeSimplicial(orig_mesh);
    for (int i = 0; i < orig_mesh.GetNV(); ++i)
    {

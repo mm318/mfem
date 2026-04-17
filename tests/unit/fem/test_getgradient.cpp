@@ -85,11 +85,11 @@ TEST_CASE("GetGradient Shared Faces", "[ParGridFunction][Parallel]")
       }
       else if (dim == 2)
       {
-         mesh = Mesh::LoadFromFile("../../data/star-mixed.mesh");
+         mesh = Mesh::LoadFromFile(mfem::test::TestsDataPath("star-mixed.mesh"));
       }
       else
       {
-         mesh = Mesh::LoadFromFile("../../data/fichera-mixed.mesh");
+         mesh = Mesh::LoadFromFile(mfem::test::TestsDataPath("fichera-mixed.mesh"));
       }
       for (int i = 0; i < 2; i++) { mesh.UniformRefinement(); }
       ParMesh pmesh(MPI_COMM_WORLD, mesh);

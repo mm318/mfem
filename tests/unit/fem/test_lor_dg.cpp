@@ -362,10 +362,10 @@ TEST_CASE("LOR Batched DG", "[LOR][BatchedLOR][CUDA]")
 {
    const int order = 3;
    const auto mesh_fname = GENERATE(
-                              "../../data/beam-quad.mesh",
-                              "../../data/l-shape.mesh",
-                              "../../data/beam-hex.mesh",
-                              "../../data/fichera.mesh"
+                              mfem::test::TestsDataPath("beam-quad.mesh"),
+                              mfem::test::TestsDataPath("l-shape.mesh"),
+                              mfem::test::TestsDataPath("beam-hex.mesh"),
+                              mfem::test::TestsDataPath("fichera.mesh")
                            );
    CAPTURE(mesh_fname);
    Mesh mesh = Mesh::LoadFromFile(mesh_fname);

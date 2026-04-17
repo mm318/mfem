@@ -117,10 +117,10 @@ TEST_CASE("NCMesh PA diagonal", "[NCMesh]")
 
 TEST_CASE("NCMesh 3D Refined Volume", "[NCMesh]")
 {
-   auto mesh_fname = GENERATE("../../data/ref-tetrahedron.mesh",
-                              "../../data/ref-cube.mesh",
-                              "../../data/ref-prism.mesh",
-                              "../../data/ref-pyramid.mesh"
+   auto mesh_fname = GENERATE(mfem::test::TestsDataPath("ref-tetrahedron.mesh"),
+                              mfem::test::TestsDataPath("ref-cube.mesh"),
+                              mfem::test::TestsDataPath("ref-prism.mesh"),
+                              mfem::test::TestsDataPath("ref-pyramid.mesh")
                              );
 
    auto ref_type = GENERATE(Refinement::X,
@@ -133,7 +133,7 @@ TEST_CASE("NCMesh 3D Refined Volume", "[NCMesh]")
 
    const real_t scale = GENERATE(0.5, 0.25);  // Only affects hex mesh so far
 
-   if (scale != 0.5 && std::strcmp(mesh_fname, "../../data/ref-cube.mesh") != 0)
+   if (scale != 0.5 && std::strcmp(mesh_fname, mfem::test::TestsDataPath("ref-cube.mesh")) != 0)
    {
       return;
    }
@@ -155,10 +155,10 @@ TEST_CASE("NCMesh 3D Refined Volume", "[NCMesh]")
 
 TEST_CASE("NCMesh 3D Derefined Volume", "[NCMesh]")
 {
-   auto mesh_fname = GENERATE("../../data/ref-tetrahedron.mesh",
-                              "../../data/ref-cube.mesh",
-                              "../../data/ref-prism.mesh",
-                              "../../data/ref-pyramid.mesh"
+   auto mesh_fname = GENERATE(mfem::test::TestsDataPath("ref-tetrahedron.mesh"),
+                              mfem::test::TestsDataPath("ref-cube.mesh"),
+                              mfem::test::TestsDataPath("ref-prism.mesh"),
+                              mfem::test::TestsDataPath("ref-pyramid.mesh")
                              );
 
    auto ref_type = GENERATE(Refinement::XYZ);
@@ -318,7 +318,7 @@ TEST_CASE("EdgeFaceConstraint", "[Parallel], [NCMesh]")
    SECTION("ReferenceTet")
    {
       constexpr int refining_rank = 0;
-      auto smesh = Mesh("../../data/ref-tetrahedron.mesh");
+      auto smesh = Mesh(mfem::test::TestsDataPath("ref-tetrahedron.mesh"));
 
       REQUIRE(smesh.GetNE() == 1);
       {
@@ -476,7 +476,7 @@ TEST_CASE("EdgeFaceConstraint", "[Parallel], [NCMesh]")
 
    SECTION("LevelTwoRefinement")
    {
-      Mesh smesh("../../data/ref-tetrahedron.mesh");
+      Mesh smesh(mfem::test::TestsDataPath("ref-tetrahedron.mesh"));
       Array<Refinement> aniso_ref(1);
       aniso_ref[0].Set(0, Refinement::X);
       smesh.GeneralRefinement(aniso_ref);
@@ -503,7 +503,7 @@ TEST_CASE("EdgeFaceConstraint", "[Parallel], [NCMesh]")
 
    SECTION("EdgeCasePartition")
    {
-      Mesh smesh("../../data/ref-tetrahedron.mesh");
+      Mesh smesh(mfem::test::TestsDataPath("ref-tetrahedron.mesh"));
       smesh.UniformRefinement();
       smesh.EnsureNCMesh(true);
       Array<int> el_to_refine(1);
@@ -643,7 +643,7 @@ TEST_CASE("GetVectorValueInFaceNeighborElement", "[Parallel], [NCMesh]")
    // The aim of this test is to verify the correct behaviour of the
    // GetVectorValue method when called on face neighbor elements in a non
    // conforming mesh.
-   auto smesh = Mesh("../../data/beam-tet.mesh");
+   auto smesh = Mesh(mfem::test::TestsDataPath("beam-tet.mesh"));
 
    for (int nc_level : {0,1,2,3})
    {
@@ -841,8 +841,8 @@ TEST_CASE("InteriorBoundaryInlineRefines", "[Parallel], [NCMesh]")
    const int p = use_tet ? GENERATE(1,2,3) : GENERATE(1,2);
    CAPTURE(p);
 
-   const auto fname = use_tet ? "../../data/inline-tet.mesh" :
-                      "../../data/inline-hex.mesh";
+   const auto fname = use_tet ? mfem::test::TestsDataPath("inline-tet.mesh") :
+                      mfem::test::TestsDataPath("inline-hex.mesh");
    auto smesh = Mesh(fname);
    smesh.FinalizeTopology();
    smesh.Finalize();
@@ -1884,7 +1884,7 @@ TEST_CASE("ReferenceTetInternalBoundaries", "[NCMesh]")
    auto p = GENERATE(1,2,3);
    CAPTURE(p);
 
-   auto smesh = Mesh("../../data/ref-tetrahedron.mesh");
+   auto smesh = Mesh(mfem::test::TestsDataPath("ref-tetrahedron.mesh"));
    Array<Refinement> refs;
    refs.Append(Refinement(0, Refinement::X));
    smesh.GeneralRefinement(refs);
@@ -1984,7 +1984,7 @@ TEST_CASE("RefinedTetsInternalBoundaries", "[NCMesh]")
    auto p = GENERATE(1,2,3);
    CAPTURE(p);
 
-   auto smesh = Mesh("../../data/ref-tetrahedron.mesh");
+   auto smesh = Mesh(mfem::test::TestsDataPath("ref-tetrahedron.mesh"));
    Array<Refinement> refs;
    refs.Append(Refinement(0, Refinement::X));
    smesh.GeneralRefinement(refs);
@@ -2144,7 +2144,7 @@ TEST_CASE("PoissonOnReferenceTetNC", "[NCMesh]")
 
 TEST_CASE("TetBoundaryRefinement", "[NCMesh]")
 {
-   auto smesh = Mesh("../../data/ref-tetrahedron.mesh");
+   auto smesh = Mesh(mfem::test::TestsDataPath("ref-tetrahedron.mesh"));
 
    smesh.FinalizeTopology();
    smesh.Finalize(true);
@@ -2768,7 +2768,7 @@ TEST_CASE("RP=I", "[NCMesh]")
       const int dim = 3;
       const int order = GENERATE(1, 2);
       // Split the hex into a pair, then isotropically refine one of them.
-      Mesh mesh("../../data/ref-cube.mesh");
+      Mesh mesh(mfem::test::TestsDataPath("ref-cube.mesh"));
       Array<Refinement> refinements(1);
       refinements[0].Set(0, Refinement::X);
 
@@ -2795,7 +2795,7 @@ TEST_CASE("RP=I", "[NCMesh]")
       const int dim = 3;
       const int order = GENERATE(1, 2);
       // Split the hex into a pair, then isotropically refine one of them.
-      Mesh mesh("../../data/ref-tetrahedron.mesh");
+      Mesh mesh(mfem::test::TestsDataPath("ref-tetrahedron.mesh"));
       Array<Refinement> refinements(1);
       refinements[0].Set(0, Refinement::X);
       mesh.GeneralRefinement(refinements);

@@ -394,7 +394,7 @@ TEST_CASE("Symmetric Matrix Coefficient", "[Coefficient]")
 
 TEST_CASE("Piecewise Constant Coefficient", "[Coefficient]")
 {
-   Mesh mesh("../../data/beam-quad.mesh");
+   Mesh mesh(mfem::test::TestsDataPath("beam-quad.mesh"));
 
    QuadratureSpace qs(&mesh, 2);
    FaceQuadratureSpace qs_f(mesh, 2, FaceType::Boundary);
