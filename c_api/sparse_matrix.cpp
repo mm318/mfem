@@ -58,6 +58,15 @@ extern "C" {
                                                         cmfem::VectorRef(y));
    }
 
+   void CMFEM_SparseMatrix_MultTranspose(const CMFEM_SparseMatrix *matrix,
+                                         const CMFEM_Vector *x,
+                                         CMFEM_Vector *y)
+   {
+      cmfem::As<const mfem::SparseMatrix>(matrix)->MultTranspose(
+         cmfem::VectorRef(x),
+         cmfem::VectorRef(y));
+   }
+
    double CMFEM_SparseMatrix_InnerProduct(const CMFEM_SparseMatrix *matrix,
                                           const CMFEM_Vector *x,
                                           const CMFEM_Vector *y)
@@ -99,6 +108,14 @@ extern "C" {
       return reinterpret_cast<CMFEM_SparseMatrix *>(
                 mfem::Mult(*cmfem::As<const mfem::SparseMatrix>(A),
                            *cmfem::As<const mfem::SparseMatrix>(B)));
+   }
+
+   CMFEM_SparseMatrix *CMFEM_MultAtDASmVec(const CMFEM_SparseMatrix *A,
+                                           const CMFEM_Vector *diag)
+   {
+      return reinterpret_cast<CMFEM_SparseMatrix *>(
+                mfem::Mult_AtDA(*cmfem::As<const mfem::SparseMatrix>(A),
+                                cmfem::VectorRef(diag)));
    }
 
    CMFEM_SparseMatrix *CMFEM_RAPSmSmSm(const CMFEM_SparseMatrix *Rt,

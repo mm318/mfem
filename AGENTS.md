@@ -101,6 +101,19 @@ do not put implementations or shared macros there.
                                                          `Bop` for `BlockOperator`, `Bdp` for
                                                          `BlockDiagonalPreconditioner`, `Cgs` for `CGSolver`, `Rop` for
                                                          `RAPOperator`, and `RtTrace` for `RT_Trace_FECollection`.
+                                                         - When an example only needs a narrow nonlinear assembly pattern, prefer a
+                                                         focused helper free function in `c_api/` over exposing a broad generic
+                                                         callback surface. The `ex40` support follows that pattern with
+                                                         `CMFEM_AssembleIsomorphismLinearFormRtGf` and
+                                                         `CMFEM_AssembleDIsomorphismMassMatrixRtGf`, instead of adding general
+                                                         `ElementTransformation`-level coefficient callbacks to the public C ABI.
+                                                         - The same rule applies to shared C++ example helper code that is not part of
+                                                         MFEM's public API. If a C port only needs a narrow slice of helper logic,
+                                                         wrap it through a focused `c_api/` bridge instead of reimplementing dense or
+                                                         LAPACK-side algorithms in C. `ex33` follows that pattern with
+                                                         `CMFEM_ComputePartialFractionApproximation`. If such a helper returns
+                                                         heap-allocated buffers to C, expose an explicit matching free function such as
+                                                         `CMFEM_FreeDoubles`.
                                                          - For saddle-point and other block-structured C example ports, prefer
                                                          explicit block offsets with flat `CMFEM_Vector` storage unless the example
                                                          truly needs `BlockVector` alias semantics. That keeps the public C surface

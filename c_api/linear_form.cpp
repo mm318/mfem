@@ -40,6 +40,17 @@ extern "C" {
          new mfem::DomainLFIntegrator(coef));
    }
 
+   void CMFEM_LinearForm_AddDomainIntegratorDliGfc(
+      CMFEM_LinearForm *linear_form,
+      const CMFEM_GridFunctionCoefficient *coefficient)
+   {
+      auto &coef = const_cast<mfem::GridFunctionCoefficient &>(
+                      *cmfem::As<const mfem::GridFunctionCoefficient>(
+                         coefficient));
+      cmfem::As<mfem::LinearForm>(linear_form)->AddDomainIntegrator(
+         new mfem::DomainLFIntegrator(coef));
+   }
+
    void
    CMFEM_LinearForm_AddDomainIntegratorDliCcMarker(
       CMFEM_LinearForm *linear_form,
@@ -153,6 +164,12 @@ extern "C" {
    {
       cmfem::VectorRef(vector) = *cmfem::As<const mfem::LinearForm>(
                                     linear_form);
+   }
+
+   void CMFEM_LinearForm_SetFromVec(CMFEM_LinearForm *linear_form,
+                                    const CMFEM_Vector *vector)
+   {
+      *cmfem::As<mfem::LinearForm>(linear_form) = cmfem::VectorRef(vector);
    }
 
    void CMFEM_LinearForm_Update(CMFEM_LinearForm *linear_form)

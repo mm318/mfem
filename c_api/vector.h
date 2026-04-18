@@ -19,8 +19,12 @@ void CMFEM_Vector_Assign(CMFEM_Vector *vector, double value);
 void CMFEM_Vector_Set(CMFEM_Vector *vector, int index, double value);
 double CMFEM_Vector_Get(const CMFEM_Vector *vector, int index);
 int CMFEM_Vector_Size(const CMFEM_Vector *vector);
+void CMFEM_Vector_Scale(CMFEM_Vector *vector, double value);
 void CMFEM_Vector_Neg(CMFEM_Vector *vector);
 void CMFEM_Vector_Add(CMFEM_Vector *vector, const CMFEM_Vector *other);
+void CMFEM_Vector_AddScaled(CMFEM_Vector *vector,
+                            double scale,
+                            const CMFEM_Vector *other);
 void CMFEM_Vector_SetSubVectorAi(CMFEM_Vector *vector,
                                  const CMFEM_ArrayInt *indices,
                                  double value);

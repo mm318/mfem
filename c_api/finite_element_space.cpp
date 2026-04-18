@@ -128,6 +128,14 @@ extern "C" {
       return cmfem::As<const mfem::FiniteElementSpace>(fespace)->GetTrueVSize();
    }
 
+   const CMFEM_SparseMatrix *CMFEM_FiniteElementSpace_GetRestrictionMatrixSm(
+      const CMFEM_FiniteElementSpace *fespace)
+   {
+      return reinterpret_cast<const CMFEM_SparseMatrix *>(
+                cmfem::As<const mfem::FiniteElementSpace>(fespace)
+                ->GetRestrictionMatrix());
+   }
+
    void CMFEM_FiniteElementSpace_GetBoundaryTrueDofs(const CMFEM_FiniteElementSpace
                                                      *fespace,
                                                      CMFEM_ArrayInt *boundary_dofs)

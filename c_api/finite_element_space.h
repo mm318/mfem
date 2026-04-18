@@ -40,6 +40,8 @@ void CMFEM_FiniteElementSpace_Delete(CMFEM_FiniteElementSpace *fespace);
 int CMFEM_FiniteElementSpace_GetVSize(const CMFEM_FiniteElementSpace *fespace);
 int CMFEM_FiniteElementSpace_GetTrueVSize(const CMFEM_FiniteElementSpace
                                           *fespace);
+const CMFEM_SparseMatrix *CMFEM_FiniteElementSpace_GetRestrictionMatrixSm(
+   const CMFEM_FiniteElementSpace *fespace);
 void CMFEM_FiniteElementSpace_GetBoundaryTrueDofs(const CMFEM_FiniteElementSpace
                                                   *fespace, CMFEM_ArrayInt *boundary_dofs);
 void CMFEM_FiniteElementSpace_GetEssentialTrueDofs(const

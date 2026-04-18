@@ -53,6 +53,8 @@
 #include "threshold_derefiner.h"
 #include "l2_fe_collection.h"
 #include "coefficient_norms.h"
+#include "isomorphism_assembly.h"
+#include "partial_fraction_approximation.h"
 #include "visit_data_collection.h"
 #include "para_view_data_collection.h"
 #include "runtime.h"

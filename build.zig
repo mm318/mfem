@@ -438,13 +438,13 @@ const c_example_main_sources: []const []const u8 = &.
    "examples/c/ex29.c",
    "examples/c/ex30.c",
    "examples/c/ex31.c",
-   // "examples/c/ex33.c",
+   "examples/c/ex33.c",
    // "examples/c/ex34.c",
    // "examples/c/ex36.c",
    // "examples/c/ex37.c",
    // "examples/c/ex38.c",
    "examples/c/ex39.c",
-   // "examples/c/ex40.c",
+   "examples/c/ex40.c",
    "examples/c/ex41.c",
 };
 

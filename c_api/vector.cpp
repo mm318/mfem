@@ -76,6 +76,11 @@ extern "C" {
       return cmfem::VectorRef(vector).Size();
    }
 
+   void CMFEM_Vector_Scale(CMFEM_Vector *vector, double value)
+   {
+      cmfem::VectorRef(vector) *= static_cast<mfem::real_t>(value);
+   }
+
    void CMFEM_Vector_Neg(CMFEM_Vector *vector)
    {
       cmfem::VectorRef(vector).Neg();
@@ -84,6 +89,14 @@ extern "C" {
    void CMFEM_Vector_Add(CMFEM_Vector *vector, const CMFEM_Vector *other)
    {
       cmfem::VectorRef(vector) += cmfem::VectorRef(other);
+   }
+
+   void CMFEM_Vector_AddScaled(CMFEM_Vector *vector,
+                               double scale,
+                               const CMFEM_Vector *other)
+   {
+      cmfem::VectorRef(vector).Add(static_cast<mfem::real_t>(scale),
+                                   cmfem::VectorRef(other));
    }
 
    void CMFEM_Vector_SetSubVectorAi(CMFEM_Vector *vector,
