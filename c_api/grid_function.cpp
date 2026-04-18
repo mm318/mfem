@@ -101,6 +101,27 @@ extern "C" {
       cmfem::As<mfem::GridFunction>(grid_function)->ProjectCoefficient(coef);
    }
 
+   void CMFEM_GridFunction_ComputeFluxDi(
+      const CMFEM_GridFunction *grid_function,
+      CMFEM_DiffusionIntegrator *integrator,
+      CMFEM_GridFunction *flux)
+   {
+      const_cast<mfem::GridFunction *>(
+         cmfem::As<const mfem::GridFunction>(grid_function))->ComputeFlux(
+            *cmfem::As<mfem::DiffusionIntegrator>(integrator),
+            *cmfem::As<mfem::GridFunction>(flux));
+   }
+
+   void CMFEM_GridFunction_SetTrueVector(CMFEM_GridFunction *grid_function)
+   {
+      cmfem::As<mfem::GridFunction>(grid_function)->SetTrueVector();
+   }
+
+   void CMFEM_GridFunction_SetFromTrueVector(CMFEM_GridFunction *grid_function)
+   {
+      cmfem::As<mfem::GridFunction>(grid_function)->SetFromTrueVector();
+   }
+
    double CMFEM_GridFunction_ComputeL2ErrorFc(
       const CMFEM_GridFunction *grid_function,
       const CMFEM_FunctionCoefficient *coefficient)
@@ -110,6 +131,23 @@ extern "C" {
       return cmfem::As<const mfem::GridFunction>(grid_function)->ComputeL2Error(coef);
    }
 
+   double CMFEM_GridFunction_ComputeL2ErrorFcOrder(
+      const CMFEM_GridFunction *grid_function,
+      const CMFEM_FunctionCoefficient *coefficient,
+      int quadrature_order)
+   {
+      auto &coef = const_cast<mfem::FunctionCoefficient &>(
+                      *cmfem::As<const mfem::FunctionCoefficient>(coefficient));
+      const mfem::IntegrationRule *irs[mfem::Geometry::NumGeom];
+      for (int i = 0; i < mfem::Geometry::NumGeom; i++)
+      {
+         irs[i] = &mfem::IntRules.Get(i, quadrature_order);
+      }
+      return cmfem::As<const mfem::GridFunction>(grid_function)->ComputeL2Error(
+                coef,
+                irs);
+   }
+
    double CMFEM_GridFunction_ComputeL2ErrorVfc(
       const CMFEM_GridFunction *grid_function,
       const CMFEM_VectorFunctionCoefficient *coefficient)
@@ -117,6 +155,28 @@ extern "C" {
       auto &coef = const_cast<mfem::VectorFunctionCoefficient &>(
                       *cmfem::As<const mfem::VectorFunctionCoefficient>(coefficient));
       return cmfem::As<const mfem::GridFunction>(grid_function)->ComputeL2Error(coef);
+   }
+
+   double CMFEM_GridFunction_ComputeHCurlErrorVfcVfc(
+      const CMFEM_GridFunction *grid_function,
+      CMFEM_VectorFunctionCoefficient *exact_solution,
+      CMFEM_VectorFunctionCoefficient *exact_curl)
+   {
+      return cmfem::As<const mfem::GridFunction>(grid_function)->ComputeHCurlError(
+                cmfem::As<mfem::VectorFunctionCoefficient>(exact_solution),
+                cmfem::As<mfem::VectorFunctionCoefficient>(exact_curl));
+   }
+
+   void CMFEM_GridFunction_CopyToVec(const CMFEM_GridFunction *grid_function,
+                                     CMFEM_Vector *vector)
+   {
+      cmfem::VectorRef(vector) = *cmfem::As<const mfem::GridFunction>(grid_function);
+   }
+
+   void CMFEM_GridFunction_SetFromVec(CMFEM_GridFunction *grid_function,
+                                      const CMFEM_Vector *vector)
+   {
+      *cmfem::As<mfem::GridFunction>(grid_function) = cmfem::VectorRef(vector);
    }
 
    void CMFEM_GridFunction_Add(CMFEM_GridFunction *grid_function,

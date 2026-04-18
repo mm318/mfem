@@ -71,6 +71,17 @@ extern "C" {
          new mfem::DiffusionIntegrator(coef));
    }
 
+   void CMFEM_BilinearForm_AddDomainIntegratorDiMfc(
+      CMFEM_BilinearForm *bilinear_form,
+      const CMFEM_MatrixFunctionCoefficient *coefficient)
+   {
+      auto &coef = const_cast<mfem::MatrixFunctionCoefficient &>(
+                      *cmfem::As<const mfem::MatrixFunctionCoefficient>(
+                         coefficient));
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->AddDomainIntegrator(
+         new mfem::DiffusionIntegrator(coef));
+   }
+
    void CMFEM_BilinearForm_AddDomainIntegratorCviVfc(
       CMFEM_BilinearForm *bilinear_form,
       const CMFEM_VectorFunctionCoefficient *coefficient,
@@ -150,6 +161,17 @@ extern "C" {
          new mfem::VectorFEMassIntegrator(coef));
    }
 
+   void CMFEM_BilinearForm_AddDomainIntegratorVmiMfc(
+      CMFEM_BilinearForm *bilinear_form,
+      const CMFEM_MatrixFunctionCoefficient *coefficient)
+   {
+      auto &coef = const_cast<mfem::MatrixFunctionCoefficient &>(
+                      *cmfem::As<const mfem::MatrixFunctionCoefficient>(
+                         coefficient));
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->AddDomainIntegrator(
+         new mfem::VectorFEMassIntegrator(coef));
+   }
+
    void CMFEM_BilinearForm_AddDomainIntegratorDdi(
       CMFEM_BilinearForm *bilinear_form,
       const CMFEM_ConstantCoefficient *coefficient)
@@ -204,6 +226,46 @@ extern "C" {
             coef,
             static_cast<mfem::real_t>(sigma),
             static_cast<mfem::real_t>(kappa)));
+   }
+
+   void CMFEM_BilinearForm_AddInteriorFaceIntegratorDgeiPwcPwc(
+      CMFEM_BilinearForm *bilinear_form,
+      const CMFEM_PWConstCoefficient *lambda,
+      const CMFEM_PWConstCoefficient *mu,
+      double alpha,
+      double kappa)
+   {
+      auto &lambda_ref = const_cast<mfem::PWConstCoefficient &>(
+                            *cmfem::As<const mfem::PWConstCoefficient>(lambda));
+      auto &mu_ref = const_cast<mfem::PWConstCoefficient &>(
+                        *cmfem::As<const mfem::PWConstCoefficient>(mu));
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->AddInteriorFaceIntegrator(
+         new mfem::DGElasticityIntegrator(
+            lambda_ref,
+            mu_ref,
+            static_cast<mfem::real_t>(alpha),
+            static_cast<mfem::real_t>(kappa)));
+   }
+
+   void CMFEM_BilinearForm_AddBdrFaceIntegratorDgeiPwcPwcAi(
+      CMFEM_BilinearForm *bilinear_form,
+      const CMFEM_PWConstCoefficient *lambda,
+      const CMFEM_PWConstCoefficient *mu,
+      double alpha,
+      double kappa,
+      const CMFEM_ArrayInt *marker)
+   {
+      auto &lambda_ref = const_cast<mfem::PWConstCoefficient &>(
+                            *cmfem::As<const mfem::PWConstCoefficient>(lambda));
+      auto &mu_ref = const_cast<mfem::PWConstCoefficient &>(
+                        *cmfem::As<const mfem::PWConstCoefficient>(mu));
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->AddBdrFaceIntegrator(
+         new mfem::DGElasticityIntegrator(
+            lambda_ref,
+            mu_ref,
+            static_cast<mfem::real_t>(alpha),
+            static_cast<mfem::real_t>(kappa)),
+         const_cast<mfem::Array<int> &>(cmfem::ArrayIntRef(marker)));
    }
 
    void CMFEM_BilinearForm_AddInteriorFaceIntegratorNdtVfc(
@@ -280,6 +342,20 @@ extern "C" {
                                              int skip_zeros)
    {
       cmfem::As<mfem::BilinearForm>(bilinear_form)->Finalize(skip_zeros);
+   }
+
+   void CMFEM_BilinearForm_EliminateEssentialBCAi(
+      CMFEM_BilinearForm *bilinear_form,
+      const CMFEM_ArrayInt *essential_bdr)
+   {
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->EliminateEssentialBC(
+         cmfem::ArrayIntRef(essential_bdr));
+   }
+
+   CMFEM_SparseMatrix *CMFEM_BilinearForm_SpMat(CMFEM_BilinearForm *bilinear_form)
+   {
+      return reinterpret_cast<CMFEM_SparseMatrix *>(
+                &cmfem::As<mfem::BilinearForm>(bilinear_form)->SpMat());
    }
 
    void CMFEM_BilinearForm_FormSystemMatrixSm(
@@ -398,6 +474,19 @@ extern "C" {
          cmfem::As<const mfem::BilinearForm>(bilinear_form))->FullMult(
             cmfem::VectorRef(x),
             cmfem::VectorRef(y));
+   }
+
+   void CMFEM_BilinearForm_AddDomainIntegratorIiDiMiCc(
+      CMFEM_BilinearForm *bilinear_form,
+      const CMFEM_ConstantCoefficient *coefficient)
+   {
+      auto &coef = const_cast<mfem::ConstantCoefficient &>(
+                      *cmfem::As<const mfem::ConstantCoefficient>(coefficient));
+      auto *sum = new mfem::SumIntegrator();
+      sum->AddIntegrator(new mfem::DiffusionIntegrator(coef));
+      sum->AddIntegrator(new mfem::MassIntegrator(coef));
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->AddDomainIntegrator(
+         new mfem::InverseIntegrator(sum));
    }
 
    void CMFEM_BilinearForm_Update(CMFEM_BilinearForm *bilinear_form)

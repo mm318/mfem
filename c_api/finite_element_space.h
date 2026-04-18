@@ -13,14 +13,27 @@ CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshH1VDim(
    CMFEM_Mesh *mesh, CMFEM_H1FeCollection *fec, int vdim);
 CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshNd(CMFEM_Mesh *mesh,
                                                              CMFEM_NdFeCollection *fec);
+CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshNdR1d(
+   CMFEM_Mesh *mesh,
+   CMFEM_NdR1dFeCollection *fec);
+CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshNdR2d(
+   CMFEM_Mesh *mesh,
+   CMFEM_NdR2dFeCollection *fec);
 CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshRt(CMFEM_Mesh *mesh,
                                                              CMFEM_RtFeCollection *fec);
+CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshRtTrace(
+   CMFEM_Mesh *mesh,
+   CMFEM_RtTraceFeCollection *fec);
 CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshL2Vdim(
    CMFEM_Mesh *mesh,
    CMFEM_L2FeCollection *fec,
    int vdim);
 CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshDg(
    CMFEM_Mesh *mesh, CMFEM_DgFeCollection *fec);
+CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshDgVDim(
+   CMFEM_Mesh *mesh,
+   CMFEM_DgFeCollection *fec,
+   int vdim);
 CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshDgInterface(
    CMFEM_Mesh *mesh, CMFEM_DgInterfaceFeCollection *fec);
 void CMFEM_FiniteElementSpace_Delete(CMFEM_FiniteElementSpace *fespace);

@@ -36,12 +36,40 @@ extern "C" {
                                              cmfem::As<mfem::ND_FECollection>(fec)));
    }
 
+   CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshNdR1d(
+      CMFEM_Mesh *mesh,
+      CMFEM_NdR1dFeCollection *fec)
+   {
+      return reinterpret_cast<CMFEM_FiniteElementSpace *>(
+                new mfem::FiniteElementSpace(cmfem::As<mfem::Mesh>(mesh),
+                                             cmfem::As<mfem::ND_R1D_FECollection>(fec)));
+   }
+
+   CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshNdR2d(
+      CMFEM_Mesh *mesh,
+      CMFEM_NdR2dFeCollection *fec)
+   {
+      return reinterpret_cast<CMFEM_FiniteElementSpace *>(
+                new mfem::FiniteElementSpace(cmfem::As<mfem::Mesh>(mesh),
+                                             cmfem::As<mfem::ND_R2D_FECollection>(fec)));
+   }
+
    CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshRt(CMFEM_Mesh *mesh,
                                                                 CMFEM_RtFeCollection *fec)
    {
       return reinterpret_cast<CMFEM_FiniteElementSpace *>(
                 new mfem::FiniteElementSpace(cmfem::As<mfem::Mesh>(mesh),
                                              cmfem::As<mfem::RT_FECollection>(fec)));
+   }
+
+   CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshRtTrace(
+      CMFEM_Mesh *mesh,
+      CMFEM_RtTraceFeCollection *fec)
+   {
+      return reinterpret_cast<CMFEM_FiniteElementSpace *>(
+                new mfem::FiniteElementSpace(
+                   cmfem::As<mfem::Mesh>(mesh),
+                   cmfem::As<mfem::RT_Trace_FECollection>(fec)));
    }
 
    CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshL2Vdim(
@@ -61,6 +89,17 @@ extern "C" {
       return reinterpret_cast<CMFEM_FiniteElementSpace *>(
                 new mfem::FiniteElementSpace(cmfem::As<mfem::Mesh>(mesh),
                                              cmfem::As<mfem::DG_FECollection>(fec)));
+   }
+
+   CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshDgVDim(
+      CMFEM_Mesh *mesh,
+      CMFEM_DgFeCollection *fec,
+      int vdim)
+   {
+      return reinterpret_cast<CMFEM_FiniteElementSpace *>(
+                new mfem::FiniteElementSpace(cmfem::As<mfem::Mesh>(mesh),
+                                             cmfem::As<mfem::DG_FECollection>(fec),
+                                             vdim));
    }
 
    CMFEM_FiniteElementSpace *

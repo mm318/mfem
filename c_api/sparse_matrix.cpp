@@ -58,6 +58,25 @@ extern "C" {
                                                         cmfem::VectorRef(y));
    }
 
+   double CMFEM_SparseMatrix_InnerProduct(const CMFEM_SparseMatrix *matrix,
+                                          const CMFEM_Vector *x,
+                                          const CMFEM_Vector *y)
+   {
+      return cmfem::As<const mfem::SparseMatrix>(matrix)->InnerProduct(
+                cmfem::VectorRef(x),
+                cmfem::VectorRef(y));
+   }
+
+   CMFEM_SparseMatrix *CMFEM_RAPSmSmSm(const CMFEM_SparseMatrix *Rt,
+                                       const CMFEM_SparseMatrix *A,
+                                       const CMFEM_SparseMatrix *P)
+   {
+      return reinterpret_cast<CMFEM_SparseMatrix *>(
+                mfem::RAP(*cmfem::As<const mfem::SparseMatrix>(Rt),
+                          *cmfem::As<const mfem::SparseMatrix>(A),
+                          *cmfem::As<const mfem::SparseMatrix>(P)));
+   }
+
    CMFEM_SparseMatrix *CMFEM_AddSmSm(double a,
                                      const CMFEM_SparseMatrix *A,
                                      double b,

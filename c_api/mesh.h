@@ -5,6 +5,10 @@
 
 CMFEM_STORAGE(Mesh, 5712);
 
+typedef void (*CMFEM_MeshTransformCallback)(const CMFEM_Vector *x,
+                                            CMFEM_Vector *value,
+                                            void *context);
+
 enum CMFEM_ElementType
 {
    CMFEM_ELEMENT_POINT = 0,
@@ -34,12 +38,16 @@ void CMFEM_Mesh_Destroy(CMFEM_Mesh *mesh);
 void CMFEM_Mesh_Delete(CMFEM_Mesh *mesh);
 int CMFEM_Mesh_Dimension(const CMFEM_Mesh *mesh);
 int CMFEM_Mesh_SpaceDimension(const CMFEM_Mesh *mesh);
+int CMFEM_Mesh_MeshGenerator(const CMFEM_Mesh *mesh);
 int CMFEM_Mesh_GetNE(const CMFEM_Mesh *mesh);
 int CMFEM_Mesh_GetElementType(const CMFEM_Mesh *mesh, int index);
 void CMFEM_Mesh_AddVertex(CMFEM_Mesh *mesh, const double *coords);
 void CMFEM_Mesh_AddTriangle(CMFEM_Mesh *mesh, const int *indices,
                             int attribute);
 void CMFEM_Mesh_AddQuad(CMFEM_Mesh *mesh, const int *indices, int attribute);
+void CMFEM_Mesh_AddBdrSegment(CMFEM_Mesh *mesh, const int *indices,
+                              int attribute);
+void CMFEM_Mesh_FinalizeTopology(CMFEM_Mesh *mesh);
 void CMFEM_Mesh_FinalizeTriMesh(CMFEM_Mesh *mesh, int generate_edges,
                                 int refine, int fix_orientation);
 void CMFEM_Mesh_FinalizeQuadMesh(CMFEM_Mesh *mesh, int generate_edges,
@@ -66,6 +74,9 @@ void CMFEM_Mesh_GetBoundingBox(const CMFEM_Mesh *mesh,
                                int ref);
 void CMFEM_Mesh_SetNodalFESpace(CMFEM_Mesh *mesh,
                                 CMFEM_FiniteElementSpace *fespace);
+void CMFEM_Mesh_Transform(CMFEM_Mesh *mesh,
+                          CMFEM_MeshTransformCallback callback,
+                          void *context);
 void CMFEM_Mesh_SnapNodesToUnitSphere(CMFEM_Mesh *mesh);
 void CMFEM_Mesh_AddDisplacementToNodes(CMFEM_Mesh *mesh,
                                        const CMFEM_GridFunction *displacement);

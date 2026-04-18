@@ -18,6 +18,9 @@ void CMFEM_VisItDataCollection_RegisterFieldGf(
 void CMFEM_VisItDataCollection_SetPrecision(
    CMFEM_VisItDataCollection *collection,
    int precision);
+void CMFEM_VisItDataCollection_SetLevelsOfDetail(
+   CMFEM_VisItDataCollection *collection,
+   int levels_of_detail);
 void CMFEM_VisItDataCollection_SetCycle(CMFEM_VisItDataCollection *collection,
                                         int cycle);
 void CMFEM_VisItDataCollection_SetTime(CMFEM_VisItDataCollection *collection,

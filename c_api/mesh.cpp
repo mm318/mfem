@@ -113,6 +113,11 @@ extern "C" {
       return cmfem::As<const mfem::Mesh>(mesh)->SpaceDimension();
    }
 
+   int CMFEM_Mesh_MeshGenerator(const CMFEM_Mesh *mesh)
+   {
+      return cmfem::As<const mfem::Mesh>(mesh)->MeshGenerator();
+   }
+
    int CMFEM_Mesh_GetNE(const CMFEM_Mesh *mesh)
    {
       return cmfem::As<const mfem::Mesh>(mesh)->GetNE();
@@ -138,6 +143,17 @@ extern "C" {
    void CMFEM_Mesh_AddQuad(CMFEM_Mesh *mesh, const int *indices, int attribute)
    {
       cmfem::As<mfem::Mesh>(mesh)->AddQuad(indices, attribute);
+   }
+
+   void CMFEM_Mesh_AddBdrSegment(CMFEM_Mesh *mesh, const int *indices,
+                                 int attribute)
+   {
+      cmfem::As<mfem::Mesh>(mesh)->AddBdrSegment(indices, attribute);
+   }
+
+   void CMFEM_Mesh_FinalizeTopology(CMFEM_Mesh *mesh)
+   {
+      cmfem::As<mfem::Mesh>(mesh)->FinalizeTopology();
    }
 
    void CMFEM_Mesh_FinalizeTriMesh(CMFEM_Mesh *mesh, int generate_edges,
@@ -255,6 +271,23 @@ extern "C" {
    {
       cmfem::As<mfem::Mesh>(mesh)->SetNodalFESpace(
          cmfem::As<mfem::FiniteElementSpace>(fespace));
+   }
+
+   void CMFEM_Mesh_Transform(CMFEM_Mesh *mesh,
+                             CMFEM_MeshTransformCallback callback,
+                             void *context)
+   {
+      mfem::Mesh *mesh_ptr = cmfem::As<mfem::Mesh>(mesh);
+      const int space_dim = mesh_ptr->SpaceDimension();
+      auto transform = [callback, context, space_dim](const mfem::Vector &x,
+                                                      mfem::Vector &value)
+      {
+         value.SetSize(space_dim);
+         callback(reinterpret_cast<const CMFEM_Vector *>(&x),
+                  reinterpret_cast<CMFEM_Vector *>(&value),
+                  context);
+      };
+      mesh_ptr->Transform(std::move(transform));
    }
 
    void CMFEM_Mesh_SnapNodesToUnitSphere(CMFEM_Mesh *mesh)

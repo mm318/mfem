@@ -9,6 +9,16 @@ CMFEM_ASSERT_TYPE(CMFEM_DiffusionIntegrator, mfem::DiffusionIntegrator);
 
 extern "C" {
 
+   CMFEM_DiffusionIntegrator *CMFEM_DiffusionIntegrator_NewMfc(
+      const CMFEM_MatrixFunctionCoefficient *coefficient)
+   {
+      auto &coef = const_cast<mfem::MatrixFunctionCoefficient &>(
+                      *cmfem::As<const mfem::MatrixFunctionCoefficient>(
+                         coefficient));
+      return reinterpret_cast<CMFEM_DiffusionIntegrator *>(
+                new mfem::DiffusionIntegrator(coef));
+   }
+
    CMFEM_DiffusionIntegrator *CMFEM_DiffusionIntegrator_NewCc(
       const CMFEM_ConstantCoefficient *coefficient)
    {

@@ -29,6 +29,14 @@ void CMFEM_PCGBfOjs(const CMFEM_BilinearForm *A,
                     int max_iter,
                     double rtol,
                     double atol);
+void CMFEM_PCGBfDs(const CMFEM_BilinearForm *A,
+                   CMFEM_DSmoother *M,
+                   const CMFEM_Vector *B,
+                   CMFEM_Vector *X,
+                   int print_iter,
+                   int max_iter,
+                   double rtol,
+                   double atol);
 void CMFEM_PCGOpGs(const CMFEM_OperatorPtr *A,
                    CMFEM_GSSmoother *M,
                    const CMFEM_Vector *B,
@@ -70,6 +78,14 @@ void CMFEM_GMRESSmGs(const CMFEM_SparseMatrix *A,
                      int restart,
                      double rtol,
                      double atol);
+void CMFEM_PCGRAPOperatorBdp(const CMFEM_RAPOperator *A,
+                             CMFEM_BlockDiagonalPreconditioner *M,
+                             const CMFEM_Vector *B,
+                             CMFEM_Vector *X,
+                             int print_iter,
+                             int max_iter,
+                             double rtol,
+                             double atol);
 int CMFEM_UsesTensorBasis(const CMFEM_FiniteElementSpace *fespace);
 
 CMFEM_END_EXTERN_C

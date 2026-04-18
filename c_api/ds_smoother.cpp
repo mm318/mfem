@@ -9,6 +9,13 @@ CMFEM_ASSERT_TYPE(CMFEM_DSmoother, mfem::DSmoother);
 
 extern "C" {
 
+   CMFEM_DSmoother *CMFEM_DSmoother_NewBf(const CMFEM_BilinearForm *bilinear_form)
+   {
+      auto &matrix = const_cast<mfem::SparseMatrix &>(
+                        cmfem::As<const mfem::BilinearForm>(bilinear_form)->SpMat());
+      return reinterpret_cast<CMFEM_DSmoother *>(new mfem::DSmoother(matrix));
+   }
+
    CMFEM_DSmoother *CMFEM_DSmoother_NewSm(CMFEM_SparseMatrix *matrix)
    {
       return reinterpret_cast<CMFEM_DSmoother *>(

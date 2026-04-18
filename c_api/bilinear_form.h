@@ -22,6 +22,9 @@ void CMFEM_BilinearForm_AddDomainIntegratorDi(CMFEM_BilinearForm
 void CMFEM_BilinearForm_AddDomainIntegratorDiCc(
    CMFEM_BilinearForm *bilinear_form,
    const CMFEM_ConstantCoefficient *coefficient);
+void CMFEM_BilinearForm_AddDomainIntegratorDiMfc(
+   CMFEM_BilinearForm *bilinear_form,
+   const CMFEM_MatrixFunctionCoefficient *coefficient);
 void CMFEM_BilinearForm_AddDomainIntegratorCviVfc(
    CMFEM_BilinearForm *bilinear_form,
    const CMFEM_VectorFunctionCoefficient *coefficient,
@@ -44,6 +47,9 @@ void CMFEM_BilinearForm_AddDomainIntegratorCci(CMFEM_BilinearForm
 void CMFEM_BilinearForm_AddDomainIntegratorVmi(
    CMFEM_BilinearForm *bilinear_form,
    const CMFEM_ConstantCoefficient *coefficient);
+void CMFEM_BilinearForm_AddDomainIntegratorVmiMfc(
+   CMFEM_BilinearForm *bilinear_form,
+   const CMFEM_MatrixFunctionCoefficient *coefficient);
 void CMFEM_BilinearForm_AddDomainIntegratorDdi(CMFEM_BilinearForm
                                                *bilinear_form, const CMFEM_ConstantCoefficient *coefficient);
 void CMFEM_BilinearForm_EnableStaticCondensation(CMFEM_BilinearForm
@@ -61,6 +67,19 @@ void CMFEM_BilinearForm_AddBdrFaceIntegratorDgd(
    const CMFEM_ConstantCoefficient *coefficient,
    double sigma,
    double kappa);
+void CMFEM_BilinearForm_AddInteriorFaceIntegratorDgeiPwcPwc(
+   CMFEM_BilinearForm *bilinear_form,
+   const CMFEM_PWConstCoefficient *lambda,
+   const CMFEM_PWConstCoefficient *mu,
+   double alpha,
+   double kappa);
+void CMFEM_BilinearForm_AddBdrFaceIntegratorDgeiPwcPwcAi(
+   CMFEM_BilinearForm *bilinear_form,
+   const CMFEM_PWConstCoefficient *lambda,
+   const CMFEM_PWConstCoefficient *mu,
+   double alpha,
+   double kappa,
+   const CMFEM_ArrayInt *marker);
 void CMFEM_BilinearForm_AddInteriorFaceIntegratorNdtVfc(
    CMFEM_BilinearForm *bilinear_form,
    const CMFEM_VectorFunctionCoefficient *coefficient,
@@ -83,6 +102,10 @@ void CMFEM_BilinearForm_AssembleSkipZeros(CMFEM_BilinearForm *bilinear_form,
 void CMFEM_BilinearForm_Finalize(CMFEM_BilinearForm *bilinear_form);
 void CMFEM_BilinearForm_FinalizeSkipZeros(CMFEM_BilinearForm *bilinear_form,
                                           int skip_zeros);
+void CMFEM_BilinearForm_EliminateEssentialBCAi(
+   CMFEM_BilinearForm *bilinear_form,
+   const CMFEM_ArrayInt *essential_bdr);
+CMFEM_SparseMatrix *CMFEM_BilinearForm_SpMat(CMFEM_BilinearForm *bilinear_form);
 void CMFEM_BilinearForm_FormSystemMatrixSm(
    CMFEM_BilinearForm *bilinear_form,
    const CMFEM_ArrayInt *ess_tdof_list,
@@ -120,6 +143,9 @@ void CMFEM_BilinearForm_RecoverFEMSolution(const CMFEM_BilinearForm
 void CMFEM_BilinearForm_FullMult(const CMFEM_BilinearForm *bilinear_form,
                                  const CMFEM_Vector *x,
                                  CMFEM_Vector *y);
+void CMFEM_BilinearForm_AddDomainIntegratorIiDiMiCc(
+   CMFEM_BilinearForm *bilinear_form,
+   const CMFEM_ConstantCoefficient *coefficient);
 void CMFEM_BilinearForm_Update(CMFEM_BilinearForm *bilinear_form);
 
 CMFEM_END_EXTERN_C

@@ -34,12 +34,30 @@ void CMFEM_GridFunction_ProjectBdrCoefficientVcc(
 void CMFEM_GridFunction_ProjectCoefficientVfc(
    CMFEM_GridFunction *grid_function,
    const CMFEM_VectorFunctionCoefficient *coefficient);
+void CMFEM_GridFunction_ComputeFluxDi(
+   const CMFEM_GridFunction *grid_function,
+   CMFEM_DiffusionIntegrator *integrator,
+   CMFEM_GridFunction *flux);
+void CMFEM_GridFunction_SetTrueVector(CMFEM_GridFunction *grid_function);
+void CMFEM_GridFunction_SetFromTrueVector(CMFEM_GridFunction *grid_function);
 double CMFEM_GridFunction_ComputeL2ErrorFc(
    const CMFEM_GridFunction *grid_function,
    const CMFEM_FunctionCoefficient *coefficient);
+double CMFEM_GridFunction_ComputeL2ErrorFcOrder(
+   const CMFEM_GridFunction *grid_function,
+   const CMFEM_FunctionCoefficient *coefficient,
+   int quadrature_order);
 double CMFEM_GridFunction_ComputeL2ErrorVfc(
    const CMFEM_GridFunction *grid_function,
    const CMFEM_VectorFunctionCoefficient *coefficient);
+double CMFEM_GridFunction_ComputeHCurlErrorVfcVfc(
+   const CMFEM_GridFunction *grid_function,
+   CMFEM_VectorFunctionCoefficient *exact_solution,
+   CMFEM_VectorFunctionCoefficient *exact_curl);
+void CMFEM_GridFunction_CopyToVec(const CMFEM_GridFunction *grid_function,
+                                  CMFEM_Vector *vector);
+void CMFEM_GridFunction_SetFromVec(CMFEM_GridFunction *grid_function,
+                                   const CMFEM_Vector *vector);
 void CMFEM_GridFunction_Add(CMFEM_GridFunction *grid_function,
                             const CMFEM_GridFunction *other);
 void CMFEM_GridFunction_Scale(CMFEM_GridFunction *grid_function, double scale);

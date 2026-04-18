@@ -18,6 +18,12 @@ int CMFEM_SparseMatrix_Height(const CMFEM_SparseMatrix *matrix);
 void CMFEM_SparseMatrix_Mult(const CMFEM_SparseMatrix *matrix,
                              const CMFEM_Vector *x,
                              CMFEM_Vector *y);
+double CMFEM_SparseMatrix_InnerProduct(const CMFEM_SparseMatrix *matrix,
+                                       const CMFEM_Vector *x,
+                                       const CMFEM_Vector *y);
+CMFEM_SparseMatrix *CMFEM_RAPSmSmSm(const CMFEM_SparseMatrix *Rt,
+                                    const CMFEM_SparseMatrix *A,
+                                    const CMFEM_SparseMatrix *P);
 CMFEM_SparseMatrix *CMFEM_AddSmSm(double a,
                                   const CMFEM_SparseMatrix *A,
                                   double b,

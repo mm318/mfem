@@ -97,6 +97,32 @@ extern "C" {
             static_cast<mfem::real_t>(kappa)));
    }
 
+   void CMFEM_LinearForm_AddBdrFaceIntegratorDgeliVfcPwcPwcAi(
+      CMFEM_LinearForm *linear_form,
+      const CMFEM_VectorFunctionCoefficient *coefficient,
+      const CMFEM_PWConstCoefficient *lambda,
+      const CMFEM_PWConstCoefficient *mu,
+      double alpha,
+      double kappa,
+      const CMFEM_ArrayInt *marker)
+   {
+      auto &coef = const_cast<mfem::VectorFunctionCoefficient &>(
+                      *cmfem::As<const mfem::VectorFunctionCoefficient>(
+                         coefficient));
+      auto &lambda_ref = const_cast<mfem::PWConstCoefficient &>(
+                            *cmfem::As<const mfem::PWConstCoefficient>(lambda));
+      auto &mu_ref = const_cast<mfem::PWConstCoefficient &>(
+                        *cmfem::As<const mfem::PWConstCoefficient>(mu));
+      cmfem::As<mfem::LinearForm>(linear_form)->AddBdrFaceIntegrator(
+         new mfem::DGElasticityDirichletLFIntegrator(
+            coef,
+            lambda_ref,
+            mu_ref,
+            static_cast<mfem::real_t>(alpha),
+            static_cast<mfem::real_t>(kappa)),
+         const_cast<mfem::Array<int> &>(cmfem::ArrayIntRef(marker)));
+   }
+
    void CMFEM_LinearForm_AddBoundaryIntegratorVbl(
       CMFEM_LinearForm *linear_form,
       const CMFEM_VectorArrayCoefficient *coefficient)

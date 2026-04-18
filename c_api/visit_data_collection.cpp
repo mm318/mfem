@@ -40,6 +40,14 @@ extern "C" {
       cmfem::As<mfem::VisItDataCollection>(collection)->SetPrecision(precision);
    }
 
+   void CMFEM_VisItDataCollection_SetLevelsOfDetail(
+      CMFEM_VisItDataCollection *collection,
+      int levels_of_detail)
+   {
+      cmfem::As<mfem::VisItDataCollection>(collection)->SetLevelsOfDetail(
+         levels_of_detail);
+   }
+
    void CMFEM_VisItDataCollection_SetCycle(CMFEM_VisItDataCollection *collection,
                                            int cycle)
    {
