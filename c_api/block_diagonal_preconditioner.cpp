@@ -32,4 +32,22 @@ extern "C" {
       ->SetDiagonalBlock(block, cmfem::As<mfem::CGSolver>(solver));
    }
 
+   void CMFEM_BlockDiagonalPreconditioner_SetDiagonalBlockDs(
+      CMFEM_BlockDiagonalPreconditioner *preconditioner,
+      int block,
+      CMFEM_DSmoother *solver)
+   {
+      cmfem::As<mfem::BlockDiagonalPreconditioner>(preconditioner)
+      ->SetDiagonalBlock(block, cmfem::As<mfem::DSmoother>(solver));
+   }
+
+   void CMFEM_BlockDiagonalPreconditioner_SetDiagonalBlockGs(
+      CMFEM_BlockDiagonalPreconditioner *preconditioner,
+      int block,
+      CMFEM_GSSmoother *solver)
+   {
+      cmfem::As<mfem::BlockDiagonalPreconditioner>(preconditioner)
+      ->SetDiagonalBlock(block, cmfem::As<mfem::GSSmoother>(solver));
+   }
+
 } // extern "C"

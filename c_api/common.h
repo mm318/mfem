@@ -64,6 +64,7 @@ typedef struct CMFEM_ThresholdRefiner CMFEM_ThresholdRefiner;
 typedef struct CMFEM_ThresholdDerefiner CMFEM_ThresholdDerefiner;
 typedef struct CMFEM_L2FeCollection CMFEM_L2FeCollection;
 typedef struct CMFEM_VisItDataCollection CMFEM_VisItDataCollection;
+typedef struct CMFEM_ParaViewDataCollection CMFEM_ParaViewDataCollection;
 
 #define CMFEM_STORAGE(Name, Size) struct CMFEM_##Name { char data[Size]; }
 

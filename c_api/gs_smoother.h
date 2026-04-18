@@ -9,6 +9,8 @@ CMFEM_BEGIN_EXTERN_C
 
 CMFEM_GSSmoother *CMFEM_GSSmoother_NewSm(CMFEM_SparseMatrix *matrix);
 CMFEM_GSSmoother *CMFEM_GSSmoother_NewOp(CMFEM_OperatorPtr *op);
+void CMFEM_GSSmoother_SetIterativeMode(CMFEM_GSSmoother *smoother,
+                                       int iterative_mode);
 void CMFEM_GSSmoother_Delete(CMFEM_GSSmoother *smoother);
 
 CMFEM_END_EXTERN_C

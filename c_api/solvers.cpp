@@ -194,6 +194,27 @@ extern "C" {
                 static_cast<mfem::real_t>(atol));
    }
 
+   void CMFEM_MINRESBopBdp(const CMFEM_BlockOperator *A,
+                           CMFEM_BlockDiagonalPreconditioner *M,
+                           const CMFEM_Vector *B,
+                           CMFEM_Vector *X,
+                           int print_iter,
+                           int max_iter,
+                           double rtol,
+                           double atol)
+   {
+      const mfem::real_t rel_tol = static_cast<mfem::real_t>(rtol);
+      const mfem::real_t abs_tol = static_cast<mfem::real_t>(atol);
+      mfem::MINRES(*cmfem::As<const mfem::BlockOperator>(A),
+                   *cmfem::As<mfem::BlockDiagonalPreconditioner>(M),
+                   cmfem::VectorRef(B),
+                   cmfem::VectorRef(X),
+                   print_iter,
+                   max_iter,
+                   rel_tol * rel_tol,
+                   abs_tol * abs_tol);
+   }
+
    int CMFEM_UsesTensorBasis(const CMFEM_FiniteElementSpace *fespace)
    {
       return mfem::UsesTensorBasis(*cmfem::As<const mfem::FiniteElementSpace>

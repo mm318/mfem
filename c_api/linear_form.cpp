@@ -133,6 +133,16 @@ extern "C" {
          new mfem::VectorBoundaryLFIntegrator(coef));
    }
 
+   void CMFEM_LinearForm_AddBoundaryIntegratorVfbfFc(
+      CMFEM_LinearForm *linear_form,
+      const CMFEM_FunctionCoefficient *coefficient)
+   {
+      auto &coef = const_cast<mfem::FunctionCoefficient &>(
+                      *cmfem::As<const mfem::FunctionCoefficient>(coefficient));
+      cmfem::As<mfem::LinearForm>(linear_form)->AddBoundaryIntegrator(
+         new mfem::VectorFEBoundaryFluxLFIntegrator(coef));
+   }
+
    void CMFEM_LinearForm_Assemble(CMFEM_LinearForm *linear_form)
    {
       cmfem::As<mfem::LinearForm>(linear_form)->Assemble();

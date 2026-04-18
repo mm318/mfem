@@ -157,6 +157,23 @@ extern "C" {
       return cmfem::As<const mfem::GridFunction>(grid_function)->ComputeL2Error(coef);
    }
 
+   double CMFEM_GridFunction_ComputeL2ErrorVfcOrder(
+      const CMFEM_GridFunction *grid_function,
+      const CMFEM_VectorFunctionCoefficient *coefficient,
+      int quadrature_order)
+   {
+      auto &coef = const_cast<mfem::VectorFunctionCoefficient &>(
+                      *cmfem::As<const mfem::VectorFunctionCoefficient>(coefficient));
+      const mfem::IntegrationRule *irs[mfem::Geometry::NumGeom];
+      for (int i = 0; i < mfem::Geometry::NumGeom; i++)
+      {
+         irs[i] = &mfem::IntRules.Get(i, quadrature_order);
+      }
+      return cmfem::As<const mfem::GridFunction>(grid_function)->ComputeL2Error(
+                coef,
+                irs);
+   }
+
    double CMFEM_GridFunction_ComputeHCurlErrorVfcVfc(
       const CMFEM_GridFunction *grid_function,
       CMFEM_VectorFunctionCoefficient *exact_solution,

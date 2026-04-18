@@ -91,6 +91,12 @@ do not put implementations or shared macros there.
                                                          `config/runtime_paths.h`, with a C++ adapter in `config/runtime_paths.hpp`.
                                                          - C wrappers and C examples should call the runtime-path APIs instead of
                                                          embedding repo-relative paths.
+                                                         - When wrapping MFEM's free iterative-solver helpers, normalize any odd
+                                                         tolerance conventions to match the class-solver APIs that examples usually
+                                                         follow. In particular, MFEM's free `MINRES(...)` takes squared tolerances;
+                                                         the `c_api` wrapper should accept the ordinary relative/absolute tolerances
+                                                         that `MINRESSolver::SetRelTol()` / `SetAbsTol()` expect and square them
+                                                         internally.
                                                          - Recent mixed/block wrappers also use these shorthands:
                                                          `Bop` for `BlockOperator`, `Bdp` for
                                                          `BlockDiagonalPreconditioner`, `Cgs` for `CGSolver`, `Rop` for

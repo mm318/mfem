@@ -86,6 +86,14 @@ void CMFEM_PCGRAPOperatorBdp(const CMFEM_RAPOperator *A,
                              int max_iter,
                              double rtol,
                              double atol);
+void CMFEM_MINRESBopBdp(const CMFEM_BlockOperator *A,
+                        CMFEM_BlockDiagonalPreconditioner *M,
+                        const CMFEM_Vector *B,
+                        CMFEM_Vector *X,
+                        int print_iter,
+                        int max_iter,
+                        double rtol,
+                        double atol);
 int CMFEM_UsesTensorBasis(const CMFEM_FiniteElementSpace *fespace);
 
 CMFEM_END_EXTERN_C

@@ -43,6 +43,9 @@ void CMFEM_LinearForm_AddBdrFaceIntegratorDgeliVfcPwcPwcAi(
    const CMFEM_ArrayInt *marker);
 void CMFEM_LinearForm_AddBoundaryIntegratorVbl(
    CMFEM_LinearForm *linear_form, const CMFEM_VectorArrayCoefficient *coefficient);
+void CMFEM_LinearForm_AddBoundaryIntegratorVfbfFc(
+   CMFEM_LinearForm *linear_form,
+   const CMFEM_FunctionCoefficient *coefficient);
 void CMFEM_LinearForm_Assemble(CMFEM_LinearForm *linear_form);
 void CMFEM_LinearForm_CopyToVector(const CMFEM_LinearForm *linear_form,
                                    CMFEM_Vector *vector);

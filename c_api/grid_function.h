@@ -50,6 +50,10 @@ double CMFEM_GridFunction_ComputeL2ErrorFcOrder(
 double CMFEM_GridFunction_ComputeL2ErrorVfc(
    const CMFEM_GridFunction *grid_function,
    const CMFEM_VectorFunctionCoefficient *coefficient);
+double CMFEM_GridFunction_ComputeL2ErrorVfcOrder(
+   const CMFEM_GridFunction *grid_function,
+   const CMFEM_VectorFunctionCoefficient *coefficient,
+   int quadrature_order);
 double CMFEM_GridFunction_ComputeHCurlErrorVfcVfc(
    const CMFEM_GridFunction *grid_function,
    CMFEM_VectorFunctionCoefficient *exact_solution,

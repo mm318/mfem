@@ -22,6 +22,13 @@ extern "C" {
                 new mfem::DSmoother(*cmfem::As<mfem::SparseMatrix>(matrix)));
    }
 
+   void CMFEM_DSmoother_SetIterativeMode(CMFEM_DSmoother *smoother,
+                                         int iterative_mode)
+   {
+      cmfem::As<mfem::DSmoother>(smoother)->iterative_mode =
+         iterative_mode != 0;
+   }
+
    void CMFEM_DSmoother_Delete(CMFEM_DSmoother *smoother)
    {
       delete cmfem::As<mfem::DSmoother>(smoother);

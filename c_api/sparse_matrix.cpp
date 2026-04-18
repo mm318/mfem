@@ -67,6 +67,40 @@ extern "C" {
                 cmfem::VectorRef(y));
    }
 
+   void CMFEM_SparseMatrix_GetDiag(const CMFEM_SparseMatrix *matrix,
+                                   CMFEM_Vector *diag)
+   {
+      cmfem::As<const mfem::SparseMatrix>(matrix)->GetDiag(cmfem::VectorRef(diag));
+   }
+
+   void CMFEM_SparseMatrix_Scale(CMFEM_SparseMatrix *matrix, double scale)
+   {
+      *cmfem::As<mfem::SparseMatrix>(matrix) *= static_cast<mfem::real_t>(scale);
+   }
+
+   void CMFEM_SparseMatrix_ScaleRow(CMFEM_SparseMatrix *matrix,
+                                    int row,
+                                    double scale)
+   {
+      cmfem::As<mfem::SparseMatrix>(matrix)->ScaleRow(
+         row,
+         static_cast<mfem::real_t>(scale));
+   }
+
+   CMFEM_SparseMatrix *CMFEM_TransposeSm(const CMFEM_SparseMatrix *matrix)
+   {
+      return reinterpret_cast<CMFEM_SparseMatrix *>(
+                mfem::Transpose(*cmfem::As<const mfem::SparseMatrix>(matrix)));
+   }
+
+   CMFEM_SparseMatrix *CMFEM_MultSmSm(const CMFEM_SparseMatrix *A,
+                                      const CMFEM_SparseMatrix *B)
+   {
+      return reinterpret_cast<CMFEM_SparseMatrix *>(
+                mfem::Mult(*cmfem::As<const mfem::SparseMatrix>(A),
+                           *cmfem::As<const mfem::SparseMatrix>(B)));
+   }
+
    CMFEM_SparseMatrix *CMFEM_RAPSmSmSm(const CMFEM_SparseMatrix *Rt,
                                        const CMFEM_SparseMatrix *A,
                                        const CMFEM_SparseMatrix *P)

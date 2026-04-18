@@ -21,6 +21,15 @@ void CMFEM_SparseMatrix_Mult(const CMFEM_SparseMatrix *matrix,
 double CMFEM_SparseMatrix_InnerProduct(const CMFEM_SparseMatrix *matrix,
                                        const CMFEM_Vector *x,
                                        const CMFEM_Vector *y);
+void CMFEM_SparseMatrix_GetDiag(const CMFEM_SparseMatrix *matrix,
+                                CMFEM_Vector *diag);
+void CMFEM_SparseMatrix_Scale(CMFEM_SparseMatrix *matrix, double scale);
+void CMFEM_SparseMatrix_ScaleRow(CMFEM_SparseMatrix *matrix,
+                                 int row,
+                                 double scale);
+CMFEM_SparseMatrix *CMFEM_TransposeSm(const CMFEM_SparseMatrix *matrix);
+CMFEM_SparseMatrix *CMFEM_MultSmSm(const CMFEM_SparseMatrix *A,
+                                   const CMFEM_SparseMatrix *B);
 CMFEM_SparseMatrix *CMFEM_RAPSmSmSm(const CMFEM_SparseMatrix *Rt,
                                     const CMFEM_SparseMatrix *A,
                                     const CMFEM_SparseMatrix *P);

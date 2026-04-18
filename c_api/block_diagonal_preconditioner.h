@@ -15,6 +15,14 @@ void CMFEM_BlockDiagonalPreconditioner_SetDiagonalBlockCgs(
    CMFEM_BlockDiagonalPreconditioner *preconditioner,
    int block,
    CMFEM_CGSolver *solver);
+void CMFEM_BlockDiagonalPreconditioner_SetDiagonalBlockDs(
+   CMFEM_BlockDiagonalPreconditioner *preconditioner,
+   int block,
+   CMFEM_DSmoother *solver);
+void CMFEM_BlockDiagonalPreconditioner_SetDiagonalBlockGs(
+   CMFEM_BlockDiagonalPreconditioner *preconditioner,
+   int block,
+   CMFEM_GSSmoother *solver);
 
 CMFEM_END_EXTERN_C
 
