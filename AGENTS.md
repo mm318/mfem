@@ -54,7 +54,7 @@ miss when editing `core/`, `c_api/`, and the Zig build.
   method segment with no extra underscores. Use compact 1-3 character
   PascalCase shorthands such as:
   `Cc` for `ConstantCoefficient`, `Fc` for `FunctionCoefficient`,
-  `Vcc` for `VectorConstantCoefficient`, `Vfc` for
+  `Gfc` for `GridFunctionCoefficient`, `Vcc` for `VectorConstantCoefficient`, `Vfc` for
   `VectorFunctionCoefficient`, `Sm` for `SparseMatrix`, `Op` for
   `OperatorPtr`, `Gf` for `GridFunction`, `Fes` for `FiniteElementSpace`,
   `Di` for `DiffusionIntegrator`, `Ei` for `ElasticityIntegrator`,
@@ -88,6 +88,11 @@ miss when editing `core/`, `c_api/`, and the Zig build.
   `config/runtime_paths.h`, with a C++ adapter in `config/runtime_paths.hpp`.
 - C wrappers and C examples should call the runtime-path APIs instead of
   embedding repo-relative paths.
+- For MFEM ODE wrappers, keep the public C type as an adapter/handle around the
+  MFEM solver/operator object rather than moving example logic into C++.
+  The first-order and second-order operator wrappers in `c_api/` are callback
+  adapters; example-specific PDE logic should stay in the C example as a C
+  context struct plus callbacks.
 
 ## Core Architecture Notes
 

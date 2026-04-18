@@ -22,6 +22,9 @@ void CMFEM_BilinearForm_AddDomainIntegratorDi(CMFEM_BilinearForm
 void CMFEM_BilinearForm_AddDomainIntegratorDiCc(
    CMFEM_BilinearForm *bilinear_form,
    const CMFEM_ConstantCoefficient *coefficient);
+void CMFEM_BilinearForm_AddDomainIntegratorDiGfc(
+   CMFEM_BilinearForm *bilinear_form,
+   const CMFEM_GridFunctionCoefficient *coefficient);
 void CMFEM_BilinearForm_AddDomainIntegratorMiCc(
    CMFEM_BilinearForm *bilinear_form,
    const CMFEM_ConstantCoefficient *coefficient);

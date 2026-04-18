@@ -411,7 +411,7 @@ const c_example_main_sources: []const []const u8 = &.{
     // "examples/c/ex10.c",
     "examples/c/ex14.c",
     "examples/c/ex15.c",
-    // "examples/c/ex16.c",
+    "examples/c/ex16.c",
     // "examples/c/ex17.c",
     // "examples/c/ex18.c",
     // "examples/c/ex19.c",

@@ -87,7 +87,8 @@ extern "C" {
                               CMFEM_TimeDependentOperatorMultCallback f_mult,
                               void *f_context)
    {
-      auto context = SIAVContext{
+      auto context = SIAVContext
+      {
          std::make_unique<COperatorAdapter>(size, p_mult, p_context),
          std::make_unique<CTimeDependentOperatorAdapter>(size, f_mult, f_context),
       };

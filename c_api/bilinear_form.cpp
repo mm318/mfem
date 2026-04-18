@@ -71,6 +71,17 @@ extern "C" {
          new mfem::DiffusionIntegrator(coef));
    }
 
+   void CMFEM_BilinearForm_AddDomainIntegratorDiGfc(
+      CMFEM_BilinearForm *bilinear_form,
+      const CMFEM_GridFunctionCoefficient *coefficient)
+   {
+      auto &coef = const_cast<mfem::GridFunctionCoefficient &>(
+                      *cmfem::As<const mfem::GridFunctionCoefficient>(
+                         coefficient));
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->AddDomainIntegrator(
+         new mfem::DiffusionIntegrator(coef));
+   }
+
    void CMFEM_BilinearForm_AddDomainIntegratorMiCc(
       CMFEM_BilinearForm *bilinear_form,
       const CMFEM_ConstantCoefficient *coefficient)

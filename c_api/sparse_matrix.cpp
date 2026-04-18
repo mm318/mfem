@@ -50,6 +50,14 @@ extern "C" {
       return cmfem::As<const mfem::SparseMatrix>(matrix)->Height();
    }
 
+   void CMFEM_SparseMatrix_Mult(const CMFEM_SparseMatrix *matrix,
+                                const CMFEM_Vector *x,
+                                CMFEM_Vector *y)
+   {
+      cmfem::As<const mfem::SparseMatrix>(matrix)->Mult(cmfem::VectorRef(x),
+                                                        cmfem::VectorRef(y));
+   }
+
    CMFEM_SparseMatrix *CMFEM_AddSmSm(double a,
                                      const CMFEM_SparseMatrix *A,
                                      double b,

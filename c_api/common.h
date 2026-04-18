@@ -20,6 +20,7 @@ typedef struct CMFEM_DgFeCollection CMFEM_DgFeCollection;
 typedef struct CMFEM_DgInterfaceFeCollection CMFEM_DgInterfaceFeCollection;
 typedef struct CMFEM_FiniteElementSpace CMFEM_FiniteElementSpace;
 typedef struct CMFEM_GridFunction CMFEM_GridFunction;
+typedef struct CMFEM_GridFunctionCoefficient CMFEM_GridFunctionCoefficient;
 typedef struct CMFEM_LinearForm CMFEM_LinearForm;
 typedef struct CMFEM_BilinearForm CMFEM_BilinearForm;
 typedef struct CMFEM_SparseMatrix CMFEM_SparseMatrix;
@@ -28,6 +29,8 @@ typedef struct CMFEM_GSSmoother CMFEM_GSSmoother;
 typedef struct CMFEM_DSmoother CMFEM_DSmoother;
 typedef struct CMFEM_Device CMFEM_Device;
 typedef struct CMFEM_SIAVSolver CMFEM_SIAVSolver;
+typedef struct CMFEM_TimeDependentOperator CMFEM_TimeDependentOperator;
+typedef struct CMFEM_ODESolver CMFEM_ODESolver;
 typedef struct CMFEM_SecondOrderTimeDependentOperator
    CMFEM_SecondOrderTimeDependentOperator;
 typedef struct CMFEM_SecondOrderODESolver CMFEM_SecondOrderODESolver;

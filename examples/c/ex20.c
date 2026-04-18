@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
    if (visualization)
    {
       mesh = CMFEM_Mesh_NewDimensionVerticesElementsBoundarySpace(
-         2, 2 * (nsteps + 1), nsteps, 0, 3);
+                2, 2 * (nsteps + 1), nsteps, 0, 3);
    }
 
    // 6. Advance the Hamiltonian system and record its state.

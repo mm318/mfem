@@ -26,12 +26,23 @@ extern "C" {
                                                       (value);
    }
 
+   double CMFEM_GridFunction_Get(const CMFEM_GridFunction *grid_function,
+                                 int index)
+   {
+      return (*cmfem::As<const mfem::GridFunction>(grid_function))(index);
+   }
+
    void CMFEM_GridFunction_Set(CMFEM_GridFunction *grid_function,
                                int index,
                                double value)
    {
       (*cmfem::As<mfem::GridFunction>(grid_function))(index) =
          static_cast<mfem::real_t>(value);
+   }
+
+   int CMFEM_GridFunction_Size(const CMFEM_GridFunction *grid_function)
+   {
+      return cmfem::As<const mfem::GridFunction>(grid_function)->Size();
    }
 
    void CMFEM_GridFunction_ProjectCoefficientFc(

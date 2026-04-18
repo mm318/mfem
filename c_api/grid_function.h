@@ -10,9 +10,12 @@ CMFEM_BEGIN_EXTERN_C
 CMFEM_GridFunction *CMFEM_GridFunction_New(CMFEM_FiniteElementSpace *fespace);
 void CMFEM_GridFunction_Delete(CMFEM_GridFunction *grid_function);
 void CMFEM_GridFunction_Assign(CMFEM_GridFunction *grid_function, double value);
+double CMFEM_GridFunction_Get(const CMFEM_GridFunction *grid_function,
+                              int index);
 void CMFEM_GridFunction_Set(CMFEM_GridFunction *grid_function,
                             int index,
                             double value);
+int CMFEM_GridFunction_Size(const CMFEM_GridFunction *grid_function);
 void CMFEM_GridFunction_ProjectCoefficientFc(
    CMFEM_GridFunction *grid_function,
    const CMFEM_FunctionCoefficient *coefficient);

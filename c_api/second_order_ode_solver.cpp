@@ -24,9 +24,10 @@ extern "C" {
          return nullptr;
       }
       return reinterpret_cast<CMFEM_SecondOrderODESolver *>(
-                new SecondOrderODESolverHolder{
-                   std::unique_ptr<mfem::SecondOrderODESolver>(solver),
-                });
+                new SecondOrderODESolverHolder
+      {
+         std::unique_ptr<mfem::SecondOrderODESolver>(solver),
+      });
    }
 
    void CMFEM_SecondOrderODESolver_Delete(CMFEM_SecondOrderODESolver *solver)
