@@ -15,6 +15,9 @@ void CMFEM_VisItDataCollection_RegisterFieldGf(
    CMFEM_VisItDataCollection *collection,
    const char *field_name,
    CMFEM_GridFunction *grid_function);
+void CMFEM_VisItDataCollection_SetPrecision(
+   CMFEM_VisItDataCollection *collection,
+   int precision);
 void CMFEM_VisItDataCollection_SetCycle(CMFEM_VisItDataCollection *collection,
                                         int cycle);
 void CMFEM_VisItDataCollection_SetTime(CMFEM_VisItDataCollection *collection,

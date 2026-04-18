@@ -24,6 +24,7 @@ CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshDg(
 CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshDgInterface(
    CMFEM_Mesh *mesh, CMFEM_DgInterfaceFeCollection *fec);
 void CMFEM_FiniteElementSpace_Delete(CMFEM_FiniteElementSpace *fespace);
+int CMFEM_FiniteElementSpace_GetVSize(const CMFEM_FiniteElementSpace *fespace);
 int CMFEM_FiniteElementSpace_GetTrueVSize(const CMFEM_FiniteElementSpace
                                           *fespace);
 void CMFEM_FiniteElementSpace_GetBoundaryTrueDofs(const CMFEM_FiniteElementSpace

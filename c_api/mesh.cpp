@@ -239,6 +239,17 @@ extern "C" {
       return (nodes && nodes->OwnFEC()) ? nodes->OwnFEC()->Name() : "";
    }
 
+   void CMFEM_Mesh_GetBoundingBox(const CMFEM_Mesh *mesh,
+                                  CMFEM_Vector *min,
+                                  CMFEM_Vector *max,
+                                  int ref)
+   {
+      const_cast<mfem::Mesh *>(cmfem::As<const mfem::Mesh>(mesh))->GetBoundingBox(
+         cmfem::VectorRef(min),
+         cmfem::VectorRef(max),
+         ref);
+   }
+
    void CMFEM_Mesh_SetNodalFESpace(CMFEM_Mesh *mesh,
                                    CMFEM_FiniteElementSpace *fespace)
    {

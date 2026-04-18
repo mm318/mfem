@@ -407,7 +407,7 @@ const c_example_main_sources: []const []const u8 = &.{
     "examples/c/ex6.c",
     "examples/c/ex7.c",
     // "examples/c/ex8.c",
-    // "examples/c/ex9.c", // next time-dependent FE slice
+    "examples/c/ex9.c",
     // "examples/c/ex10.c",
     "examples/c/ex14.c",
     "examples/c/ex15.c",
@@ -434,7 +434,7 @@ const c_example_main_sources: []const []const u8 = &.{
     // "examples/c/ex38.c",
     "examples/c/ex39.c",
     // "examples/c/ex40.c",
-    // "examples/c/ex41.c",
+    "examples/c/ex41.c",
 };
 
 const miniapp_main_sources: []const []const u8 = &.{

@@ -53,6 +53,23 @@ extern "C" {
          const_cast<mfem::Array<int> &>(cmfem::ArrayIntRef(marker)));
    }
 
+   void CMFEM_LinearForm_AddBdrFaceIntegratorBfiFcVfc(
+      CMFEM_LinearForm *linear_form,
+      const CMFEM_FunctionCoefficient *coefficient,
+      const CMFEM_VectorFunctionCoefficient *velocity,
+      double alpha)
+   {
+      auto &coef = const_cast<mfem::FunctionCoefficient &>(
+                      *cmfem::As<const mfem::FunctionCoefficient>(coefficient));
+      auto &vel = const_cast<mfem::VectorFunctionCoefficient &>(
+                     *cmfem::As<const mfem::VectorFunctionCoefficient>(
+                        velocity));
+      cmfem::As<mfem::LinearForm>(linear_form)->AddBdrFaceIntegrator(
+         new mfem::BoundaryFlowIntegrator(coef,
+                                          vel,
+                                          static_cast<mfem::real_t>(alpha)));
+   }
+
    void CMFEM_LinearForm_AddDomainIntegratorVfd(
       CMFEM_LinearForm *linear_form,
       const CMFEM_VectorFunctionCoefficient *coefficient)
@@ -93,6 +110,13 @@ extern "C" {
    void CMFEM_LinearForm_Assemble(CMFEM_LinearForm *linear_form)
    {
       cmfem::As<mfem::LinearForm>(linear_form)->Assemble();
+   }
+
+   void CMFEM_LinearForm_CopyToVector(const CMFEM_LinearForm *linear_form,
+                                      CMFEM_Vector *vector)
+   {
+      cmfem::VectorRef(vector) = *cmfem::As<const mfem::LinearForm>(
+                                    linear_form);
    }
 
    void CMFEM_LinearForm_Update(CMFEM_LinearForm *linear_form)

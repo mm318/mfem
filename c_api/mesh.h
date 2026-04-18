@@ -60,6 +60,10 @@ void CMFEM_Mesh_SetCurvature(CMFEM_Mesh *mesh, int order);
 int CMFEM_Mesh_HasNodes(const CMFEM_Mesh *mesh);
 CMFEM_FiniteElementSpace *CMFEM_Mesh_GetNodesFESpace(CMFEM_Mesh *mesh);
 const char *CMFEM_Mesh_GetNodesOwnFECName(CMFEM_Mesh *mesh);
+void CMFEM_Mesh_GetBoundingBox(const CMFEM_Mesh *mesh,
+                               CMFEM_Vector *min,
+                               CMFEM_Vector *max,
+                               int ref);
 void CMFEM_Mesh_SetNodalFESpace(CMFEM_Mesh *mesh,
                                 CMFEM_FiniteElementSpace *fespace);
 void CMFEM_Mesh_SnapNodesToUnitSphere(CMFEM_Mesh *mesh);

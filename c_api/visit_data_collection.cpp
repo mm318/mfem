@@ -33,6 +33,13 @@ extern "C" {
          cmfem::As<mfem::GridFunction>(grid_function));
    }
 
+   void CMFEM_VisItDataCollection_SetPrecision(
+      CMFEM_VisItDataCollection *collection,
+      int precision)
+   {
+      cmfem::As<mfem::VisItDataCollection>(collection)->SetPrecision(precision);
+   }
+
    void CMFEM_VisItDataCollection_SetCycle(CMFEM_VisItDataCollection *collection,
                                            int cycle)
    {

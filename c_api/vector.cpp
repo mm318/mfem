@@ -81,6 +81,11 @@ extern "C" {
       cmfem::VectorRef(vector).Neg();
    }
 
+   void CMFEM_Vector_Add(CMFEM_Vector *vector, const CMFEM_Vector *other)
+   {
+      cmfem::VectorRef(vector) += cmfem::VectorRef(other);
+   }
+
    void CMFEM_Vector_SetSubVectorAi(CMFEM_Vector *vector,
                                     const CMFEM_ArrayInt *indices,
                                     double value)

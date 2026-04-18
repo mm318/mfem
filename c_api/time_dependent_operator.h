@@ -39,6 +39,12 @@ CMFEM_TimeDependentOperator *CMFEM_TimeDependentOperator_New(
    void *mult_context,
    CMFEM_TimeDependentOperatorImplicitSolveCallback implicit_solve,
    void *implicit_context);
+CMFEM_TimeDependentOperator *CMFEM_TimeDependentOperator_NewImex(
+   int size,
+   CMFEM_TimeDependentOperatorMultCallback mult_term_1,
+   void *mult_term_1_context,
+   CMFEM_TimeDependentOperatorImplicitSolveCallback implicit_solve_term_2,
+   void *implicit_solve_term_2_context);
 void CMFEM_TimeDependentOperator_Delete(CMFEM_TimeDependentOperator *oper);
 void CMFEM_TimeDependentOperator_SetImplicitVariableType(
    CMFEM_TimeDependentOperator *oper,

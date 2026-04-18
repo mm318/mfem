@@ -30,6 +30,20 @@ extern "C" {
       });
    }
 
+   CMFEM_ODESolver *CMFEM_ODESolver_NewImexType(int type)
+   {
+      auto solver = mfem::ODESolver::SelectIMEX(type);
+      if (!solver)
+      {
+         return nullptr;
+      }
+      return reinterpret_cast<CMFEM_ODESolver *>(
+                new ODESolverHolder
+      {
+         std::move(solver),
+      });
+   }
+
    void CMFEM_ODESolver_Delete(CMFEM_ODESolver *solver)
    {
       delete cmfem::As<ODESolverHolder>(solver);

@@ -19,6 +19,11 @@ CMFEM_LinearForm_AddDomainIntegratorDliCcMarker(
    CMFEM_LinearForm *linear_form,
    const CMFEM_ConstantCoefficient *coefficient,
    const CMFEM_ArrayInt *marker);
+void CMFEM_LinearForm_AddBdrFaceIntegratorBfiFcVfc(
+   CMFEM_LinearForm *linear_form,
+   const CMFEM_FunctionCoefficient *coefficient,
+   const CMFEM_VectorFunctionCoefficient *velocity,
+   double alpha);
 void CMFEM_LinearForm_AddDomainIntegratorVfd(
    CMFEM_LinearForm *linear_form,
    const CMFEM_VectorFunctionCoefficient *coefficient);
@@ -31,6 +36,8 @@ void CMFEM_LinearForm_AddBdrFaceIntegratorDgl(
 void CMFEM_LinearForm_AddBoundaryIntegratorVbl(
    CMFEM_LinearForm *linear_form, const CMFEM_VectorArrayCoefficient *coefficient);
 void CMFEM_LinearForm_Assemble(CMFEM_LinearForm *linear_form);
+void CMFEM_LinearForm_CopyToVector(const CMFEM_LinearForm *linear_form,
+                                   CMFEM_Vector *vector);
 void CMFEM_LinearForm_Update(CMFEM_LinearForm *linear_form);
 
 CMFEM_END_EXTERN_C

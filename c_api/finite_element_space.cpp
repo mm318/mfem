@@ -77,6 +77,12 @@ extern "C" {
       delete cmfem::As<mfem::FiniteElementSpace>(fespace);
    }
 
+   int CMFEM_FiniteElementSpace_GetVSize(const CMFEM_FiniteElementSpace
+                                         *fespace)
+   {
+      return cmfem::As<const mfem::FiniteElementSpace>(fespace)->GetVSize();
+   }
+
    int CMFEM_FiniteElementSpace_GetTrueVSize(const CMFEM_FiniteElementSpace
                                              *fespace)
    {

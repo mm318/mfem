@@ -54,6 +54,64 @@ public:
    }
 };
 
+class CImexTimeDependentOperatorAdapter final : public
+   mfem::TimeDependentOperator
+{
+private:
+   CMFEM_TimeDependentOperatorMultCallback mult_term_1;
+   void *mult_term_1_context;
+   CMFEM_TimeDependentOperatorImplicitSolveCallback implicit_solve_term_2;
+   void *implicit_solve_term_2_context;
+
+public:
+   CImexTimeDependentOperatorAdapter(
+      int size,
+      CMFEM_TimeDependentOperatorMultCallback mult_term_1_,
+      void *mult_term_1_context_,
+      CMFEM_TimeDependentOperatorImplicitSolveCallback implicit_solve_term_2_,
+      void *implicit_solve_term_2_context_)
+      : mfem::TimeDependentOperator(size, 0.0, mfem::TimeDependentOperator::IMPLICIT),
+        mult_term_1(mult_term_1_),
+        mult_term_1_context(mult_term_1_context_),
+        implicit_solve_term_2(implicit_solve_term_2_),
+        implicit_solve_term_2_context(implicit_solve_term_2_context_) { }
+
+   void Mult(const mfem::Vector &u, mfem::Vector &du_dt) const override
+   {
+      if (GetEvalMode() != mfem::TimeDependentOperator::ADDITIVE_TERM_1)
+      {
+         MFEM_ABORT("CMFEM IMEX time-dependent operator expected additive term 1 evaluation");
+      }
+      if (!mult_term_1)
+      {
+         MFEM_ABORT("CMFEM IMEX time-dependent operator missing Mult1 callback");
+      }
+      mult_term_1(reinterpret_cast<const CMFEM_Vector *>(&u),
+                  reinterpret_cast<CMFEM_Vector *>(&du_dt),
+                  GetTime(),
+                  mult_term_1_context);
+   }
+
+   void ImplicitSolve(const mfem::real_t gamma,
+                      const mfem::Vector &u,
+                      mfem::Vector &k) override
+   {
+      if (GetEvalMode() != mfem::TimeDependentOperator::ADDITIVE_TERM_2)
+      {
+         MFEM_ABORT("CMFEM IMEX time-dependent operator expected additive term 2 implicit evaluation");
+      }
+      if (!implicit_solve_term_2)
+      {
+         MFEM_ABORT("CMFEM IMEX time-dependent operator missing ImplicitSolve2 callback");
+      }
+      implicit_solve_term_2(gamma,
+                            reinterpret_cast<const CMFEM_Vector *>(&u),
+                            reinterpret_cast<CMFEM_Vector *>(&k),
+                            GetTime(),
+                            implicit_solve_term_2_context);
+   }
+};
+
 CMFEM_ASSERT_TYPE(CMFEM_TimeDependentOperator, CTimeDependentOperatorAdapter);
 
 mfem::TimeDependentOperator::Type AsMfemType(
@@ -105,9 +163,24 @@ extern "C" {
                                                   implicit_context));
    }
 
+   CMFEM_TimeDependentOperator *CMFEM_TimeDependentOperator_NewImex(
+      int size,
+      CMFEM_TimeDependentOperatorMultCallback mult_term_1,
+      void *mult_term_1_context,
+      CMFEM_TimeDependentOperatorImplicitSolveCallback implicit_solve_term_2,
+      void *implicit_solve_term_2_context)
+   {
+      return reinterpret_cast<CMFEM_TimeDependentOperator *>(
+                new CImexTimeDependentOperatorAdapter(size,
+                                                      mult_term_1,
+                                                      mult_term_1_context,
+                                                      implicit_solve_term_2,
+                                                      implicit_solve_term_2_context));
+   }
+
    void CMFEM_TimeDependentOperator_Delete(CMFEM_TimeDependentOperator *oper)
    {
-      delete cmfem::As<CTimeDependentOperatorAdapter>(oper);
+      delete cmfem::As<mfem::TimeDependentOperator>(oper);
    }
 
    void CMFEM_TimeDependentOperator_SetImplicitVariableType(
