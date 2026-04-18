@@ -17,6 +17,8 @@ typedef struct ConductionOperatorContext
    _Alignas(max_align_t) CMFEM_SparseMatrix mmat;
    _Alignas(max_align_t) CMFEM_SparseMatrix kmat;
    _Alignas(max_align_t) CMFEM_Vector z;
+   CMFEM_BilinearForm *m_form;
+   CMFEM_BilinearForm *k_form;
    CMFEM_SparseMatrix *tmat;
    CMFEM_DSmoother *m_prec;
    CMFEM_DSmoother *t_prec;
@@ -60,26 +62,27 @@ static void conduction_set_parameters(ConductionOperatorContext *oper,
 {
    CMFEM_GridFunction *u_alpha_gf = CMFEM_GridFunction_New(oper->fespace);
    CMFEM_GridFunctionCoefficient *u_coeff = NULL;
-   CMFEM_BilinearForm *k_form = NULL;
    int i;
-   const int size = CMFEM_Vector_Size(u);
 
    CMFEM_GridFunction_SetFromTrueDofs(u_alpha_gf, u);
-   for (i = 0; i < size; i++)
+   for (i = 0; i < CMFEM_GridFunction_Size(u_alpha_gf); i++)
    {
       const double value = oper->kappa +
                            oper->alpha * CMFEM_GridFunction_Get(u_alpha_gf, i);
       CMFEM_GridFunction_Set(u_alpha_gf, i, value);
    }
 
+   if (oper->k_form != NULL)
+   {
+      CMFEM_BilinearForm_Delete(oper->k_form);
+   }
+   oper->k_form = CMFEM_BilinearForm_New(oper->fespace);
    u_coeff = CMFEM_GridFunctionCoefficient_NewGf(u_alpha_gf);
-   k_form = CMFEM_BilinearForm_New(oper->fespace);
-   CMFEM_BilinearForm_AddDomainIntegratorDiGfc(k_form, u_coeff);
-   CMFEM_BilinearForm_Assemble(k_form);
-   CMFEM_BilinearForm_FormSystemMatrixSm(k_form, &oper->ess_tdof_list,
+   CMFEM_BilinearForm_AddDomainIntegratorDiGfc(oper->k_form, u_coeff);
+   CMFEM_BilinearForm_Assemble(oper->k_form);
+   CMFEM_BilinearForm_FormSystemMatrixSm(oper->k_form, &oper->ess_tdof_list,
                                          &oper->kmat);
 
-   CMFEM_BilinearForm_Delete(k_form);
    CMFEM_GridFunctionCoefficient_Delete(u_coeff);
    CMFEM_GridFunction_Delete(u_alpha_gf);
 
@@ -93,7 +96,6 @@ static void conduction_init(ConductionOperatorContext *oper,
                             int solve_implicit_state,
                             const CMFEM_Vector *u)
 {
-   CMFEM_BilinearForm *m_form = NULL;
    CMFEM_ConstantCoefficient *one = NULL;
 
    oper->fespace = fespace;
@@ -102,6 +104,8 @@ static void conduction_init(ConductionOperatorContext *oper,
    oper->kmat = CMFEM_SparseMatrix_Construct();
    oper->z = CMFEM_Vector_ConstructSize(
                 CMFEM_FiniteElementSpace_GetTrueVSize(fespace));
+   oper->m_form = NULL;
+   oper->k_form = NULL;
    oper->tmat = NULL;
    oper->m_prec = NULL;
    oper->t_prec = NULL;
@@ -110,14 +114,13 @@ static void conduction_init(ConductionOperatorContext *oper,
    oper->current_gamma = -1.0;
    oper->solve_implicit_state = solve_implicit_state;
 
-   m_form = CMFEM_BilinearForm_New(fespace);
+   oper->m_form = CMFEM_BilinearForm_New(fespace);
    one = CMFEM_ConstantCoefficient_New(1.0);
-   CMFEM_BilinearForm_AddDomainIntegratorMiCc(m_form, one);
-   CMFEM_BilinearForm_Assemble(m_form);
-   CMFEM_BilinearForm_FormSystemMatrixSm(m_form, &oper->ess_tdof_list,
+   CMFEM_BilinearForm_AddDomainIntegratorMiCc(oper->m_form, one);
+   CMFEM_BilinearForm_Assemble(oper->m_form);
+   CMFEM_BilinearForm_FormSystemMatrixSm(oper->m_form, &oper->ess_tdof_list,
                                          &oper->mmat);
    CMFEM_ConstantCoefficient_Delete(one);
-   CMFEM_BilinearForm_Delete(m_form);
 
    oper->m_prec = CMFEM_DSmoother_NewSm(&oper->mmat);
 
@@ -130,6 +133,14 @@ static void conduction_destroy(ConductionOperatorContext *oper)
    if (oper->m_prec != NULL)
    {
       CMFEM_DSmoother_Delete(oper->m_prec);
+   }
+   if (oper->k_form != NULL)
+   {
+      CMFEM_BilinearForm_Delete(oper->k_form);
+   }
+   if (oper->m_form != NULL)
+   {
+      CMFEM_BilinearForm_Delete(oper->m_form);
    }
    CMFEM_Vector_Destroy(&oper->z);
    CMFEM_SparseMatrix_Destroy(&oper->kmat);
@@ -281,6 +292,13 @@ int main(int argc, char *argv[])
 
       fprintf(stderr, "Unknown option: %s\n", argv[i]);
       return 1;
+   }
+
+   if (visit)
+   {
+      fprintf(stderr,
+              "VisIt output is currently disabled in examples/c/ex16.c to avoid instability in the C port.\n");
+      visit = 0;
    }
 
    // 2. Read and refine the mesh.

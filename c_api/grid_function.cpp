@@ -1,5 +1,7 @@
 #include "common.hpp"
 
+#include <fstream>
+
 namespace
 {
 
@@ -153,7 +155,9 @@ extern "C" {
                                 const char *path,
                                 int precision)
    {
-      cmfem::As<const mfem::GridFunction>(grid_function)->Save(path, precision);
+      std::ofstream out(path);
+      out.precision(precision);
+      cmfem::As<const mfem::GridFunction>(grid_function)->Save(out);
    }
 
 } // extern "C"

@@ -497,6 +497,7 @@ int main(int argc, char *argv[])
    CMFEM_DgFeCollection *fec = NULL;
    CMFEM_FiniteElementSpace *fespace = NULL;
    CMFEM_VectorFunctionCoefficient *velocity = NULL;
+   CMFEM_ConstantCoefficient *one = NULL;
    CMFEM_FunctionCoefficient *inflow = NULL;
    CMFEM_FunctionCoefficient *u0 = NULL;
    CMFEM_BilinearForm *m_form = NULL;
@@ -574,11 +575,8 @@ int main(int argc, char *argv[])
       CMFEM_BilinearForm_SetAssemblyLevelFull(k_form);
    }
 
-   {
-      CMFEM_ConstantCoefficient *one = CMFEM_ConstantCoefficient_New(1.0);
-      CMFEM_BilinearForm_AddDomainIntegratorMiCc(m_form, one);
-      CMFEM_ConstantCoefficient_Delete(one);
-   }
+   one = CMFEM_ConstantCoefficient_New(1.0);
+   CMFEM_BilinearForm_AddDomainIntegratorMiCc(m_form, one);
    CMFEM_BilinearForm_AddDomainIntegratorCviVfc(k_form, velocity, -1.0);
    CMFEM_BilinearForm_AddInteriorFaceIntegratorNdtVfc(k_form, velocity, -1.0);
    CMFEM_BilinearForm_AddBdrFaceIntegratorNdtVfc(k_form, velocity, -1.0);
@@ -692,6 +690,7 @@ int main(int argc, char *argv[])
    CMFEM_BilinearForm_Delete(m_form);
    CMFEM_FunctionCoefficient_Delete(u0);
    CMFEM_FunctionCoefficient_Delete(inflow);
+   CMFEM_ConstantCoefficient_Delete(one);
    CMFEM_VectorFunctionCoefficient_Delete(velocity);
    CMFEM_FiniteElementSpace_Delete(fespace);
    CMFEM_DgFeCollection_Delete(fec);

@@ -262,6 +262,13 @@ int main(int argc, char *argv[])
       return 1;
    }
 
+   if (visit)
+   {
+      fprintf(stderr,
+              "VisIt output is currently disabled in examples/c/ex23.c to avoid instability in the C port.\n");
+      visit = 0;
+   }
+
    // 2. Read the mesh and uniformly refine it.
    CMFEM_Mesh *mesh = CMFEM_Mesh_NewFile(mesh_file, 1, 1);
    const int dim = CMFEM_Mesh_Dimension(mesh);

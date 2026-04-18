@@ -173,8 +173,8 @@ int main(int argc, char *argv[])
    CMFEM_BilinearForm_RecoverFEMSolution(a, &X, b, x);
 
    // 12. Save the refined mesh and the solution.
-   CMFEM_Mesh_Save(mesh, "refined.mesh", 8);
-   CMFEM_GridFunction_Save(x, "sol.gf", 8);
+   CMFEM_Mesh_Save(mesh, "refined.mesh", 6);
+   CMFEM_GridFunction_Save(x, "sol.gf", 6);
 
    // 13. Send the solution by socket to a GLVis server.
    if (visualization)

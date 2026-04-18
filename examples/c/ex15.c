@@ -333,7 +333,7 @@ int main(int argc, char *argv[])
             {
                printf("Iteration: %d, number of unknowns: %d\n",
                       ref_it,
-                      CMFEM_FiniteElementSpace_GetTrueVSize(fespace));
+                      CMFEM_FiniteElementSpace_GetVSize(fespace));
 
                CMFEM_BilinearForm_Assemble(a);
                CMFEM_LinearForm_Assemble(b);
