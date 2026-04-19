@@ -215,6 +215,13 @@ extern "C" {
       *cmfem::As<mfem::LinearForm>(linear_form) = cmfem::VectorRef(vector);
    }
 
+   double CMFEM_LinearForm_EvalGf(const CMFEM_LinearForm *linear_form,
+                                  const CMFEM_GridFunction *grid_function)
+   {
+      return (*cmfem::As<const mfem::LinearForm>(linear_form))(
+                *cmfem::As<const mfem::GridFunction>(grid_function));
+   }
+
    void CMFEM_LinearForm_Update(CMFEM_LinearForm *linear_form)
    {
       cmfem::As<mfem::LinearForm>(linear_form)->Update();

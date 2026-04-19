@@ -15,6 +15,14 @@ extern "C" {
                 new mfem::L2_FECollection(order, dim));
    }
 
+   CMFEM_L2FeCollection *CMFEM_L2FeCollection_NewOrderDimGl(int order, int dim)
+   {
+      return reinterpret_cast<CMFEM_L2FeCollection *>(
+                new mfem::L2_FECollection(order,
+                                          dim,
+                                          mfem::BasisType::GaussLobatto));
+   }
+
    void CMFEM_L2FeCollection_Delete(CMFEM_L2FeCollection *fec)
    {
       delete cmfem::As<mfem::L2_FECollection>(fec);

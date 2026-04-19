@@ -68,6 +68,11 @@ void CMFEM_GridFunction_SetFromVec(CMFEM_GridFunction *grid_function,
                                    const CMFEM_Vector *vector);
 void CMFEM_GridFunction_Add(CMFEM_GridFunction *grid_function,
                             const CMFEM_GridFunction *other);
+void CMFEM_GridFunction_CopyFromGf(CMFEM_GridFunction *grid_function,
+                                   const CMFEM_GridFunction *other);
+void CMFEM_GridFunction_AddScaledGf(CMFEM_GridFunction *grid_function,
+                                    double scale,
+                                    const CMFEM_GridFunction *other);
 void CMFEM_GridFunction_Scale(CMFEM_GridFunction *grid_function, double scale);
 void CMFEM_GridFunction_GetTrueDofs(const CMFEM_GridFunction *grid_function,
                                     CMFEM_Vector *true_dofs);

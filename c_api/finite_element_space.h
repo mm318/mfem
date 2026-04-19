@@ -11,6 +11,10 @@ CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshH1(CMFEM_Mesh *mesh,
                                                              CMFEM_H1FeCollection *fec);
 CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshH1VDim(
    CMFEM_Mesh *mesh, CMFEM_H1FeCollection *fec, int vdim);
+CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshH1VDimByVdim(
+   CMFEM_Mesh *mesh,
+   CMFEM_H1FeCollection *fec,
+   int vdim);
 CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshNd(CMFEM_Mesh *mesh,
                                                              CMFEM_NdFeCollection *fec);
 CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshNdR1d(

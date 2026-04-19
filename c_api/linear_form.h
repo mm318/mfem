@@ -69,6 +69,8 @@ void CMFEM_LinearForm_CopyToVector(const CMFEM_LinearForm *linear_form,
                                    CMFEM_Vector *vector);
 void CMFEM_LinearForm_SetFromVec(CMFEM_LinearForm *linear_form,
                                  const CMFEM_Vector *vector);
+double CMFEM_LinearForm_EvalGf(const CMFEM_LinearForm *linear_form,
+                               const CMFEM_GridFunction *grid_function);
 void CMFEM_LinearForm_Update(CMFEM_LinearForm *linear_form);
 
 CMFEM_END_EXTERN_C

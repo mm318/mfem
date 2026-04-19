@@ -26,12 +26,17 @@ typedef struct CMFEM_GridFunction CMFEM_GridFunction;
 typedef struct CMFEM_GridFunctionCoefficient CMFEM_GridFunctionCoefficient;
 typedef struct CMFEM_LinearForm CMFEM_LinearForm;
 typedef struct CMFEM_BilinearForm CMFEM_BilinearForm;
+typedef struct CMFEM_ComplexLinearForm CMFEM_ComplexLinearForm;
+typedef struct CMFEM_ComplexGridFunction CMFEM_ComplexGridFunction;
+typedef struct CMFEM_SesquilinearForm CMFEM_SesquilinearForm;
+typedef struct CMFEM_DiffusionMultigrid CMFEM_DiffusionMultigrid;
 typedef struct CMFEM_MixedBilinearForm CMFEM_MixedBilinearForm;
 typedef struct CMFEM_DiscreteLinearOperator CMFEM_DiscreteLinearOperator;
 typedef struct CMFEM_BlockOperator CMFEM_BlockOperator;
 typedef struct CMFEM_BlockDiagonalPreconditioner
    CMFEM_BlockDiagonalPreconditioner;
 typedef struct CMFEM_RAPOperator CMFEM_RAPOperator;
+typedef struct CMFEM_ScaledOperator CMFEM_ScaledOperator;
 typedef struct CMFEM_SparseMatrix CMFEM_SparseMatrix;
 typedef struct CMFEM_Vector CMFEM_Vector;
 typedef struct CMFEM_CGSolver CMFEM_CGSolver;
@@ -65,6 +70,12 @@ typedef struct CMFEM_ThresholdDerefiner CMFEM_ThresholdDerefiner;
 typedef struct CMFEM_L2FeCollection CMFEM_L2FeCollection;
 typedef struct CMFEM_VisItDataCollection CMFEM_VisItDataCollection;
 typedef struct CMFEM_ParaViewDataCollection CMFEM_ParaViewDataCollection;
+
+enum CMFEM_ComplexConvention
+{
+   CMFEM_ComplexConventionHermitian = 0,
+   CMFEM_ComplexConventionBlockSymmetric = 1
+};
 
 #define CMFEM_STORAGE(Name, Size) struct CMFEM_##Name { char data[Size]; }
 

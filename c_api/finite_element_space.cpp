@@ -28,6 +28,18 @@ extern "C" {
                                              vdim));
    }
 
+   CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshH1VDimByVdim(
+      CMFEM_Mesh *mesh,
+      CMFEM_H1FeCollection *fec,
+      int vdim)
+   {
+      return reinterpret_cast<CMFEM_FiniteElementSpace *>(
+                new mfem::FiniteElementSpace(cmfem::As<mfem::Mesh>(mesh),
+                                             cmfem::As<mfem::H1_FECollection>(fec),
+                                             vdim,
+                                             mfem::Ordering::byVDIM));
+   }
+
    CMFEM_FiniteElementSpace *CMFEM_FiniteElementSpace_NewMeshNd(CMFEM_Mesh *mesh,
                                                                 CMFEM_NdFeCollection *fec)
    {

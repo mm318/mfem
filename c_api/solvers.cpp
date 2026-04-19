@@ -175,6 +175,27 @@ extern "C" {
                   static_cast<mfem::real_t>(atol));
    }
 
+   void CMFEM_GMRESOpBdp(const CMFEM_OperatorPtr *A,
+                         CMFEM_BlockDiagonalPreconditioner *M,
+                         const CMFEM_Vector *B,
+                         CMFEM_Vector *X,
+                         int print_iter,
+                         int max_iter,
+                         int restart,
+                         double rtol,
+                         double atol)
+   {
+      mfem::GMRES(*cmfem::OperatorPtrRef(A),
+                  *cmfem::As<mfem::BlockDiagonalPreconditioner>(M),
+                  cmfem::VectorRef(B),
+                  cmfem::VectorRef(X),
+                  print_iter,
+                  max_iter,
+                  restart,
+                  static_cast<mfem::real_t>(rtol),
+                  static_cast<mfem::real_t>(atol));
+   }
+
    void CMFEM_GMRESBopBdp(const CMFEM_BlockOperator *A,
                           CMFEM_BlockDiagonalPreconditioner *M,
                           const CMFEM_Vector *B,

@@ -255,6 +255,13 @@ extern "C" {
       return (nodes && nodes->OwnFEC()) ? nodes->OwnFEC()->Name() : "";
    }
 
+   void CMFEM_Mesh_GetNodesGf(const CMFEM_Mesh *mesh,
+                              CMFEM_GridFunction *nodes)
+   {
+      cmfem::As<const mfem::Mesh>(mesh)->GetNodes(
+         *cmfem::As<mfem::GridFunction>(nodes));
+   }
+
    void CMFEM_Mesh_GetBoundingBox(const CMFEM_Mesh *mesh,
                                   CMFEM_Vector *min,
                                   CMFEM_Vector *max,

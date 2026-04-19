@@ -23,6 +23,14 @@ void CMFEM_BlockDiagonalPreconditioner_SetDiagonalBlockGs(
    CMFEM_BlockDiagonalPreconditioner *preconditioner,
    int block,
    CMFEM_GSSmoother *solver);
+void CMFEM_BlockDiagonalPreconditioner_SetDiagonalBlockOjs(
+   CMFEM_BlockDiagonalPreconditioner *preconditioner,
+   int block,
+   CMFEM_OperatorJacobiSmoother *solver);
+void CMFEM_BlockDiagonalPreconditioner_SetDiagonalBlockSop(
+   CMFEM_BlockDiagonalPreconditioner *preconditioner,
+   int block,
+   CMFEM_ScaledOperator *solver);
 
 CMFEM_END_EXTERN_C
 

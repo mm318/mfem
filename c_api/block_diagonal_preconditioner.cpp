@@ -50,4 +50,22 @@ extern "C" {
       ->SetDiagonalBlock(block, cmfem::As<mfem::GSSmoother>(solver));
    }
 
+   void CMFEM_BlockDiagonalPreconditioner_SetDiagonalBlockOjs(
+      CMFEM_BlockDiagonalPreconditioner *preconditioner,
+      int block,
+      CMFEM_OperatorJacobiSmoother *solver)
+   {
+      cmfem::As<mfem::BlockDiagonalPreconditioner>(preconditioner)
+      ->SetDiagonalBlock(block, cmfem::As<mfem::OperatorJacobiSmoother>(solver));
+   }
+
+   void CMFEM_BlockDiagonalPreconditioner_SetDiagonalBlockSop(
+      CMFEM_BlockDiagonalPreconditioner *preconditioner,
+      int block,
+      CMFEM_ScaledOperator *solver)
+   {
+      cmfem::As<mfem::BlockDiagonalPreconditioner>(preconditioner)
+      ->SetDiagonalBlock(block, cmfem::As<mfem::ScaledOperator>(solver));
+   }
+
 } // extern "C"

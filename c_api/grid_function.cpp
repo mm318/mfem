@@ -213,6 +213,22 @@ extern "C" {
          *cmfem::As<const mfem::GridFunction>(other);
    }
 
+   void CMFEM_GridFunction_CopyFromGf(CMFEM_GridFunction *grid_function,
+                                      const CMFEM_GridFunction *other)
+   {
+      *cmfem::As<mfem::GridFunction>(grid_function) =
+         *cmfem::As<const mfem::GridFunction>(other);
+   }
+
+   void CMFEM_GridFunction_AddScaledGf(CMFEM_GridFunction *grid_function,
+                                       double scale,
+                                       const CMFEM_GridFunction *other)
+   {
+      cmfem::As<mfem::GridFunction>(grid_function)->Add(
+         static_cast<mfem::real_t>(scale),
+         *cmfem::As<const mfem::GridFunction>(other));
+   }
+
    void CMFEM_GridFunction_Scale(CMFEM_GridFunction *grid_function, double scale)
    {
       *cmfem::As<mfem::GridFunction>(grid_function) *= static_cast<mfem::real_t>

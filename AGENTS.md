@@ -63,128 +63,148 @@ do not put implementations or shared macros there.
                                        `Di` for `DiffusionIntegrator`, `Ei` for `ElasticityIntegrator`,
                                              `Bli` for `BoundaryLFIntegrator`, `Bmi` for
                                                    `BoundaryMassIntegrator`,
-                                             `Zze` for `ZienkiewiczZhuEstimator`, `Lzz` for
-                                                   `LSZienkiewiczZhuEstimator`, and `Kee` for `KellyErrorEstimator`.
-                                                      - When multiple substituted or overload types need to be encoded, append the
-                                                      shorthands in argument-order as one PascalCase tail. Examples:
-                                                      `CMFEM_ZienkiewiczZhuEstimator_NewDiGfFes`,
-                                                      `CMFEM_ElasticityIntegrator_NewPwcPwc`,
-                                                      `CMFEM_BilinearForm_FormLinearSystemSm`,
-                                                      `CMFEM_GridFunction_ProjectBdrCoefficientFc`, and
-                                                      `CMFEM_ThresholdRefiner_NewKee`.
-                                                      - New wrapper types should expose the standard lifetime surface whenever the
-                                                      underlying MFEM type is constructible:
-                                                      `Construct`, `New`, `Copy`, `NewCopy`, `Destroy`, and `Delete`.
-                                                      - `Construct` and `Copy` return the storage struct by value.
-                                                      - `New` and `NewCopy` return pointers backed by actual C++ `new` allocations.
-                                                      - `Destroy` manually invokes the C++ destructor on the storage object.
-                                                      - `Delete` must be paired with `New`/`NewCopy` and call C++ `delete`.
-                                                      - Because the public storage is only `char data[N]`, by-value construction in
-                                                         the `.cpp` side must use an `alignas(mfem::<CppType>)` local before
-                                                         placement-new into that storage.
-                                                         - For the same alignment reason, C code that keeps one of these storage objects
-                                                         by value on the stack should declare it with `_Alignas(max_align_t)`, as the
-                                                         existing C examples do.
-                                                         - Keep the wrapper surface minimal. Only wrap the MFEM APIs actually needed by
-                                                         the current C examples unless a broader wrapper expansion is explicitly
-                                                         requested.
-                                                         - Runtime path lookup for installed data is not hardcoded in public MFEM
-                                                         headers. The canonical implementation lives in `config/runtime_paths.c` and
-                                                         `config/runtime_paths.h`, with a C++ adapter in `config/runtime_paths.hpp`.
-                                                         - C wrappers and C examples should call the runtime-path APIs instead of
-                                                         embedding repo-relative paths.
-                                                         - When wrapping MFEM's free iterative-solver helpers, normalize any odd
-                                                         tolerance conventions to match the class-solver APIs that examples usually
-                                                         follow. In particular, MFEM's free `MINRES(...)` takes squared tolerances;
-                                                         the `c_api` wrapper should accept the ordinary relative/absolute tolerances
-                                                         that `MINRESSolver::SetRelTol()` / `SetAbsTol()` expect and square them
-                                                         internally.
-                                                         - Recent mixed/block wrappers also use these shorthands:
-                                                         `Bop` for `BlockOperator`, `Bdp` for
-                                                         `BlockDiagonalPreconditioner`, `Cgs` for `CGSolver`, `Rop` for
-                                                         `RAPOperator`, and `RtTrace` for `RT_Trace_FECollection`.
-                                                         - When an example only needs a narrow nonlinear assembly pattern, prefer a
-                                                         focused helper free function in `c_api/` over exposing a broad generic
-                                                         callback surface. The `ex40` support follows that pattern with
-                                                         `CMFEM_AssembleIsomorphismLinearFormRtGf` and
-                                                         `CMFEM_AssembleDIsomorphismMassMatrixRtGf`, instead of adding general
-                                                         `ElementTransformation`-level coefficient callbacks to the public C ABI.
-                                                         - The same rule applies to shared C++ example helper code that is not part of
-                                                         MFEM's public API. If a C port only needs a narrow slice of helper logic,
-                                                         wrap it through a focused `c_api/` bridge instead of reimplementing dense or
-                                                         LAPACK-side algorithms in C. `ex33` follows that pattern with
-                                                         `CMFEM_ComputePartialFractionApproximation`. If such a helper returns
-                                                         heap-allocated buffers to C, expose an explicit matching free function such as
-                                                         `CMFEM_FreeDoubles`.
-                                                         - The same focused-bridge rule also applies to example-specific mesh builders
-                                                         and postprocessing helpers when the current public C surface does not expose
-                                                         the required low-level MFEM mutators cleanly. `ex27` follows that pattern
-                                                         with `CMFEM_NewPeriodicTwoHoleMesh2d` and
-                                                         `CMFEM_IntegrateBoundaryConditionGfAi`, while keeping the actual PDE assembly
-                                                         and solve path in the C example.
-                                                         - For saddle-point and other block-structured C example ports, prefer
-                                                         explicit block offsets with flat `CMFEM_Vector` storage unless the example
-                                                         truly needs `BlockVector` alias semantics. That keeps the public C surface
-                                                         smaller and avoids wrapping MFEM container classes that are only being used
-                                                         as temporary views.
-                                                         - For MFEM ODE wrappers, keep the public C type as an adapter/handle around the
-                                                         MFEM solver/operator object rather than moving example logic into C++.
-                                                         The first-order and second-order operator wrappers in `c_api/` are callback
-                                                         adapters; example-specific PDE logic should stay in the C example as a C
+                                                   `Zze` for `ZienkiewiczZhuEstimator`, `Lzz` for
+                                                         `LSZienkiewiczZhuEstimator`, and `Kee` for `KellyErrorEstimator`.
+                                                            - When multiple substituted or overload types need to be encoded, append the
+                                                            shorthands in argument-order as one PascalCase tail. Examples:
+                                                            `CMFEM_ZienkiewiczZhuEstimator_NewDiGfFes`,
+                                                            `CMFEM_ElasticityIntegrator_NewPwcPwc`,
+                                                            `CMFEM_BilinearForm_FormLinearSystemSm`,
+                                                            `CMFEM_GridFunction_ProjectBdrCoefficientFc`, and
+                                                            `CMFEM_ThresholdRefiner_NewKee`.
+                                                            - New wrapper types should expose the standard lifetime surface whenever the
+                                                            underlying MFEM type is constructible:
+                                                            `Construct`, `New`, `Copy`, `NewCopy`, `Destroy`, and `Delete`.
+                                                            - `Construct` and `Copy` return the storage struct by value.
+                                                            - `New` and `NewCopy` return pointers backed by actual C++ `new` allocations.
+                                                            - `Destroy` manually invokes the C++ destructor on the storage object.
+                                                            - `Delete` must be paired with `New`/`NewCopy` and call C++ `delete`.
+                                                            - Because the public storage is only `char data[N]`, by-value construction in
+                                                               the `.cpp` side must use an `alignas(mfem::<CppType>)` local before
+                                                               placement-new into that storage.
+                                                               - For the same alignment reason, C code that keeps one of these storage objects
+                                                               by value on the stack should declare it with `_Alignas(max_align_t)`, as the
+                                                               existing C examples do.
+                                                               - Keep the wrapper surface minimal. Only wrap the MFEM APIs actually needed by
+                                                               the current C examples unless a broader wrapper expansion is explicitly
+                                                               requested.
+                                                               - Runtime path lookup for installed data is not hardcoded in public MFEM
+                                                               headers. The canonical implementation lives in `config/runtime_paths.c` and
+                                                               `config/runtime_paths.h`, with a C++ adapter in `config/runtime_paths.hpp`.
+                                                               - C wrappers and C examples should call the runtime-path APIs instead of
+                                                               embedding repo-relative paths.
+                                                               - When wrapping MFEM's free iterative-solver helpers, normalize any odd
+                                                               tolerance conventions to match the class-solver APIs that examples usually
+                                                                  follow. In particular, MFEM's free `MINRES(...)` takes squared tolerances;
+                                                                  the `c_api` wrapper should accept the ordinary relative/absolute tolerances
+                                                                  that `MINRESSolver::SetRelTol()` / `SetAbsTol()` expect and square them
+                                                                     internally.
+                                                                     - Recent mixed/block wrappers also use these shorthands:
+                                                                     `Bop` for `BlockOperator`, `Bdp` for
+                                                                        `BlockDiagonalPreconditioner`, `Cgs` for `CGSolver`, `Rop` for
+                                                                              `RAPOperator`, `RtTrace` for `RT_Trace_FECollection`, and `Dmg` for
+                                                                                    the focused diffusion-multigrid helper surface.
+                                                                                    - When an example only needs a narrow nonlinear assembly pattern, prefer a
+                                                                                    focused helper free function in `c_api/` over exposing a broad generic
+                                                                                    callback surface. The `ex40` support follows that pattern with
+                                                                                    `CMFEM_AssembleIsomorphismLinearFormRtGf` and
+                                                                                    `CMFEM_AssembleDIsomorphismMassMatrixRtGf`, instead of adding general
+                                                                                    `ElementTransformation`-level coefficient callbacks to the public C ABI.
+                                                                                    - The same rule applies to shared C++ example helper code that is not part of
+                                                                                    MFEM's public API. If a C port only needs a narrow slice of helper logic,
+                                                                                    wrap it through a focused `c_api/` bridge instead of reimplementing dense or
+                                                                                    LAPACK-side algorithms in C. `ex33` follows that pattern with
+                                                                                    `CMFEM_ComputePartialFractionApproximation`. If such a helper returns
+                                                                                    heap-allocated buffers to C, expose an explicit matching free function such as
+                                                                                    `CMFEM_FreeDoubles`.
+                                                                                    - The same focused-bridge rule also applies to example-specific mesh builders
+                                                                                    and postprocessing helpers when the current public C surface does not expose
+                                                                                    the required low-level MFEM mutators cleanly. `ex27` follows that pattern
+                                                                                    with `CMFEM_NewPeriodicTwoHoleMesh2d` and
+                                                                                    `CMFEM_IntegrateBoundaryConditionGfAi`, while keeping the actual PDE assembly
+                                                                                       and solve path in the C example.
+                                                                                       - The same pattern is the right default for example-specific nonlinear
+                                                                                          operators and Newton/preconditioner stacks. If a C port needs custom C++
+                                                                                          classes like `HyperelasticOperator`, `ReducedSystemOperator`, or a block
+                                                                                          `RubberOperator`, keep them behind a narrow helper context in `c_api/`
+                                                                                          instead of wrapping broad generic `NonlinearForm`, `BlockNonlinearForm`,
+                                                                                          `NewtonSolver`, or monitor APIs. `ex10` and `ex19` follow that pattern.
+                                                                                          - When a focused helper owns an MFEM space hierarchy, match the ownership
+                                                                                          expectations of the corresponding C++ example instead of adding extra
+                                                                                          deletes on the C side. `ex26` follows the serial example's pattern:
+                                                                                          the hierarchy helper owns the mesh/fespace chain, so the C example must
+                                                                                          not separately delete the original mesh after deleting the multigrid
+                                                                                          context.
+                                                                                          - For saddle-point and other block-structured C example ports, prefer
+                                                                                          explicit block offsets with flat `CMFEM_Vector` storage unless the example
+                                                                                          truly needs `BlockVector` alias semantics. That keeps the public C surface
+                                                                                          smaller and avoids wrapping MFEM container classes that are only being used
+                                                                                          as temporary views.
+                                                                                          - For MFEM ODE wrappers, keep the public C type as an adapter/handle around the
+                                                                                          MFEM solver/operator object rather than moving example logic into C++.
+                                                                                          The first-order and second-order operator wrappers in `c_api/` are callback
+                                                                                          adapters; example-specific PDE logic should stay in the C example as a C
 context struct plus callbacks.
+- Two small generic wrappers added for the elasticity ports are easy to miss:
+   `CMFEM_Mesh_GetNodesGf` is the C-side equivalent of `Mesh::GetNodes(
+      GridFunction&)`
+      and is the right way to recover reference coordinates on meshes that do not
+         already own nodal grid functions; and
+`CMFEM_FiniteElementSpace_NewMeshH1VDimByVdim` must be used when a port depends
+on `Ordering::byVDIM` parity with the C++ example, such as `ex19`.
 
 ## Core Architecture Notes
 
 - `core/` is the real MFEM public header root now. The old repo-root
-forwarding `mfem.hpp` was removed.
-- Code that still writes `#include "mfem.hpp"` relies on the build system
-adding `core/` to the include path so that `core/mfem.hpp` is found as the
-include-root `mfem.hpp`.
-- `config/` is a separate include root. Build systems must add both `core/`
-and `config/` include directories.
-- `core/mfem.hpp` includes `"config.hpp"`, not `"config/config.hpp"`. That only
-works when `config/` is an include root.
-- `config/config.hpp` supports out-of-tree configuration via
-`MFEM_CONFIG_FILE`. The current Zig build generates `config/_config.hpp` and
-points `MFEM_CONFIG_FILE` at it. Do not reintroduce the removed
-`core/config` symlink approach.
-- The umbrella include order in `core/mfem.hpp` is deliberate:
-`general -> linalg -> mesh -> fem`.
-- When possible, preserve that layering. Avoid creating new reverse
-dependencies from `general` into higher-level subsystems, or from `linalg`
-into `mesh`/`fem`.
-- The subsystem umbrellas are:
-`core/linalg/linalg.hpp`, `core/mesh/mesh_headers.hpp`, and `core/fem/fem.hpp`.
-If a new public header belongs to one of those surfaces, add it to the
-relevant umbrella instead of relying only on direct includes from examples.
-- `general/` is not just miscellaneous utilities. `device.hpp`,
-`forall.hpp`, `mem_manager.hpp`, `mem_alloc.hpp`, `globals.hpp`, and
-`error.hpp` form a cross-cutting substrate used throughout the library.
-- `mfem::Device` in `core/general/device.hpp` is effectively a singleton-style
-global configuration point. Many MFEM objects assume device configuration
-happens once early and is not later reconfigured.
-- OpenMP in `Device` is still a host backend. It is not a substitute for the
+   forwarding `mfem.hpp` was removed.
+   - Code that still writes `#include "mfem.hpp"` relies on the build system
+   adding `core/` to the include path so that `core/mfem.hpp` is found as the
+   include-root `mfem.hpp`.
+   - `config/` is a separate include root. Build systems must add both `core/`
+   and `config/` include directories.
+   - `core/mfem.hpp` includes `"config.hpp"`, not `"config/config.hpp"`. That only
+   works when `config/` is an include root.
+   - `config/config.hpp` supports out-of-tree configuration via
+   `MFEM_CONFIG_FILE`. The current Zig build generates `config/_config.hpp` and
+   points `MFEM_CONFIG_FILE` at it. Do not reintroduce the removed
+   `core/config` symlink approach.
+   - The umbrella include order in `core/mfem.hpp` is deliberate:
+   `general -> linalg -> mesh -> fem`.
+   - When possible, preserve that layering. Avoid creating new reverse
+   dependencies from `general` into higher-level subsystems, or from `linalg`
+   into `mesh`/`fem`.
+   - The subsystem umbrellas are:
+   `core/linalg/linalg.hpp`, `core/mesh/mesh_headers.hpp`, and `core/fem/fem.hpp`.
+   If a new public header belongs to one of those surfaces, add it to the
+   relevant umbrella instead of relying only on direct includes from examples.
+   - `general/` is not just miscellaneous utilities. `device.hpp`,
+   `forall.hpp`, `mem_manager.hpp`, `mem_alloc.hpp`, `globals.hpp`, and
+   `error.hpp` form a cross-cutting substrate used throughout the library.
+   - `mfem::Device` in `core/general/device.hpp` is effectively a singleton-style
+   global configuration point. Many MFEM objects assume device configuration
+   happens once early and is not later reconfigured.
+   - OpenMP in `Device` is still a host backend. It is not a substitute for the
    MPI/distributed parts of MFEM.
    - Serial and parallel APIs are interleaved in the same source trees. The
    parallel surface is usually gated by `MFEM_USE_MPI` and often uses `p*`
    naming (`pmesh`, `pfespace`, `pgridfunc`, `plinearform`, `pbilinearform`,
-           and related headers).
+   and related headers).
       - Optional TPL and device integrations also live in the same trees and are
       selected mostly by `MFEM_USE_*` macros rather than by separate top-level
       source roots.
       - `core/linalg/handle.hpp` defines `OperatorHandle`, and `OperatorPtr` is only
       a typedef of that class. Treat it like an owning/non-owning handle with
       `own_oper` semantics, not like a raw pointer wrapper.
-      - That `OperatorPtr` detail matters in the C wrapper: copy operations are
+   - That `OperatorPtr` detail matters in the C wrapper: copy operations are
       shallow unless you explicitly clone the underlying operator yourself.
-      - `core/linalg/linalg.hpp` is where the serial/parallel split becomes obvious:
-      base linear algebra is always present, while hypre/PETSc/SLEPc/MUMPS/etc. are
-      added only under `MFEM_USE_MPI` or other feature macros.
-      - `core/mesh/mesh_headers.hpp` and `core/fem/fem.hpp` follow the same pattern:
-      serial headers are always present, while MPI-only or optional data-collection
-         layers are conditionally included.
-         - `core/fem/fem.hpp` unconditionally includes the serial finite-element stack
-         and also `dfem/doperator.hpp`; the parallel finite-element classes are added
+   - `core/linalg/linalg.hpp` is where the serial/parallel split becomes obvious:
+            base linear algebra is always present, while hypre/PETSc/SLEPc/MUMPS/etc. are
+            added only under `MFEM_USE_MPI` or other feature macros.
+         - `core/mesh/mesh_headers.hpp` and `core/fem/fem.hpp` follow the same pattern:
+            serial headers are always present, while MPI-only or optional data-collection
+               layers are conditionally included.
+               - `core/fem/fem.hpp` unconditionally includes the serial finite-element stack
+               and also `dfem/doperator.hpp`; the parallel finite-element classes are added
 later under `MFEM_USE_MPI`.
 - When porting build systems, it is usually better to turn feature macros on or
    off and adjust source lists accordingly than to edit public headers to hide
