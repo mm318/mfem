@@ -61,6 +61,8 @@ do not put implementations or shared macros there.
                            `ArrayInt`, `Sm` for `SparseMatrix`, `Op` for
                                  `OperatorPtr`, `Gf` for `GridFunction`, `Fes` for `FiniteElementSpace`,
                                        `Di` for `DiffusionIntegrator`, `Ei` for `ElasticityIntegrator`,
+                                             `Bli` for `BoundaryLFIntegrator`, `Bmi` for
+                                                   `BoundaryMassIntegrator`,
                                              `Zze` for `ZienkiewiczZhuEstimator`, `Lzz` for
                                                    `LSZienkiewiczZhuEstimator`, and `Kee` for `KellyErrorEstimator`.
                                                       - When multiple substituted or overload types need to be encoded, append the
@@ -114,6 +116,12 @@ do not put implementations or shared macros there.
                                                          `CMFEM_ComputePartialFractionApproximation`. If such a helper returns
                                                          heap-allocated buffers to C, expose an explicit matching free function such as
                                                          `CMFEM_FreeDoubles`.
+                                                         - The same focused-bridge rule also applies to example-specific mesh builders
+                                                         and postprocessing helpers when the current public C surface does not expose
+                                                         the required low-level MFEM mutators cleanly. `ex27` follows that pattern
+                                                         with `CMFEM_NewPeriodicTwoHoleMesh2d` and
+                                                         `CMFEM_IntegrateBoundaryConditionGfAi`, while keeping the actual PDE assembly
+                                                         and solve path in the C example.
                                                          - For saddle-point and other block-structured C example ports, prefer
                                                          explicit block offsets with flat `CMFEM_Vector` storage unless the example
                                                          truly needs `BlockVector` alias semantics. That keeps the public C surface

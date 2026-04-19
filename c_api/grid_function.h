@@ -58,6 +58,10 @@ double CMFEM_GridFunction_ComputeHCurlErrorVfcVfc(
    const CMFEM_GridFunction *grid_function,
    CMFEM_VectorFunctionCoefficient *exact_solution,
    CMFEM_VectorFunctionCoefficient *exact_curl);
+double CMFEM_GridFunction_ComputeH1ErrorFcVfc(
+   const CMFEM_GridFunction *grid_function,
+   CMFEM_FunctionCoefficient *exact_solution,
+   CMFEM_VectorFunctionCoefficient *exact_gradient);
 void CMFEM_GridFunction_CopyToVec(const CMFEM_GridFunction *grid_function,
                                   CMFEM_Vector *vector);
 void CMFEM_GridFunction_SetFromVec(CMFEM_GridFunction *grid_function,

@@ -184,6 +184,16 @@ extern "C" {
                 cmfem::As<mfem::VectorFunctionCoefficient>(exact_curl));
    }
 
+   double CMFEM_GridFunction_ComputeH1ErrorFcVfc(
+      const CMFEM_GridFunction *grid_function,
+      CMFEM_FunctionCoefficient *exact_solution,
+      CMFEM_VectorFunctionCoefficient *exact_gradient)
+   {
+      return cmfem::As<const mfem::GridFunction>(grid_function)->ComputeH1Error(
+                cmfem::As<mfem::FunctionCoefficient>(exact_solution),
+                cmfem::As<mfem::VectorFunctionCoefficient>(exact_gradient));
+   }
+
    void CMFEM_GridFunction_CopyToVec(const CMFEM_GridFunction *grid_function,
                                      CMFEM_Vector *vector)
    {

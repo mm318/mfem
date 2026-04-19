@@ -116,6 +116,18 @@ extern "C" {
          new mfem::MassIntegrator(coef));
    }
 
+   void CMFEM_BilinearForm_AddBoundaryIntegratorMiCcAi(
+      CMFEM_BilinearForm *bilinear_form,
+      const CMFEM_ConstantCoefficient *coefficient,
+      const CMFEM_ArrayInt *marker)
+   {
+      auto &coef = const_cast<mfem::ConstantCoefficient &>(
+                      *cmfem::As<const mfem::ConstantCoefficient>(coefficient));
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->AddBoundaryIntegrator(
+         new mfem::MassIntegrator(coef),
+         const_cast<mfem::Array<int> &>(cmfem::ArrayIntRef(marker)));
+   }
+
    void CMFEM_BilinearForm_AddDomainIntegratorDiCcMarker(
       CMFEM_BilinearForm *bilinear_form,
       const CMFEM_ConstantCoefficient *coefficient,
@@ -226,6 +238,35 @@ extern "C" {
             coef,
             static_cast<mfem::real_t>(sigma),
             static_cast<mfem::real_t>(kappa)));
+   }
+
+   void CMFEM_BilinearForm_AddBdrFaceIntegratorDgdAi(
+      CMFEM_BilinearForm *bilinear_form,
+      const CMFEM_ConstantCoefficient *coefficient,
+      double sigma,
+      double kappa,
+      const CMFEM_ArrayInt *marker)
+   {
+      auto &coef = const_cast<mfem::ConstantCoefficient &>(
+                      *cmfem::As<const mfem::ConstantCoefficient>(coefficient));
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->AddBdrFaceIntegrator(
+         new mfem::DGDiffusionIntegrator(
+            coef,
+            static_cast<mfem::real_t>(sigma),
+            static_cast<mfem::real_t>(kappa)),
+         const_cast<mfem::Array<int> &>(cmfem::ArrayIntRef(marker)));
+   }
+
+   void CMFEM_BilinearForm_AddBdrFaceIntegratorBmiCcAi(
+      CMFEM_BilinearForm *bilinear_form,
+      const CMFEM_ConstantCoefficient *coefficient,
+      const CMFEM_ArrayInt *marker)
+   {
+      auto &coef = const_cast<mfem::ConstantCoefficient &>(
+                      *cmfem::As<const mfem::ConstantCoefficient>(coefficient));
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->AddBdrFaceIntegrator(
+         new mfem::BoundaryMassIntegrator(coef),
+         const_cast<mfem::Array<int> &>(cmfem::ArrayIntRef(marker)));
    }
 
    void CMFEM_BilinearForm_AddInteriorFaceIntegratorDgeiPwcPwc(
@@ -350,6 +391,19 @@ extern "C" {
    {
       cmfem::As<mfem::BilinearForm>(bilinear_form)->EliminateEssentialBC(
          cmfem::ArrayIntRef(essential_bdr));
+   }
+
+   void CMFEM_BilinearForm_EliminateEssentialBCAiVecVec(
+      CMFEM_BilinearForm *bilinear_form,
+      const CMFEM_ArrayInt *essential_bdr,
+      const CMFEM_Vector *solution,
+      CMFEM_Vector *rhs)
+   {
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->EliminateEssentialBC(
+         cmfem::ArrayIntRef(essential_bdr),
+         cmfem::VectorRef(solution),
+         cmfem::VectorRef(rhs),
+         mfem::Operator::DiagonalPolicy::DIAG_ONE);
    }
 
    CMFEM_SparseMatrix *CMFEM_BilinearForm_SpMat(CMFEM_BilinearForm *bilinear_form)

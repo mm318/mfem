@@ -72,6 +72,13 @@ extern "C" {
          new mfem::VectorFEDivergenceIntegrator(coef));
    }
 
+   void CMFEM_MixedBilinearForm_AddDomainIntegratorMsi(
+      CMFEM_MixedBilinearForm *mixed_bilinear_form)
+   {
+      cmfem::As<mfem::MixedBilinearForm>(mixed_bilinear_form)->AddDomainIntegrator(
+         new mfem::MixedScalarMassIntegrator());
+   }
+
    void CMFEM_MixedBilinearForm_AddTraceFaceIntegratorTji(
       CMFEM_MixedBilinearForm *mixed_bilinear_form)
    {
@@ -101,6 +108,18 @@ extern "C" {
       ->EliminateTrialEssentialBC(cmfem::ArrayIntRef(essential_bdr),
                                   cmfem::VectorRef(solution),
                                   *cmfem::As<mfem::LinearForm>(rhs));
+   }
+
+   void CMFEM_MixedBilinearForm_EliminateTrialEssentialBCAiVecVec(
+      CMFEM_MixedBilinearForm *mixed_bilinear_form,
+      const CMFEM_ArrayInt *essential_bdr,
+      const CMFEM_Vector *solution,
+      CMFEM_Vector *rhs)
+   {
+      cmfem::As<mfem::MixedBilinearForm>(mixed_bilinear_form)
+      ->EliminateTrialEssentialBC(cmfem::ArrayIntRef(essential_bdr),
+                                  cmfem::VectorRef(solution),
+                                  cmfem::VectorRef(rhs));
    }
 
    CMFEM_SparseMatrix *CMFEM_MixedBilinearForm_SpMat(

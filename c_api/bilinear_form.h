@@ -35,6 +35,10 @@ void CMFEM_BilinearForm_AddDomainIntegratorDiGfc(
 void CMFEM_BilinearForm_AddDomainIntegratorMiCc(
    CMFEM_BilinearForm *bilinear_form,
    const CMFEM_ConstantCoefficient *coefficient);
+void CMFEM_BilinearForm_AddBoundaryIntegratorMiCcAi(
+   CMFEM_BilinearForm *bilinear_form,
+   const CMFEM_ConstantCoefficient *coefficient,
+   const CMFEM_ArrayInt *marker);
 void CMFEM_BilinearForm_AddDomainIntegratorDiCcMarker(
    CMFEM_BilinearForm *bilinear_form,
    const CMFEM_ConstantCoefficient *coefficient,
@@ -67,6 +71,16 @@ void CMFEM_BilinearForm_AddBdrFaceIntegratorDgd(
    const CMFEM_ConstantCoefficient *coefficient,
    double sigma,
    double kappa);
+void CMFEM_BilinearForm_AddBdrFaceIntegratorDgdAi(
+   CMFEM_BilinearForm *bilinear_form,
+   const CMFEM_ConstantCoefficient *coefficient,
+   double sigma,
+   double kappa,
+   const CMFEM_ArrayInt *marker);
+void CMFEM_BilinearForm_AddBdrFaceIntegratorBmiCcAi(
+   CMFEM_BilinearForm *bilinear_form,
+   const CMFEM_ConstantCoefficient *coefficient,
+   const CMFEM_ArrayInt *marker);
 void CMFEM_BilinearForm_AddInteriorFaceIntegratorDgeiPwcPwc(
    CMFEM_BilinearForm *bilinear_form,
    const CMFEM_PWConstCoefficient *lambda,
@@ -105,6 +119,11 @@ void CMFEM_BilinearForm_FinalizeSkipZeros(CMFEM_BilinearForm *bilinear_form,
 void CMFEM_BilinearForm_EliminateEssentialBCAi(
    CMFEM_BilinearForm *bilinear_form,
    const CMFEM_ArrayInt *essential_bdr);
+void CMFEM_BilinearForm_EliminateEssentialBCAiVecVec(
+   CMFEM_BilinearForm *bilinear_form,
+   const CMFEM_ArrayInt *essential_bdr,
+   const CMFEM_Vector *solution,
+   CMFEM_Vector *rhs);
 CMFEM_SparseMatrix *CMFEM_BilinearForm_SpMat(CMFEM_BilinearForm *bilinear_form);
 void CMFEM_BilinearForm_FormSystemMatrixSm(
    CMFEM_BilinearForm *bilinear_form,

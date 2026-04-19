@@ -26,6 +26,8 @@ void CMFEM_MixedBilinearForm_AddDomainIntegratorMvciCc(
 void CMFEM_MixedBilinearForm_AddDomainIntegratorVfdiCc(
    CMFEM_MixedBilinearForm *mixed_bilinear_form,
    const CMFEM_ConstantCoefficient *coefficient);
+void CMFEM_MixedBilinearForm_AddDomainIntegratorMsi(
+   CMFEM_MixedBilinearForm *mixed_bilinear_form);
 void CMFEM_MixedBilinearForm_AddTraceFaceIntegratorTji(
    CMFEM_MixedBilinearForm *mixed_bilinear_form);
 void CMFEM_MixedBilinearForm_Assemble(CMFEM_MixedBilinearForm
@@ -37,6 +39,11 @@ void CMFEM_MixedBilinearForm_EliminateTrialEssentialBCAiVecLf(
    const CMFEM_ArrayInt *essential_bdr,
    const CMFEM_Vector *solution,
    CMFEM_LinearForm *rhs);
+void CMFEM_MixedBilinearForm_EliminateTrialEssentialBCAiVecVec(
+   CMFEM_MixedBilinearForm *mixed_bilinear_form,
+   const CMFEM_ArrayInt *essential_bdr,
+   const CMFEM_Vector *solution,
+   CMFEM_Vector *rhs);
 CMFEM_SparseMatrix *CMFEM_MixedBilinearForm_SpMat(
    CMFEM_MixedBilinearForm *mixed_bilinear_form);
 void CMFEM_MixedBilinearForm_Mult(
