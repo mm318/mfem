@@ -22,8 +22,14 @@ only;
 do not put implementations or shared macros there.
 - Put shared public C declarations in `c_api/common.h`.
 - Put shared internal C++-only wrapper helpers in `c_api/common.hpp`.
-- Each wrapped MFEM type gets its own `c_api/<name>.h` and
-`c_api/<name>.cpp`. Do not add new wrappers back into a monolithic file.
+- Mirror MFEM's subsystem layout under `c_api/`.
+  Put wrappers for core MFEM types under paths such as
+  `c_api/general/...`, `c_api/linalg/...`, `c_api/mesh/...`, and
+  `c_api/fem/...`, matching the subsystem where the wrapped C++ type lives.
+- Example-specific focused helper bridges belong under
+  `examples/c/adapters/exNN/...`, matching the example/helper source they wrap.
+- Each wrapped MFEM type still gets its own header/implementation pair. Do not
+  add new wrappers back into a monolithic file.
 - The public storage type shape is fixed:
 `struct CMFEM_<Name> { char data[N]; }`.
 - Use `CMFEM_STORAGE(Name, Size)` in the per-type public header to define the
@@ -85,9 +91,13 @@ do not put implementations or shared macros there.
                                                                - For the same alignment reason, C code that keeps one of these storage objects
                                                                by value on the stack should declare it with `_Alignas(max_align_t)`, as the
                                                                existing C examples do.
-                                                               - Keep the wrapper surface minimal. Only wrap the MFEM APIs actually needed by
-                                                               the current C examples unless a broader wrapper expansion is explicitly
-                                                               requested.
+- Keep the wrapper surface minimal. Only wrap the MFEM APIs actually needed by
+   the current C examples unless a broader wrapper expansion is explicitly
+   requested.
+- When adding a new wrapper, preserve the mirrored directory layout in
+  `c_api/cmfem.h` include paths too. The aggregate header should include the
+  moved file by its subsystem-relative path, e.g. `fem/grid_function.h` or
+  `adapters/ex25/maxwell_pml.h`.
                                                                - Runtime path lookup for installed data is not hardcoded in public MFEM
                                                                headers. The canonical implementation lives in `config/runtime_paths.c` and
                                                                `config/runtime_paths.h`, with a C++ adapter in `config/runtime_paths.hpp`.
@@ -95,10 +105,11 @@ do not put implementations or shared macros there.
                                                                embedding repo-relative paths.
                                                                - When wrapping MFEM's free iterative-solver helpers, normalize any odd
                                                                tolerance conventions to match the class-solver APIs that examples usually
-                                                                  follow. In particular, MFEM's free `MINRES(...)` takes squared tolerances;
-                                                                  the `c_api` wrapper should accept the ordinary relative/absolute tolerances
-                                                                  that `MINRESSolver::SetRelTol()` / `SetAbsTol()` expect and square them
-                                                                     internally.
+                                                                  follow. In particular, the free `CG(...)`, `PCG(...)`, `GMRES(...)`, and
+                                                                  `MINRES(...)` entry points use squared tolerance conventions relative to the
+                                                                  corresponding solver-class APIs; the `c_api` wrappers should accept the
+                                                                  ordinary relative/absolute tolerances that `CGSolver`, `GMRESSolver`, and
+                                                                  `MINRESSolver` callers expect and square them internally.
                                                                      - Recent mixed/block wrappers also use these shorthands:
                                                                      `Bop` for `BlockOperator`, `Bdp` for
                                                                         `BlockDiagonalPreconditioner`, `Cgs` for `CGSolver`, `Rop` for

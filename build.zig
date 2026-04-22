@@ -598,6 +598,7 @@ pub fn build(b: *std.Build) void {
     ));
     const generated_config_dir = write_files.getDirectory();
     const c_api_sources = collectCppSourcesUnder(b, io, "c_api") catch @panic("OOM");
+    const c_adapter_sources = collectCppSourcesUnder(b, io, "examples/c/adapters") catch @panic("OOM");
 
     // Install the repository data files and test fixtures used by the
     // installed examples, miniapps, and tests.
@@ -677,8 +678,10 @@ pub fn build(b: *std.Build) void {
     });
     configureMfemModule(mfem_c_api.root_module, b, generated_config_dir);
     mfem_c_api.root_module.addIncludePath(b.path("c_api"));
+    mfem_c_api.root_module.addIncludePath(b.path("examples/c"));
     mfem_c_api.root_module.linkLibrary(mfem);
     addSourceGroup(mfem_c_api.root_module, b, c_api_sources, cxx_flags);
+    addSourceGroup(mfem_c_api.root_module, b, c_adapter_sources, cxx_flags);
 
     // Build and install the serial C++ examples.
     const examples_step = b.step("examples", "Build the serial example executables into zig-out/bin/examples/cpp");

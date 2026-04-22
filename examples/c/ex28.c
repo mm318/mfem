@@ -121,15 +121,17 @@ int main(int argc, char *argv[])
       _Alignas(max_align_t) CMFEM_SparseMatrix A = CMFEM_SparseMatrix_Construct();
       _Alignas(max_align_t) CMFEM_Vector B = CMFEM_Vector_Construct();
       _Alignas(max_align_t) CMFEM_Vector X = CMFEM_Vector_Construct();
+      int ref_levels;
 
       if (mesh == NULL)
       {
          return 1;
       }
       dim = CMFEM_Mesh_Dimension(mesh);
-      for (i = 0;
-           i < cmfem_uniform_refinement_levels(1000.0, CMFEM_Mesh_GetNE(mesh), dim);
-           i++)
+      ref_levels = cmfem_uniform_refinement_levels(1000.0,
+                                                   CMFEM_Mesh_GetNE(mesh),
+                                                   dim);
+      for (i = 0; i < ref_levels; i++)
       {
          CMFEM_Mesh_UniformRefinement(mesh);
       }
