@@ -26,8 +26,11 @@ do not put implementations or shared macros there.
   Put wrappers for core MFEM types under paths such as
   `c_api/general/...`, `c_api/linalg/...`, `c_api/mesh/...`, and
   `c_api/fem/...`, matching the subsystem where the wrapped C++ type lives.
-- Example-specific focused helper bridges belong under
-  `examples/c/adapters/exNN/...`, matching the example/helper source they wrap.
+- Example-specific focused helper bridge headers and implementations belong
+  under `examples/c/adapters/exNN/...`, matching the example/helper source
+  they wrap.
+- Those adapter headers should depend on `c_api/` headers such as
+  `c_api/common.h`; `c_api/` must not depend on the adapter layer.
 - Each wrapped MFEM type still gets its own header/implementation pair. Do not
   add new wrappers back into a monolithic file.
 - The public storage type shape is fixed:
@@ -95,9 +98,13 @@ do not put implementations or shared macros there.
    the current C examples unless a broader wrapper expansion is explicitly
    requested.
 - When adding a new wrapper, preserve the mirrored directory layout in
-  `c_api/cmfem.h` include paths too. The aggregate header should include the
-  moved file by its subsystem-relative path, e.g. `fem/grid_function.h` or
-  `adapters/ex25/maxwell_pml.h`.
+  `c_api/cmfem.h` include paths too. The aggregate header should include only
+  the fundamental `c_api` wrapper surface, e.g. `fem/grid_function.h`.
+- `c_api/cmfem.h` is a public package surface. It must never include, directly
+  or transitively, headers from `examples/`.
+- C examples that need example-specific bridge APIs must include the relevant
+  `examples/c/adapters/exNN/...` headers directly instead of relying on
+  `cmfem.h` to export them.
                                                                - Runtime path lookup for installed data is not hardcoded in public MFEM
                                                                headers. The canonical implementation lives in `config/runtime_paths.c` and
                                                                `config/runtime_paths.h`, with a C++ adapter in `config/runtime_paths.hpp`.

@@ -64,17 +64,5 @@
 #include "fem/vector_function_coefficient.h"
 #include "fem/visit_data_collection.h"
 #include "fem/zienkiewicz_zhu_estimator.h"
-#include "adapters/ex10/hyperelastic_dynamics.h"
-#include "adapters/ex18/euler_dg.h"
-#include "adapters/ex19/incompressible_rubber.h"
-#include "adapters/ex25/maxwell_pml.h"
-#include "adapters/ex26/diffusion_multigrid.h"
-#include "adapters/ex27/boundary_postprocess.h"
-#include "adapters/ex27/periodic_two_hole_mesh.h"
-#include "adapters/ex33/partial_fraction_approximation.h"
-#include "adapters/ex34/magnetostatics_submesh.h"
-#include "adapters/ex36/obstacle_assembly.h"
-#include "adapters/ex37/topology_optimization.h"
-#include "adapters/ex40/isomorphism_assembly.h"
 
 #endif

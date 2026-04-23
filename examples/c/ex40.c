@@ -5,6 +5,7 @@
 
 #include "common.h"
 #include "cmfem.h"
+#include "adapters/ex40/isomorphism_assembly.h"
 
 #include <math.h>
 #include <stdio.h>

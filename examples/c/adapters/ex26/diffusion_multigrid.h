@@ -1,7 +1,7 @@
 #ifndef CMFEM_DIFFUSION_MULTIGRID_H
 #define CMFEM_DIFFUSION_MULTIGRID_H
 
-#include "../../../c_api/common.h"
+#include "../../../../c_api/common.h"
 
 CMFEM_STORAGE(DiffusionMultigrid, 40);
 

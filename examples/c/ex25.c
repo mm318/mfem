@@ -5,6 +5,7 @@
 
 #include "common.h"
 #include "cmfem.h"
+#include "adapters/ex25/maxwell_pml.h"
 
 #include <stdio.h>
 

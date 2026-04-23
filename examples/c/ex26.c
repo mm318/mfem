@@ -5,6 +5,7 @@
 
 #include "common.h"
 #include "cmfem.h"
+#include "adapters/ex26/diffusion_multigrid.h"
 
 #include <math.h>
 #include <stddef.h>

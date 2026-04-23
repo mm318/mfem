@@ -1,3 +1,4 @@
+#include "diffusion_multigrid.h"
 #include "common.hpp"
 
 #include <cmath>

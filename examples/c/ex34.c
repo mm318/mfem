@@ -6,6 +6,7 @@
 
 #include "common.h"
 #include "cmfem.h"
+#include "adapters/ex34/magnetostatics_submesh.h"
 
 #include <stdio.h>
 #include <string.h>

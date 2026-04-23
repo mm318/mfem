@@ -6,6 +6,7 @@
 
 #include "common.h"
 #include "cmfem.h"
+#include "adapters/ex33/partial_fraction_approximation.h"
 
 #include <math.h>
 #include <stdio.h>

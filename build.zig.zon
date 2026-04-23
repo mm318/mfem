@@ -1,0 +1,27 @@
+.{
+    .name = .mfem,
+    .version = "0.0.0",
+
+    .dependencies = .{},
+
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "c_api",
+        "config",
+        "core",
+        "data",
+        "examples",
+        "miniapps",
+        "tests",
+        "README.md",
+        "INSTALL",
+        "LICENSE",
+        "NOTICE",
+        "CHANGELOG",
+        "CONTRIBUTING.md",
+        "AGENTS.md",
+    },
+
+    .fingerprint = 0x8fdbc55753de0680,
+}

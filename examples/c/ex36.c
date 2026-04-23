@@ -5,6 +5,7 @@
 
 #include "common.h"
 #include "cmfem.h"
+#include "adapters/ex36/obstacle_assembly.h"
 
 #include <math.h>
 #include <stdio.h>

@@ -6,6 +6,7 @@
 
 #include "common.h"
 #include "cmfem.h"
+#include "adapters/ex37/topology_optimization.h"
 
 #include <math.h>
 #include <stdio.h>

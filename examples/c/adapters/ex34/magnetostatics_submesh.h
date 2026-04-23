@@ -1,7 +1,7 @@
 #ifndef CMFEM_MAGNETOSTATICS_SUBMESH_H
 #define CMFEM_MAGNETOSTATICS_SUBMESH_H
 
-#include "../../../c_api/common.h"
+#include "../../../../c_api/common.h"
 
 CMFEM_BEGIN_EXTERN_C
 

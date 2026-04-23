@@ -1,7 +1,7 @@
 #ifndef CMFEM_HYPERELASTIC_DYNAMICS_H
 #define CMFEM_HYPERELASTIC_DYNAMICS_H
 
-#include "../../../c_api/common.h"
+#include "../../../../c_api/common.h"
 
 CMFEM_BEGIN_EXTERN_C
 

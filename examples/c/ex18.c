@@ -5,6 +5,7 @@
 
 #include "common.h"
 #include "cmfem.h"
+#include "adapters/ex18/euler_dg.h"
 
 #include <stdio.h>
 #include <time.h>

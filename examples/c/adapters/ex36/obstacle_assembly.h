@@ -1,7 +1,7 @@
 #ifndef CMFEM_OBSTACLE_ASSEMBLY_H
 #define CMFEM_OBSTACLE_ASSEMBLY_H
 
-#include "../../../c_api/common.h"
+#include "../../../../c_api/common.h"
 
 CMFEM_BEGIN_EXTERN_C
 

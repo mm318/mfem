@@ -1,7 +1,7 @@
 #ifndef CMFEM_PARTIAL_FRACTION_APPROXIMATION_H
 #define CMFEM_PARTIAL_FRACTION_APPROXIMATION_H
 
-#include "../../../c_api/common.h"
+#include "../../../../c_api/common.h"
 
 CMFEM_BEGIN_EXTERN_C
 

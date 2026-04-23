@@ -6,6 +6,7 @@
 
 #include "common.h"
 #include "cmfem.h"
+#include "adapters/ex19/incompressible_rubber.h"
 
 #include <stdio.h>
 

@@ -6,6 +6,8 @@
 
 #include "common.h"
 #include "cmfem.h"
+#include "adapters/ex27/boundary_postprocess.h"
+#include "adapters/ex27/periodic_two_hole_mesh.h"
 
 #include <stddef.h>
 #include <stdio.h>

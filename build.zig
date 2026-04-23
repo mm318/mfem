@@ -683,6 +683,19 @@ pub fn build(b: *std.Build) void {
     addSourceGroup(mfem_c_api.root_module, b, c_api_sources, cxx_flags);
     addSourceGroup(mfem_c_api.root_module, b, c_adapter_sources, cxx_flags);
 
+    // Export the public C wrapper surface as a translated Zig module so
+    // downstream packages can `@import("cmfem")` instead of relying on the
+    // deprecated `@cImport` builtin directly.
+    const cmfem_translate = b.addTranslateC(.{
+        .root_source_file = b.path("c_api/cmfem.h"),
+        .target = target,
+        .optimize = optimize,
+    });
+    const cmfem_module = cmfem_translate.addModule("cmfem");
+    cmfem_module.linkLibrary(mfem);
+    cmfem_module.linkLibrary(mfem_c_api);
+    cmfem_module.link_libcpp = true;
+
     // Build and install the serial C++ examples.
     const examples_step = b.step("examples", "Build the serial example executables into zig-out/bin/examples/cpp");
     examples_step.dependOn(&install_mfem.step);
@@ -973,19 +986,19 @@ fn sourceStem(source_path: []const u8) []const u8 {
 
 // Recursively collect C++ sources under a directory.
 fn appendCppSourcesUnder(
-    allocator: std.mem.Allocator,
+    b: *std.Build,
     io: std.Io,
     list: *std.array_list.Managed([]const u8),
     dir_path: []const u8,
 ) !void {
-    var dir = try std.Io.Dir.cwd().openDir(io, dir_path, .{ .iterate = true });
+    var dir = try std.Io.Dir.cwd().openDir(io, b.pathFromRoot(dir_path), .{ .iterate = true });
     defer dir.close(io);
 
     var iterator = dir.iterate();
     while (try iterator.next(io)) |entry| {
-        const child_path = try std.fs.path.join(allocator, &.{ dir_path, entry.name });
+        const child_path = try std.fs.path.join(b.allocator, &.{ dir_path, entry.name });
         switch (entry.kind) {
-            .directory => try appendCppSourcesUnder(allocator, io, list, child_path),
+            .directory => try appendCppSourcesUnder(b, io, list, child_path),
             .file => {
                 if (std.mem.endsWith(u8, entry.name, ".cpp")) {
                     try list.append(child_path);
@@ -1003,7 +1016,7 @@ fn collectCppSourcesUnder(
     dir_path: []const u8,
 ) ![]const []const u8 {
     var list = std.array_list.Managed([]const u8).init(b.allocator);
-    try appendCppSourcesUnder(b.allocator, io, &list, dir_path);
+    try appendCppSourcesUnder(b, io, &list, dir_path);
     std.mem.sort([]const u8, list.items, {}, lessThanString);
     return list.toOwnedSlice();
 }
@@ -1023,7 +1036,7 @@ fn collectSupportSourcesForExecutable(
         if (std.mem.eql(u8, path, main_source)) {
             continue;
         }
-        if (try fileHasMain(b.allocator, io, path)) continue;
+        if (try fileHasMain(b, io, path)) continue;
         try list.append(path);
     }
     std.mem.sort([]const u8, list.items, {}, lessThanString);
@@ -1047,7 +1060,7 @@ fn collectNonMainSourcesUnder(
                 continue :outer;
             }
         }
-        if (try fileHasMain(b.allocator, io, path)) continue;
+        if (try fileHasMain(b, io, path)) continue;
         try list.append(path);
     }
     std.mem.sort([]const u8, list.items, {}, lessThanString);
@@ -1057,12 +1070,17 @@ fn collectNonMainSourcesUnder(
 // Detect whether a translation unit defines a main function and should
 // therefore be treated as a standalone executable entry point.
 fn fileHasMain(
-    allocator: std.mem.Allocator,
+    b: *std.Build,
     io: std.Io,
     path: []const u8,
 ) !bool {
-    const contents = try std.Io.Dir.cwd().readFileAlloc(io, path, allocator, .limited(16 * 1024 * 1024));
-    defer allocator.free(contents);
+    const contents = try std.Io.Dir.cwd().readFileAlloc(
+        io,
+        b.pathFromRoot(path),
+        b.allocator,
+        .limited(16 * 1024 * 1024),
+    );
+    defer b.allocator.free(contents);
 
     return std.mem.indexOf(u8, contents, "int main(") != null or
         std.mem.indexOf(u8, contents, "int main (") != null;

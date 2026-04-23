@@ -1,7 +1,7 @@
 #ifndef CMFEM_BOUNDARY_POSTPROCESS_H
 #define CMFEM_BOUNDARY_POSTPROCESS_H
 
-#include "../../../c_api/common.h"
+#include "../../../../c_api/common.h"
 
 CMFEM_BEGIN_EXTERN_C
 

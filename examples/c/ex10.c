@@ -6,6 +6,7 @@
 
 #include "common.h"
 #include "cmfem.h"
+#include "adapters/ex10/hyperelastic_dynamics.h"
 
 #include <math.h>
 #include <stdio.h>
