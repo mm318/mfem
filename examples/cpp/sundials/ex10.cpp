@@ -211,7 +211,7 @@ int main(int argc, char *argv[])
    Sundials::Init();
 
    // 1. Parse command-line options.
-   const char *mesh_file = "../../data/beam-quad.mesh";
+   const char *mesh_file = mfem::test::ExamplesDataPath("beam-quad.mesh");
    int ref_levels = 2;
    int order = 2;
    int ode_solver_type = 3;
@@ -302,6 +302,14 @@ int main(int argc, char *argv[])
       cout << "Unknown ODE solver type: " << ode_solver_type << '\n';
       return 1;
    }
+#ifndef SUNDIALS_CVODES
+   if (ode_solver_type >= 11 && ode_solver_type <= 14)
+   {
+      cout << "ODE solver types 11-14 require CVODES, but this build only "
+           << "provides ARKODE.\n";
+      return 1;
+   }
+#endif
 
    // check for valid nonlinear solver options
    if (nonlinear_solver_type < 0 || nonlinear_solver_type > 4)
@@ -321,6 +329,14 @@ int main(int argc, char *argv[])
       cout << "Only KINSOL fixed-point and Picard methods can use AA\n";
       return 1;
    }
+#ifndef SUNDIALS_KINSOL
+   if (nonlinear_solver_type != 0)
+   {
+      cout << "Nonlinear solver types 1-4 require KINSOL, which is not "
+           << "available in this build.\n";
+      return 1;
+   }
+#endif
 
 
    // 2. Read the mesh from the given mesh file. We can handle triangular,
@@ -381,10 +397,13 @@ int main(int argc, char *argv[])
    //    the initial energies.
    std::unique_ptr<HyperelasticOperator> oper;
    if (nonlinear_solver_type == 0)
+   {
       oper = std::make_unique<HyperelasticOperator>(fespace, ess_bdr, visc, mu,
                                                     K);
+   }
    else
    {
+#ifdef SUNDIALS_KINSOL
       switch (nonlinear_solver_type)
       {
          case 1:
@@ -404,6 +423,9 @@ int main(int argc, char *argv[])
                                                           visc, mu, K, KIN_PICARD, kinsol_damping, kinsol_aa_n);
             break;
       }
+#else
+      MFEM_ABORT("KINSOL nonlinear solver types are unavailable in this build.");
+#endif
    }
 
    socketstream vis_v, vis_w;
@@ -437,7 +459,9 @@ int main(int argc, char *argv[])
    oper->SetTime(t);
 
    ODESolver *ode_solver = NULL;
+#ifdef SUNDIALS_CVODES
    CVODESolver *cvode = NULL;
+#endif
    ARKStepSolver *arkode = NULL;
    switch (ode_solver_type)
    {
@@ -454,7 +478,8 @@ int main(int argc, char *argv[])
       case 8:  ode_solver = new RK2Solver(0.5); break; // midpoint method
       case 9:  ode_solver = new RK3SSPSolver; break;
       case 10: ode_solver = new RK4Solver; break;
-      // CVODE BDF
+         // CVODE BDF
+#ifdef SUNDIALS_CVODES
       case 11:
       case 12:
          cvode = new CVODESolver(CV_BDF);
@@ -480,6 +505,7 @@ int main(int argc, char *argv[])
             cvode->UseSundialsLinearSolver();
          }
          ode_solver = cvode; break;
+#endif
       // ARKStep Implicit methods
       case 15:
       case 16:
@@ -528,8 +554,12 @@ int main(int argc, char *argv[])
          cout << "step " << ti << ", t = " << t << ", EE = " << ee << ", KE = "
               << ke << ", ΔTE = " << (ee+ke)-(ee0+ke0) << endl;
 
+#ifdef SUNDIALS_CVODES
          if (cvode) { cvode->PrintInfo(); }
          else if (arkode) { arkode->PrintInfo(); }
+#else
+         if (arkode) { arkode->PrintInfo(); }
+#endif
 
          if (visualization)
          {
@@ -702,6 +732,7 @@ HyperelasticOperator::HyperelasticOperator(FiniteElementSpace &f,
 
    if (kinsol_nls_type > 0)
    {
+#ifdef SUNDIALS_KINSOL
       KINSolver *kinsolver = new KINSolver(kinsol_nls_type, true);
       if (kinsol_nls_type != KIN_PICARD)
       {
@@ -722,6 +753,9 @@ HyperelasticOperator::HyperelasticOperator(FiniteElementSpace &f,
       {
          kinsolver->SetDamping(kinsol_damping);
       }
+#else
+      MFEM_ABORT("KINSOL nonlinear solver types are unavailable in this build.");
+#endif
    }
    else
    {

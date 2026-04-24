@@ -25,6 +25,7 @@ concurrency:
 
 env:
   ZIG_VERSION: 0.16.0
+  SLANG_VERSION: 2025.23.1
 
 jobs:
   zig-build:
@@ -45,15 +46,35 @@ jobs:
             optimize: ReleaseSafe
             extra_args: "-Dshared=true"
             build_targets: false
-          - name: release-single-precision
-            optimize: ReleaseSafe
-            extra_args: "-Dprecision=single"
-            build_targets: false
+          # - name: release-single-precision
+          #   optimize: ReleaseSafe
+          #   extra_args: "-Dprecision=single"
+          #   build_targets: false
 
     name: ${{ matrix.name }}
 
     steps:
       - uses: actions/checkout@v6
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libvulkan-dev vulkan-tools
+
+      - name: Install Slang compiler
+        run: |
+          set -euxo pipefail
+          base="https://github.com/shader-slang/slang/releases/download/v${SLANG_VERSION}/slang-${SLANG_VERSION}-linux-x86_64.tar.gz"
+          mkdir -p "$RUNNER_TEMP/slang"
+          curl -fL "${base}" -o "$RUNNER_TEMP/slang/slang.tar.gz"
+          tar -xzf "$RUNNER_TEMP/slang/slang.tar.gz" -C "$RUNNER_TEMP/slang"
+          slangc_path="$RUNNER_TEMP/slang/bin/slangc"
+          if [ ! -x "$slangc_path" ]; then
+            echo "slangc not found" >&2
+            exit 1
+          fi
+          chmod +x "$slangc_path"
+          echo "$(dirname "$slangc_path")" >> "$GITHUB_PATH"
 
       - uses: mlugg/setup-zig@v2
         with:

@@ -672,6 +672,7 @@ static int LSFree(SUNLinearSolver LS)
 // ---------------------------------------------------------------------------
 // CVODE interface
 // ---------------------------------------------------------------------------
+#ifdef SUNDIALS_CVODES
 int CVODESolver::RHS(sunrealtype t, const N_Vector y, N_Vector ydot,
                      void *user_data)
 {
@@ -1378,12 +1379,14 @@ CVODESSolver::~CVODESSolver()
    SUNMatDestroy(AB);
    SUNLinSolFree(LSB);
 }
+#endif // SUNDIALS_CVODES
 
 
 // ---------------------------------------------------------------------------
 // ARKStep interface
 // ---------------------------------------------------------------------------
 
+#ifdef SUNDIALS_ARKODE
 int ARKStepSolver::RHS1(sunrealtype t, const N_Vector y, N_Vector result,
                         void *user_data)
 {
@@ -1899,11 +1902,13 @@ ARKStepSolver::~ARKStepSolver()
    SUNNonlinSolFree(NLS);
    MFEM_ARKode(Free)(&sundials_mem);
 }
+#endif // SUNDIALS_ARKODE
 
 // ---------------------------------------------------------------------------
 // KINSOL interface
 // ---------------------------------------------------------------------------
 
+#ifdef SUNDIALS_KINSOL
 // Wrapper for evaluating the nonlinear residual F(u) = 0
 int KINSolver::Mult(const N_Vector u, N_Vector fu, void *user_data)
 {
@@ -2433,6 +2438,7 @@ KINSolver::~KINSolver()
    SUNLinSolFree(LSA);
    KINFree(&sundials_mem);
 }
+#endif // SUNDIALS_KINSOL
 
 } // namespace mfem
 

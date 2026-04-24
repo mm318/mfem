@@ -77,6 +77,7 @@ const linalg_sources: []const []const u8 = &.{
     "core/linalg/ordering.cpp",
     "core/linalg/particlevector.cpp",
     "core/linalg/solvers.cpp",
+    "core/linalg/sundials.cpp",
     "core/linalg/sparsemat.cpp",
     "core/linalg/sparsesmoothers.cpp",
     "core/linalg/symmat.cpp",
@@ -388,9 +389,9 @@ const example_main_sources: []const []const u8 = &.{
     // "examples/cpp/pumi/ex2.cpp", // PUMI
     // "examples/cpp/pumi/ex1p.cpp", // PUMI + MPI
     // "examples/cpp/pumi/ex6p.cpp", // PUMI + MPI
-    // "examples/cpp/sundials/ex9.cpp", // SUNDIALS
-    // "examples/cpp/sundials/ex10.cpp", // SUNDIALS
-    // "examples/cpp/sundials/ex16.cpp", // SUNDIALS
+    "examples/cpp/sundials/ex9.cpp", // SUNDIALS
+    "examples/cpp/sundials/ex10.cpp", // SUNDIALS
+    "examples/cpp/sundials/ex16.cpp", // SUNDIALS
     // "examples/cpp/sundials/ex9p.cpp", // SUNDIALS + MPI
     // "examples/cpp/sundials/ex10p.cpp", // SUNDIALS + MPI
     // "examples/cpp/sundials/ex16p.cpp", // SUNDIALS + MPI
@@ -582,6 +583,10 @@ pub fn build(b: *std.Build) void {
     const thread_safe = b.option(bool, "thread-safe", "Enable MFEM thread safety") orelse false;
     const use_memalloc = b.option(bool, "memalloc", "Enable MFEM internal MEMALLOC") orelse true;
     const use_simd = b.option(bool, "simd", "Enable MFEM SIMD code paths") orelse false;
+    const arkode_dep = b.dependency("arkode_zig", .{
+        .target = target,
+        .optimize = optimize,
+    });
 
     // Generate MFEM's config header from the selected Zig build options.
     const write_files = b.addWriteFiles();
@@ -648,7 +653,7 @@ pub fn build(b: *std.Build) void {
         }),
     });
 
-    configureMfemModule(mfem.root_module, b, generated_config_dir);
+    configureMfemModule(mfem.root_module, b, generated_config_dir, arkode_dep);
 
     if (shared and target.result.os.tag == .windows) {
         mfem.root_module.addCMacro("mfem_EXPORTS", "1");
@@ -656,6 +661,7 @@ pub fn build(b: *std.Build) void {
 
     addSourceGroup(mfem.root_module, b, general_sources, cxx_flags);
     addSourceGroup(mfem.root_module, b, linalg_sources, cxx_flags);
+    mfem.root_module.linkLibrary(arkode_dep.artifact("arkode"));
     addSourceGroup(mfem.root_module, b, mesh_sources, cxx_flags);
     addSourceGroup(mfem.root_module, b, fem_sources, cxx_flags);
     addSourceGroup(mfem.root_module, b, runtime_c_sources, c_flags);
@@ -676,7 +682,7 @@ pub fn build(b: *std.Build) void {
             .link_libcpp = true,
         }),
     });
-    configureMfemModule(mfem_c_api.root_module, b, generated_config_dir);
+    configureMfemModule(mfem_c_api.root_module, b, generated_config_dir, arkode_dep);
     mfem_c_api.root_module.addIncludePath(b.path("c_api"));
     mfem_c_api.root_module.addIncludePath(b.path("examples/c"));
     mfem_c_api.root_module.linkLibrary(mfem);
@@ -701,19 +707,20 @@ pub fn build(b: *std.Build) void {
     examples_step.dependOn(&install_mfem.step);
     examples_step.dependOn(&install_repo_data.step);
     for (example_main_sources) |main_source| {
-        const install_name = sourceStem(main_source);
+        const install_name = exampleInstallName(b, main_source, "");
         const artifact_name = sanitizeArtifactName(b, "example", main_source) catch @panic("OOM");
         const exe = addCppExecutable(
             b,
             target,
             optimize,
             generated_config_dir,
+            arkode_dep,
             mfem,
             artifact_name,
             &.{main_source},
             &.{},
         );
-        const installed = installExecutable(b, exe, "examples/cpp", install_name);
+        const installed = installExecutableStem(b, exe, install_name);
         examples_step.dependOn(&installed.step.step);
     }
 
@@ -722,20 +729,21 @@ pub fn build(b: *std.Build) void {
     c_examples_step.dependOn(&install_mfem.step);
     c_examples_step.dependOn(&install_repo_data.step);
     for (c_example_main_sources) |main_source| {
-        const install_name = sourceStem(main_source);
+        const install_name = exampleInstallName(b, main_source, "");
         const artifact_name = sanitizeArtifactName(b, "c_example", main_source) catch @panic("OOM");
         const exe = addCExecutable(
             b,
             target,
             optimize,
             generated_config_dir,
+            arkode_dep,
             mfem,
             mfem_c_api,
             artifact_name,
             &.{main_source},
             &.{ "examples/c", "c_api" },
         );
-        const installed = installExecutable(b, exe, "examples/c", install_name);
+        const installed = installExecutableStem(b, exe, install_name);
         c_examples_step.dependOn(&installed.step.step);
     }
 
@@ -759,6 +767,7 @@ pub fn build(b: *std.Build) void {
             target,
             optimize,
             generated_config_dir,
+            arkode_dep,
             mfem,
             artifact_name,
             sources.items,
@@ -830,6 +839,7 @@ pub fn build(b: *std.Build) void {
             target,
             optimize,
             generated_config_dir,
+            arkode_dep,
             mfem,
             spec.artifact_name,
             sources.items,
@@ -855,12 +865,15 @@ fn configureMfemModule(
     module: *std.Build.Module,
     b: *std.Build,
     generated_config_dir: std.Build.LazyPath,
+    arkode_dep: *std.Build.Dependency,
 ) void {
     module.addIncludePath(generated_config_dir);
     module.addIncludePath(b.path("config"));
     module.addIncludePath(b.path("core"));
     module.addIncludePath(b.path("."));
     module.addCMacro("MFEM_CONFIG_FILE", "\"config/_config.hpp\"");
+    module.addIncludePath(arkode_dep.artifact("arkode").getEmittedIncludeTree());
+    module.addCMacro("SUNDIALS_STATIC_DEFINE", "1");
 }
 
 // Create a C++ executable that links against MFEM and installs runtime path
@@ -870,6 +883,7 @@ fn addCppExecutable(
     target: std.Build.ResolvedTarget,
     optimize: std.builtin.OptimizeMode,
     generated_config_dir: std.Build.LazyPath,
+    arkode_dep: *std.Build.Dependency,
     mfem: *std.Build.Step.Compile,
     artifact_name: []const u8,
     sources: []const []const u8,
@@ -885,7 +899,7 @@ fn addCppExecutable(
         }),
     });
 
-    configureMfemModule(exe.root_module, b, generated_config_dir);
+    configureMfemModule(exe.root_module, b, generated_config_dir, arkode_dep);
     for (extra_include_paths) |path| {
         exe.root_module.addIncludePath(b.path(path));
     }
@@ -901,6 +915,7 @@ fn addCExecutable(
     target: std.Build.ResolvedTarget,
     optimize: std.builtin.OptimizeMode,
     generated_config_dir: std.Build.LazyPath,
+    arkode_dep: *std.Build.Dependency,
     mfem: *std.Build.Step.Compile,
     mfem_c_api: *std.Build.Step.Compile,
     artifact_name: []const u8,
@@ -917,7 +932,7 @@ fn addCExecutable(
         }),
     });
 
-    configureMfemModule(exe.root_module, b, generated_config_dir);
+    configureMfemModule(exe.root_module, b, generated_config_dir, arkode_dep);
     for (extra_include_paths) |path| {
         exe.root_module.addIncludePath(b.path(path));
     }
@@ -946,14 +961,16 @@ fn addSourceGroup(
     });
 }
 
-// Install an executable into a flat group directory under zig-out/bin.
-fn installExecutable(
+// Install an executable under zig-out/bin using an extensionless stem path.
+fn installExecutableStem(
     b: *std.Build,
     exe: *std.Build.Step.Compile,
-    group: []const u8,
-    install_name: []const u8,
+    install_stem: []const u8,
 ) InstalledExecutable {
-    const rel_path = executableInstallRelPath(b, exe, group, install_name);
+    const rel_path = b.fmt("{s}{s}", .{
+        install_stem,
+        std.fs.path.extension(exe.out_filename),
+    });
     const step = b.addInstallArtifact(exe, .{
         .dest_sub_path = rel_path,
     });
@@ -961,6 +978,17 @@ fn installExecutable(
         .step = step,
         .path = b.getInstallPath(.bin, rel_path),
     };
+}
+
+// Install an executable under zig-out/bin/<group>/<name>.
+fn installExecutable(
+    b: *std.Build,
+    exe: *std.Build.Step.Compile,
+    group: []const u8,
+    install_name: []const u8,
+) InstalledExecutable {
+    const rel_path = executableInstallRelPath(b, exe, group, install_name);
+    return installExecutableStem(b, exe, rel_path[0 .. rel_path.len - std.fs.path.extension(rel_path).len]);
 }
 
 // Compute the installed relative path for an executable within a group.
@@ -982,6 +1010,23 @@ fn sourceStem(source_path: []const u8) []const u8 {
     const basename = std.fs.path.basename(source_path);
     const extension = std.fs.path.extension(basename);
     return basename[0 .. basename.len - extension.len];
+}
+
+// Derive an installed example path stem relative to the source prefix, e.g.
+// examples/cpp/sundials/ex9.cpp -> examples/cpp/sundials/ex9.
+fn exampleInstallName(
+    b: *std.Build,
+    source_path: []const u8,
+    prefix: []const u8,
+) []const u8 {
+    const relative_path = if (std.mem.startsWith(u8, source_path, prefix))
+        source_path[prefix.len..]
+    else
+        source_path;
+    const extension = std.fs.path.extension(relative_path);
+    const stem = relative_path[0 .. relative_path.len - extension.len];
+
+    return b.dupe(stem);
 }
 
 // Recursively collect C++ sources under a directory.
@@ -1168,6 +1213,7 @@ fn mfemConfigHeader(
         \\{s}
         \\{s}
         \\{s}
+        \\{s}
         \\#define MFEM_TIMER_TYPE {d}
         \\
         \\#endif // MFEM_CONFIG_HEADER
@@ -1183,6 +1229,7 @@ fn mfemConfigHeader(
             if (thread_safe) "#define MFEM_THREAD_SAFE" else "",
             if (use_memalloc) "#define MFEM_USE_MEMALLOC" else "",
             if (use_simd) "#define MFEM_USE_SIMD" else "",
+            "#define MFEM_USE_SUNDIALS\n#define MFEM_USE_SUNDIALS_ARKODE",
             timer_type,
         },
     );

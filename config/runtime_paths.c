@@ -28,6 +28,7 @@ static char *mfem_runtime_examples_dir;
 static char *mfem_runtime_miniapps_dir;
 static char *mfem_runtime_tests_dir;
 static char *mfem_runtime_tests_miniapps_dir;
+static char *mfem_runtime_install_root_dir;
 static MFEM_RuntimePathCacheEntry *mfem_runtime_examples_paths;
 static MFEM_RuntimePathCacheEntry *mfem_runtime_miniapps_paths;
 static MFEM_RuntimePathCacheEntry *mfem_runtime_tests_paths;
@@ -344,11 +345,55 @@ static const char *MFEM_RuntimeExecutableDir(void)
    return dir;
 }
 
-static const char *MFEM_RuntimeCachedDir(const char *relative_path, char **slot)
+static const char *MFEM_RuntimeInstallRootDir(void)
+{
+   if (!mfem_runtime_install_root_dir)
+   {
+      const char *dir = MFEM_RuntimeExecutableDir();
+      const char *last_match = NULL;
+      const char *cursor = dir;
+
+      while ((cursor = strchr(cursor, '/')) != NULL)
+      {
+         if (strncmp(cursor, "/bin", 4) == 0 &&
+             (cursor[4] == '\0' || cursor[4] == '/'))
+         {
+            last_match = cursor;
+         }
+         cursor++;
+      }
+
+      if (!last_match)
+      {
+         MFEM_RuntimeFail("executable is not installed under zig-out/bin");
+      }
+
+      if (last_match == dir)
+      {
+         mfem_runtime_install_root_dir = MFEM_RuntimeStrdup("/");
+      }
+      else
+      {
+         const size_t len = (size_t)(last_match - dir);
+         mfem_runtime_install_root_dir = (char *)malloc(len + 1);
+         if (!mfem_runtime_install_root_dir)
+         {
+            MFEM_RuntimeFail("out of memory");
+         }
+         memcpy(mfem_runtime_install_root_dir, dir, len);
+         mfem_runtime_install_root_dir[len] = '\0';
+      }
+   }
+   return mfem_runtime_install_root_dir;
+}
+
+static const char *MFEM_RuntimeCachedDir(const char *install_relative_path,
+                                         char **slot)
 {
    if (!*slot)
    {
-      char *joined = MFEM_RuntimeJoin(MFEM_RuntimeExecutableDir(), relative_path);
+      char *joined =
+         MFEM_RuntimeJoin(MFEM_RuntimeInstallRootDir(), install_relative_path);
       *slot = MFEM_RuntimeNormalize(joined);
       free(joined);
    }
@@ -394,12 +439,12 @@ static const char *MFEM_RuntimeCachedPath(const char *relative_dir,
 
 const char *MFEM_Runtime_ExamplesDataDir(void)
 {
-   return MFEM_RuntimeCachedDir("../../../share/data", &mfem_runtime_examples_dir);
+   return MFEM_RuntimeCachedDir("share/data", &mfem_runtime_examples_dir);
 }
 
 const char *MFEM_Runtime_ExamplesDataPath(const char *leaf)
 {
-   return MFEM_RuntimeCachedPath("../../../share/data",
+   return MFEM_RuntimeCachedPath("share/data",
                                  leaf,
                                  &mfem_runtime_examples_dir,
                                  &mfem_runtime_examples_paths);
@@ -412,12 +457,12 @@ size_t MFEM_Runtime_ExamplesDataPrefixLength(void)
 
 const char *MFEM_Runtime_MiniappsDataDir(void)
 {
-   return MFEM_RuntimeCachedDir("../../share/data", &mfem_runtime_miniapps_dir);
+   return MFEM_RuntimeCachedDir("share/data", &mfem_runtime_miniapps_dir);
 }
 
 const char *MFEM_Runtime_MiniappsDataPath(const char *leaf)
 {
-   return MFEM_RuntimeCachedPath("../../share/data",
+   return MFEM_RuntimeCachedPath("share/data",
                                  leaf,
                                  &mfem_runtime_miniapps_dir,
                                  &mfem_runtime_miniapps_paths);
@@ -430,12 +475,12 @@ size_t MFEM_Runtime_MiniappsDataPrefixLength(void)
 
 const char *MFEM_Runtime_TestsDataDir(void)
 {
-   return MFEM_RuntimeCachedDir("../../share/data", &mfem_runtime_tests_dir);
+   return MFEM_RuntimeCachedDir("share/data", &mfem_runtime_tests_dir);
 }
 
 const char *MFEM_Runtime_TestsDataPath(const char *leaf)
 {
-   return MFEM_RuntimeCachedPath("../../share/data",
+   return MFEM_RuntimeCachedPath("share/data",
                                  leaf,
                                  &mfem_runtime_tests_dir,
                                  &mfem_runtime_tests_paths);
@@ -448,13 +493,13 @@ size_t MFEM_Runtime_TestsDataPrefixLength(void)
 
 const char *MFEM_Runtime_TestsMiniappsDir(void)
 {
-   return MFEM_RuntimeCachedDir("../../share/miniapps",
+   return MFEM_RuntimeCachedDir("share/miniapps",
                                 &mfem_runtime_tests_miniapps_dir);
 }
 
 const char *MFEM_Runtime_TestsMiniappsPath(const char *leaf)
 {
-   return MFEM_RuntimeCachedPath("../../share/miniapps",
+   return MFEM_RuntimeCachedPath("share/miniapps",
                                  leaf,
                                  &mfem_runtime_tests_miniapps_dir,
                                  &mfem_runtime_tests_miniapps_paths);

@@ -147,14 +147,14 @@ int main(int argc, char *argv[])
 
    // 1. Parse command-line options.
    problem = 0;
-   const char *mesh_file = "../../data/periodic-hexagon.mesh";
+   const char *mesh_file = mfem::test::ExamplesDataPath("periodic-hexagon.mesh");
    int ref_levels = 2;
    int order = 3;
    bool pa = false;
    bool ea = false;
    bool fa = false;
    const char *device_config = "cpu";
-   int ode_solver_type = 7;
+   int ode_solver_type = 8;
    double t_final = 10.0;
    double dt = 0.01;
    bool visualization = false;
@@ -226,6 +226,14 @@ int main(int argc, char *argv[])
       cout << "Unknown ODE solver type: " << ode_solver_type << '\n';
       return 3;
    }
+#ifndef SUNDIALS_CVODES
+   if (ode_solver_type == 7)
+   {
+      cout << "ODE solver type 7 requires CVODES, but this build only provides "
+           << "ARKODE.\n";
+      return 3;
+   }
+#endif
    args.PrintOptions(cout);
 
    Device device(device_config);
@@ -386,7 +394,9 @@ int main(int argc, char *argv[])
 
    // Create the time integrator
    ODESolver *ode_solver = NULL;
+#ifdef SUNDIALS_CVODES
    CVODESolver *cvode = NULL;
+#endif
    ARKStepSolver *arkode = NULL;
    switch (ode_solver_type)
    {
@@ -395,6 +405,7 @@ int main(int argc, char *argv[])
       case 3: ode_solver = new RK3SSPSolver; break;
       case 4: ode_solver = new RK4Solver; break;
       case 6: ode_solver = new RK6Solver; break;
+#ifdef SUNDIALS_CVODES
       case 7:
          cvode = new CVODESolver(CV_ADAMS);
          cvode->Init(adv);
@@ -402,6 +413,7 @@ int main(int argc, char *argv[])
          cvode->SetMaxStep(dt);
          cvode->UseSundialsLinearSolver();
          ode_solver = cvode; break;
+#endif
       case 8:
          arkode = new ARKStepSolver(ARKStepSolver::EXPLICIT);
          arkode->Init(adv);
@@ -435,7 +447,9 @@ int main(int argc, char *argv[])
       if (done || ti % vis_steps == 0)
       {
          cout << "time step: " << ti << ", time: " << t << endl;
+#ifdef SUNDIALS_CVODES
          if (cvode) { cvode->PrintInfo(); }
+#endif
          if (arkode) { arkode->PrintInfo(); }
 
          if (visualization)

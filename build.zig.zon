@@ -2,7 +2,12 @@
     .name = .mfem,
     .version = "0.0.0",
 
-    .dependencies = .{},
+    .dependencies = .{
+        .arkode_zig = .{
+            .url = "https://github.com/mm318/arkode-zig/archive/0be03eda07aa2d9c037e69ca016c0c9626a51822.tar.gz",
+            .hash = "arkode_zig-6.5.0-XTfRtEjupQCln229535KQgfIxVetkCX3RyKV4bNpHIjo",
+        },
+    },
 
     .paths = .{
         "build.zig",
@@ -23,5 +28,5 @@
         "AGENTS.md",
     },
 
-    .fingerprint = 0x8fdbc55753de0680,
+    .fingerprint = 0x8fdbc5578405d780,
 }

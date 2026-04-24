@@ -146,10 +146,10 @@ int main(int argc, char *argv[])
    Sundials::Init();
 
    // 1. Parse command-line options.
-   const char *mesh_file = "../../data/star.mesh";
+   const char *mesh_file = mfem::test::ExamplesDataPath("star.mesh");
    int ref_levels = 2;
    int order = 2;
-   int ode_solver_type = 9; // CVODE implicit BDF
+   int ode_solver_type = 12; // ARKODE default implicit
    real_t t_final = 0.5;
    real_t dt = 1.0e-2;
    real_t alpha = 1.0e-2;
@@ -210,6 +210,14 @@ int main(int argc, char *argv[])
       args.PrintUsage(cout);
       return 1;
    }
+#ifndef SUNDIALS_CVODES
+   if (ode_solver_type == 8 || ode_solver_type == 9)
+   {
+      cout << "ODE solver types 8 and 9 require CVODES, but this build only "
+           << "provides ARKODE.\n";
+      return 3;
+   }
+#endif
    args.PrintOptions(cout);
 
    bool use_mass_solver = ode_solver_type >= 13;
@@ -313,7 +321,8 @@ int main(int argc, char *argv[])
       case 5: ode_solver = std::make_unique<BackwardEulerSolver>(); break;
       case 6: ode_solver = std::make_unique<SDIRK23Solver>(2); break;
       case 7: ode_solver = std::make_unique<SDIRK33Solver>(); break;
-      // CVODE
+         // CVODE
+#ifdef SUNDIALS_CVODES
       case 8:
       case 9:
       {
@@ -333,6 +342,7 @@ int main(int argc, char *argv[])
          ode_solver = std::move(cvode);
          break;
       }
+#endif
       // ARKODE
       case 10:
       case 11:
@@ -376,14 +386,16 @@ int main(int argc, char *argv[])
 
    // Since we want to update the diffusion coefficient after every time step,
    // we need to use the "one-step" mode of the SUNDIALS solvers.
-   if (CVODESolver* cvode = dynamic_cast<CVODESolver*>(ode_solver.get()))
-   {
-      cvode->SetStepMode(CV_ONE_STEP);
-   }
-   else if (ARKStepSolver* arkode = dynamic_cast<ARKStepSolver*>(ode_solver.get()))
+   if (ARKStepSolver* arkode = dynamic_cast<ARKStepSolver*>(ode_solver.get()))
    {
       arkode->SetStepMode(ARK_ONE_STEP);
    }
+#ifdef SUNDIALS_CVODES
+   else if (CVODESolver* cvode = dynamic_cast<CVODESolver*>(ode_solver.get()))
+   {
+      cvode->SetStepMode(CV_ONE_STEP);
+   }
+#endif
 
    // 8. Perform time-integration (looping over the time iterations, ti, with a
    //    time-step dt).
@@ -408,14 +420,16 @@ int main(int argc, char *argv[])
       if (last_step || (ti % vis_steps) == 0)
       {
          cout << "step " << ti << ", t = " << t << endl;
-         if (CVODESolver* cvode = dynamic_cast<CVODESolver*>(ode_solver.get()))
-         {
-            cvode->PrintInfo();
-         }
-         else if (ARKStepSolver* arkode = dynamic_cast<ARKStepSolver*>(ode_solver.get()))
+         if (ARKStepSolver* arkode = dynamic_cast<ARKStepSolver*>(ode_solver.get()))
          {
             arkode->PrintInfo();
          }
+#ifdef SUNDIALS_CVODES
+         else if (CVODESolver* cvode = dynamic_cast<CVODESolver*>(ode_solver.get()))
+         {
+            cvode->PrintInfo();
+         }
+#endif
 
          u_gf.SetFromTrueDofs(u);
          if (visualization)
@@ -579,4 +593,3 @@ int ConductionOperator::SUNMassMult(const Vector &x, Vector &v)
    Mmat.Mult(x, v);
    return SUN_SUCCESS;
 }
-

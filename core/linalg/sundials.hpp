@@ -43,9 +43,15 @@
 #endif
 #include <sundials/sundials_matrix.h>
 #include <sundials/sundials_linearsolver.h>
+#ifdef SUNDIALS_ARKODE
 #include <arkode/arkode_arkstep.h>
+#endif
+#ifdef SUNDIALS_CVODES
 #include <cvodes/cvodes.h>
+#endif
+#ifdef SUNDIALS_KINSOL
 #include <kinsol/kinsol.h>
+#endif
 #if defined(MFEM_USE_CUDA)
 #include <sunmemory/sunmemory_cuda.h>
 #elif defined(MFEM_USE_HIP)
@@ -425,6 +431,7 @@ public:
 // Interface to the CVODE library -- linear multi-step methods
 // ---------------------------------------------------------------------------
 
+#ifdef SUNDIALS_CVODES
 /// Interface to the CVODE library -- linear multi-step methods.
 class CVODESolver : public ODESolver, public SundialsSolver
 {
@@ -710,12 +717,14 @@ public:
    /// Destroy the associated CVODES memory and SUNDIALS objects.
    virtual ~CVODESSolver();
 };
+#endif // SUNDIALS_CVODES
 
 
 // ---------------------------------------------------------------------------
 // Interface to ARKode's ARKStep module -- Additive Runge-Kutta methods
 // ---------------------------------------------------------------------------
 
+#ifdef SUNDIALS_ARKODE
 /// Interface to ARKode's ARKStep module -- additive Runge-Kutta methods.
 class ARKStepSolver : public ODESolver, public SundialsSolver
 {
@@ -886,12 +895,14 @@ public:
    virtual ~ARKStepSolver();
 
 };
+#endif // SUNDIALS_ARKODE
 
 
 // ---------------------------------------------------------------------------
 // Interface to the KINSOL library -- nonlinear solver methods
 // ---------------------------------------------------------------------------
 
+#ifdef SUNDIALS_KINSOL
 /// Interface to the KINSOL library -- nonlinear solver methods.
 class KINSolver : public NewtonSolver, public SundialsSolver
 {
@@ -1061,6 +1072,7 @@ public:
                                 x is not too close to a solution */
    void Mult(Vector &x, const Vector &x_scale, const Vector &fx_scale) const;
 };
+#endif // SUNDIALS_KINSOL
 
 }  // namespace mfem
 
