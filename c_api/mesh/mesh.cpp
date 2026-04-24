@@ -1,6 +1,7 @@
 #include "common.hpp"
 
 #include <fstream>
+#include <sstream>
 
 namespace
 {
@@ -70,6 +71,14 @@ extern "C" {
       return reinterpret_cast<CMFEM_Mesh *>(
                 new mfem::Mesh(dim, num_vertices, num_elements,
                                num_bdr_elements, space_dim));
+   }
+
+   void CMFEM_Mesh_Load(CMFEM_Mesh *mesh, const char *mesh_text,
+                        int generate_edges, int refine, int fix_orientation)
+   {
+      std::istringstream input(mesh_text);
+      cmfem::As<mfem::Mesh>(mesh)->Load(input, generate_edges, refine,
+                                        fix_orientation != 0);
    }
 
    CMFEM_Mesh *CMFEM_Mesh_NewFile(const char *mesh_file, int generate_edges,
@@ -160,6 +169,13 @@ extern "C" {
                                    int refine, int fix_orientation)
    {
       cmfem::As<mfem::Mesh>(mesh)->FinalizeTriMesh(generate_edges, refine,
+                                                   fix_orientation != 0);
+   }
+
+   void CMFEM_Mesh_FinalizeTetMesh(CMFEM_Mesh *mesh, int generate_edges,
+                                   int refine, int fix_orientation)
+   {
+      cmfem::As<mfem::Mesh>(mesh)->FinalizeTetMesh(generate_edges, refine,
                                                    fix_orientation != 0);
    }
 

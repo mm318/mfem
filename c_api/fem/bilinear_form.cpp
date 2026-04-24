@@ -116,6 +116,16 @@ extern "C" {
          new mfem::MassIntegrator(coef));
    }
 
+   void CMFEM_BilinearForm_AddDomainIntegratorMiFc(
+      CMFEM_BilinearForm *bilinear_form,
+      const CMFEM_FunctionCoefficient *coefficient)
+   {
+      auto &coef = const_cast<mfem::FunctionCoefficient &>(
+                      *cmfem::As<const mfem::FunctionCoefficient>(coefficient));
+      cmfem::As<mfem::BilinearForm>(bilinear_form)->AddDomainIntegrator(
+         new mfem::MassIntegrator(coef));
+   }
+
    void CMFEM_BilinearForm_AddBoundaryIntegratorMiCcAi(
       CMFEM_BilinearForm *bilinear_form,
       const CMFEM_ConstantCoefficient *coefficient,

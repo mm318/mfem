@@ -35,6 +35,9 @@ void CMFEM_BilinearForm_AddDomainIntegratorDiGfc(
 void CMFEM_BilinearForm_AddDomainIntegratorMiCc(
    CMFEM_BilinearForm *bilinear_form,
    const CMFEM_ConstantCoefficient *coefficient);
+void CMFEM_BilinearForm_AddDomainIntegratorMiFc(
+   CMFEM_BilinearForm *bilinear_form,
+   const CMFEM_FunctionCoefficient *coefficient);
 void CMFEM_BilinearForm_AddBoundaryIntegratorMiCcAi(
    CMFEM_BilinearForm *bilinear_form,
    const CMFEM_ConstantCoefficient *coefficient,

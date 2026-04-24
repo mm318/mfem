@@ -30,6 +30,8 @@ CMFEM_Mesh *CMFEM_Mesh_NewDimensionVerticesElementsBoundarySpace(int dim,
                                                                  int num_elements,
                                                                  int num_bdr_elements,
                                                                  int space_dim);
+void CMFEM_Mesh_Load(CMFEM_Mesh *mesh, const char *mesh_text,
+                     int generate_edges, int refine, int fix_orientation);
 CMFEM_Mesh *CMFEM_Mesh_NewFile(const char *mesh_file, int generate_edges,
                                int refine);
 CMFEM_Mesh CMFEM_Mesh_Copy(const CMFEM_Mesh *mesh);
@@ -49,6 +51,8 @@ void CMFEM_Mesh_AddBdrSegment(CMFEM_Mesh *mesh, const int *indices,
                               int attribute);
 void CMFEM_Mesh_FinalizeTopology(CMFEM_Mesh *mesh);
 void CMFEM_Mesh_FinalizeTriMesh(CMFEM_Mesh *mesh, int generate_edges,
+                                int refine, int fix_orientation);
+void CMFEM_Mesh_FinalizeTetMesh(CMFEM_Mesh *mesh, int generate_edges,
                                 int refine, int fix_orientation);
 void CMFEM_Mesh_FinalizeQuadMesh(CMFEM_Mesh *mesh, int generate_edges,
                                  int refine, int fix_orientation);
