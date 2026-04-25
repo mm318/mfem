@@ -56,6 +56,15 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Configure workspace
+        run: |
+          set -euxo pipefail
+          workdir="$RUNNER_TEMP/work-${{ matrix.name }}"
+          rm -rf "$workdir"
+          mkdir -p "$workdir"
+          cp -a "$GITHUB_WORKSPACE"/. "$workdir"/
+          echo "MFEM_WORKDIR=$workdir" >> "$GITHUB_ENV"
+
       - name: Install system dependencies
         run: |
           sudo apt-get update
@@ -79,21 +88,48 @@ jobs:
       - uses: mlugg/setup-zig@v2
         with:
           version: ${{ env.ZIG_VERSION }}
+          use-cache: false
+
+      - name: Configure Zig directories
+        run: |
+          set -euxo pipefail
+          build_root="$RUNNER_TEMP/zig-${{ matrix.name }}"
+          mkdir -p "$build_root/global-cache"
+          mkdir -p "$build_root/global-cache/tmp"
+          mkdir -p "$build_root/local-cache"
+          mkdir -p "$build_root/local-cache/tmp"
+          mkdir -p "$build_root/zig-out"
+          {
+            echo "ZIG_BUILD_ROOT=$build_root"
+            echo "ZIG_GLOBAL_CACHE_DIR=$build_root/global-cache"
+            echo "ZIG_LOCAL_CACHE_DIR=$build_root/local-cache"
+            echo "ZIG_PREFIX=$build_root/zig-out"
+          } >> "$GITHUB_ENV"
 
       - name: Check build script formatting
-        run: zig fmt --check build.zig
+        run: |
+          cd "$MFEM_WORKDIR"
+          zig fmt --check build.zig
 
       - name: Build
-        run: zig build -Doptimize=${{ matrix.optimize }} ${{ matrix.extra_args }} --summary all
+        run: |
+          cd "$MFEM_WORKDIR"
+          zig build -Doptimize=${{ matrix.optimize }} ${{ matrix.extra_args }} --summary all
 
       - name: Build Examples
         if: ${{ matrix.build_targets }}
-        run: zig build examples -Doptimize=${{ matrix.optimize }} ${{ matrix.extra_args }} --summary all
+        run: |
+          cd "$MFEM_WORKDIR"
+          zig build examples -Doptimize=${{ matrix.optimize }} ${{ matrix.extra_args }} --summary all
 
       - name: Build Miniapps
         if: ${{ matrix.build_targets }}
-        run: zig build miniapps -Doptimize=${{ matrix.optimize }} ${{ matrix.extra_args }} --summary all
+        run: |
+          cd "$MFEM_WORKDIR"
+          zig build miniapps -Doptimize=${{ matrix.optimize }} ${{ matrix.extra_args }} --summary all
 
       - name: Build And Run Tests
         if: ${{ matrix.build_targets }}
-        run: zig build test -Doptimize=${{ matrix.optimize }} ${{ matrix.extra_args }} --summary all
+        run: |
+          cd "$MFEM_WORKDIR"
+          zig build test -Doptimize=${{ matrix.optimize }} ${{ matrix.extra_args }} --summary all
