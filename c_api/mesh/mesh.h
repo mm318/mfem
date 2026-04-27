@@ -32,6 +32,8 @@ CMFEM_Mesh *CMFEM_Mesh_NewDimensionVerticesElementsBoundarySpace(int dim,
                                                                  int space_dim);
 void CMFEM_Mesh_Load(CMFEM_Mesh *mesh, const char *mesh_text,
                      int generate_edges, int refine, int fix_orientation);
+CMFEM_Mesh *CMFEM_Mesh_NewPeriodic(const CMFEM_Mesh *mesh,
+                                   double sx, double sy, double sz);
 CMFEM_Mesh *CMFEM_Mesh_NewFile(const char *mesh_file, int generate_edges,
                                int refine);
 CMFEM_Mesh CMFEM_Mesh_Copy(const CMFEM_Mesh *mesh);

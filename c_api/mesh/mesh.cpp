@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <vector>
 
 namespace
 {
@@ -79,6 +80,32 @@ extern "C" {
       std::istringstream input(mesh_text);
       cmfem::As<mfem::Mesh>(mesh)->Load(input, generate_edges, refine,
                                         fix_orientation != 0);
+   }
+
+   CMFEM_Mesh *CMFEM_Mesh_NewPeriodic(const CMFEM_Mesh *mesh,
+                                      double sx, double sy, double sz)
+   {
+      const mfem::Mesh &mfem_mesh = *cmfem::As<const mfem::Mesh>(mesh);
+      const int sdim = mfem_mesh.SpaceDimension();
+      std::vector<mfem::Vector> translations;
+
+      auto add_translation = [&](int axis, double length)
+      {
+         if (axis >= sdim || length == 0.0) { return; }
+         mfem::Vector translation(sdim);
+         translation = 0.0;
+         translation(axis) = static_cast<mfem::real_t>(length);
+         translations.push_back(translation);
+      };
+
+      add_translation(0, sx);
+      add_translation(1, sy);
+      add_translation(2, sz);
+
+      std::vector<int> v2v =
+         mfem_mesh.CreatePeriodicVertexMapping(translations);
+      return reinterpret_cast<CMFEM_Mesh *>(
+                new mfem::Mesh(mfem::Mesh::MakePeriodic(mfem_mesh, v2v)));
    }
 
    CMFEM_Mesh *CMFEM_Mesh_NewFile(const char *mesh_file, int generate_edges,
